@@ -131,15 +131,15 @@ void SoundMgrBase::deinit() {
 const char* SoundMgrBase::getName() { return "SoundMgrBase"; }
 
 void SoundMgrBase::process() {
+  std::vector<int> finishedChannelsCopy;
+
   gSoundMutex.lock();
-
-  const uint32_t SIZE = static_cast<uint32_t>(finishedChannels.size());
-  for (uint32_t i = 0; i < SIZE; ++i) {
-    resetChannel(finishedChannels[i]);
-  }
-  finishedChannels.clear();
-
+  std::swap(finishedChannelsCopy, finishedChannels);
   gSoundMutex.unlock();
+
+  for (const int32_t channel : finishedChannelsCopy) {
+    resetChannel(channel);
+  }
 }
 
 void SoundMgrBase::handleEvent(const InputEvent& e) {
@@ -748,9 +748,6 @@ void SoundMgrBase::resetChannel(const int32_t channel) {
 }
 
 void SoundMgrBase::onChannelFinished(const int32_t channel) {
-  gSoundMutex.lock();
-
+  std::lock_guard<std::mutex> lock(gSoundMutex);
   finishedChannels.emplace_back(channel);
-
-  gSoundMutex.unlock();
 }
