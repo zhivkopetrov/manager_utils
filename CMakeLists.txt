@@ -6,7 +6,9 @@ if(TARGET manager_utils)
   return()
 endif()
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_helpers/helpers.cmake)
+if(NOT CMAKE_HELPERS_INCLUDED)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_helpers/helpers.cmake)
+endif()
 
 project(manager_utils)
             
@@ -58,7 +60,9 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-add_subdirectory(sdl_utils)
+if(NOT TARGET sdl_utils)
+    add_subdirectory(sdl_utils)
+endif()
 
 target_link_libraries(
     ${PROJECT_NAME}
