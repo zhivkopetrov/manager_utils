@@ -16,7 +16,7 @@
 #include "manager_utils/sound/SoundWidgetEndCb.hpp"
 #include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/sound/SoundMixer.h"
-#include "utils/datatype/EnumClassUtils.hpp"
+#include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/debug/FunctionTracer.hpp"
 #include "utils/Unused.h"
 #include "utils/Log.h"

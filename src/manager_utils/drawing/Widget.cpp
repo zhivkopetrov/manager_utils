@@ -11,7 +11,7 @@
 // Own components headers
 #include "manager_utils/managers_base/DrawMgrBase.h"
 #include "sdl_utils/drawing/GeometryUtils.h"
-#include "utils/datatype/FloatingPointUtils.h"
+#include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
 
 // default constructor

@@ -11,12 +11,45 @@ if(NOT CMAKE_HELPERS_INCLUDED)
 endif()
 
 project(manager_utils)
-            
+   
+set(_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/manager_utils")       
 set(_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/manager_utils")
 
 add_library(
     ${PROJECT_NAME} 
     STATIC
+        "${_INCLUDE_DIR}/drawing/CreditRotation.h"
+        "${_INCLUDE_DIR}/drawing/DynamicImage.h"
+        "${_INCLUDE_DIR}/drawing/Image.h"
+        "${_INCLUDE_DIR}/drawing/Sprite.h"
+        "${_INCLUDE_DIR}/drawing/SpriteBuffer.h"
+        "${_INCLUDE_DIR}/drawing/Text.h"
+        "${_INCLUDE_DIR}/drawing/Widget.h"
+        "${_INCLUDE_DIR}/drawing/animation/AnimationBase.h"
+        "${_INCLUDE_DIR}/drawing/animation/AnimationEndCb.hpp"
+        "${_INCLUDE_DIR}/drawing/animation/FrameAnimation.h"
+        "${_INCLUDE_DIR}/drawing/animation/PositionAnimation.h"
+        "${_INCLUDE_DIR}/drawing/animation/PulseAnimation.h"
+        "${_INCLUDE_DIR}/drawing/animation/RotationAnimation.h"
+        "${_INCLUDE_DIR}/drawing/animation/defines/AnimationDefines.h"
+        "${_INCLUDE_DIR}/drawing/animation/defines/CommonAnimationStructs.h"
+        "${_INCLUDE_DIR}/input/ButtonBase.h"
+        "${_INCLUDE_DIR}/input/Scroller.h"
+        "${_INCLUDE_DIR}/managers_base/MgrBase.h"
+        "${_INCLUDE_DIR}/managers_base/DrawMgrBase.h"
+        "${_INCLUDE_DIR}/managers_base/RsrcMgrBase.h"
+        "${_INCLUDE_DIR}/managers_base/SoundMgrBase.h"
+        "${_INCLUDE_DIR}/managers_base/TimerMgrBase.h"
+        "${_INCLUDE_DIR}/sound/Music.h"
+        "${_INCLUDE_DIR}/sound/Sound.h"
+        "${_INCLUDE_DIR}/sound/SoundWidget.h"
+        "${_INCLUDE_DIR}/sound/SoundWidgetEndCb.hpp"
+        "${_INCLUDE_DIR}/time/TimerClient.h"
+        "${_INCLUDE_DIR}/time/TimerClientSpeedAdjustable.h"
+        "${_INCLUDE_DIR}/time/UserTimerClient.h"
+        "${_INCLUDE_DIR}/time/UserTimerClient.h"
+        "${_INCLUDE_DIR}/time/defines/TimerClientDefines.h"
+    
         "${_SRC_DIR}/drawing/CreditRotation.cpp"
         "${_SRC_DIR}/drawing/DynamicImage.cpp"
         "${_SRC_DIR}/drawing/Image.cpp"

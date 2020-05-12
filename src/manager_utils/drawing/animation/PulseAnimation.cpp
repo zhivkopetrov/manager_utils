@@ -11,7 +11,7 @@
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.hpp"
-#include "utils/datatype/FloatingPointUtils.h"
+#include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
 
 // default constructor

@@ -11,7 +11,7 @@
 #include "manager_utils/managers_base/DrawMgrBase.h"
 #include "manager_utils/managers_base/RsrcMgrBase.h"
 #include "manager_utils/drawing/Sprite.h"
-#include "utils/datatype/EnumClassUtils.hpp"
+#include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/Log.h"
 
 // default constructor
