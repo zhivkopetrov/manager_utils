@@ -18,7 +18,6 @@
 #include "sdl_utils/sound/SoundMixer.h"
 #include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/debug/FunctionTracer.hpp"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 SoundMgrBase* gSoundMgrBase = nullptr;
@@ -142,8 +141,7 @@ void SoundMgrBase::process() {
   }
 }
 
-void SoundMgrBase::handleEvent(const InputEvent& e) {
-  UNUSED(e);
+void SoundMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
 void SoundMgrBase::setGlobalVolume(const SoundLevel soundLevel) {

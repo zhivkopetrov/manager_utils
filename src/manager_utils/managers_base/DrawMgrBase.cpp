@@ -13,7 +13,6 @@
 #include "sdl_utils/drawing/MonitorWindow.h"
 #include "sdl_utils/drawing/Renderer.h"
 #include "utils/debug/FunctionTracer.hpp"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 DrawMgrBase* gDrawMgrBase = nullptr;
@@ -53,8 +52,7 @@ const char* DrawMgrBase::getName() { return "DrawMgrBase"; }
 
 void DrawMgrBase::process() {}
 
-void DrawMgrBase::handleEvent(const InputEvent& e) {
-  UNUSED(e);
+void DrawMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
 void DrawMgrBase::setSDLContainers(SDLContainers* containers) {

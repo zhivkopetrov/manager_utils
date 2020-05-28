@@ -14,7 +14,6 @@
 #include "utils/debug/FunctionTracer.hpp"
 #include "utils/debug/StackTrace.hpp"
 #include "utils/LimitValues.hpp"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 TimerMgrBase* gTimerMgrBase = nullptr;
@@ -81,8 +80,7 @@ void TimerMgrBase::process() {
   removeTimersInternal();
 }
 
-void TimerMgrBase::handleEvent(const InputEvent& e) {
-  UNUSED(e);
+void TimerMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
 void TimerMgrBase::changeSpeed() {

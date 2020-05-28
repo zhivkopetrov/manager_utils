@@ -9,7 +9,6 @@
 
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -95,16 +94,12 @@ bool ButtonBase::containsEvent(const InputEvent& e) {
   return isInside;
 }
 
-void ButtonBase::onLeave(const InputEvent& e) {
+void ButtonBase::onLeave([[maybe_unused]]const InputEvent& e) {
   _buttonTexture.setFrame(UNCLICKED);
-
-  UNUSED(e);
 }
 
-void ButtonBase::onReturn(const InputEvent& e) {
+void ButtonBase::onReturn([[maybe_unused]]const InputEvent& e) {
   _buttonTexture.setFrame(CLICKED);
-
-  UNUSED(e);
 }
 
 void ButtonBase::create(const uint64_t rsrcId) {

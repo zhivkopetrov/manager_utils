@@ -11,7 +11,6 @@
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 #include "utils/debug/FunctionTracer.hpp"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 RsrcMgrBase* gRsrcMgrBase = nullptr;
@@ -43,12 +42,11 @@ const char* RsrcMgrBase::getName() { return "RsrcMgrBase"; }
 
 void RsrcMgrBase::process() {}
 
-void RsrcMgrBase::handleEvent(const InputEvent& e) {
-  UNUSED(e);
+void RsrcMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
-void RsrcMgrBase::onLoadTextureMultipleCompleted(const int32_t batchId) {
-  UNUSED(batchId);
+void RsrcMgrBase::onLoadTextureMultipleCompleted(
+    [[maybe_unused]]const int32_t batchId) {
 }
 
 uint64_t RsrcMgrBase::getGPUMemoryUsage() const {

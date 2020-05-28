@@ -12,7 +12,6 @@
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 #include "utils/LimitValues.hpp"
-#include "utils/Unused.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -21,9 +20,8 @@ Scroller::Scroller()
       _prevPos(Point::UNDEFINED),
       _movementX(INIT_INT32_VALUE),
       _movementY(INIT_INT32_VALUE),
-      _boundaryRect(Rectangle::ZERO)
-
-{}
+      _boundaryRect(Rectangle::ZERO) {
+}
 
 // move constructor
 Scroller::Scroller(Scroller&& movedOther)
@@ -131,10 +129,8 @@ void Scroller::handleEvent(const InputEvent& e) {
   }
 }
 
-void Scroller::onLeave(const InputEvent& e) {
+void Scroller::onLeave([[maybe_unused]]const InputEvent& e) {
   resetScroller();
-
-  UNUSED(e);
 }
 
 void Scroller::onReturn(const InputEvent& e) { _prevPos = e.pos; }
