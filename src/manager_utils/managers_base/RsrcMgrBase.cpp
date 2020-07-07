@@ -15,11 +15,7 @@
 
 RsrcMgrBase* gRsrcMgrBase = nullptr;
 
-RsrcMgrBase::RsrcMgrBase(Renderer* renderer, const std::string& projectName,
-                         const bool isMultithreadResAllowed)
-    :
-
-      SDLContainers(renderer, projectName, isMultithreadResAllowed) {}
+RsrcMgrBase::RsrcMgrBase(const SDLContainersConfig &cfg) : SDLContainers(cfg) {}
 
 RsrcMgrBase::~RsrcMgrBase() { TRACE_ENTRY_EXIT; }
 

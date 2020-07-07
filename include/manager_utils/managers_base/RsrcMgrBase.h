@@ -14,12 +14,10 @@
 
 // Forward declarations
 class InputEvent;
-class Renderer;
 
 class RsrcMgrBase : public MgrBase, public SDLContainers {
  public:
-  RsrcMgrBase(Renderer* renderer, const std::string& projectName,
-              const bool isMultithreadResAllowed);
+  RsrcMgrBase(const SDLContainersConfig &cfg);
 
   virtual ~RsrcMgrBase();
 

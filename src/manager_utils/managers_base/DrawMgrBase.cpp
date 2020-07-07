@@ -9,6 +9,7 @@
 // Other libraries headers
 
 // Own components headers
+#include "manager_utils/managers_base/config/DrawMgrBaseConfig.hpp"
 #include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/drawing/MonitorWindow.h"
 #include "sdl_utils/drawing/Renderer.h"
@@ -20,20 +21,13 @@ DrawMgrBase* gDrawMgrBase = nullptr;
 // SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS
 #define FULL_SCREEN_MODE 1 | 16
 
-DrawMgrBase::DrawMgrBase(Renderer* renderer,
-                         MonitorWindow* window,
-                         const int32_t displayMode,
-                         const int32_t monitorWidth,
-                         const int32_t monitorHeight)
-    :
-
-      _renderer(renderer),
-      _window(window),
-      _displayMode(displayMode),
+DrawMgrBase::DrawMgrBase(const DrawMgrBaseConfig &cfg)
+    : _renderer(cfg.renderer),
+      _window(cfg.window),
+      _displayMode(cfg.displayMode),
       _maxFrames(0),
-      _SCREEN_WIDTH(monitorWidth),
-      _SCREEN_HEIGHT(monitorHeight) {
-
+      _SCREEN_WIDTH(cfg.monitorWidth),
+      _SCREEN_HEIGHT(cfg.monitorHeight) {
 }
 
 DrawMgrBase::~DrawMgrBase() { TRACE_ENTRY_EXIT; }

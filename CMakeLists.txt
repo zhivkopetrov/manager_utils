@@ -35,6 +35,7 @@ add_library(
         "${_INCLUDE_DIR}/drawing/animation/defines/CommonAnimationStructs.h"
         "${_INCLUDE_DIR}/input/ButtonBase.h"
         "${_INCLUDE_DIR}/input/Scroller.h"
+        "${_INCLUDE_DIR}/managers_base/config/DrawMgrBaseConfig.hpp"
         "${_INCLUDE_DIR}/managers_base/MgrBase.h"
         "${_INCLUDE_DIR}/managers_base/DrawMgrBase.h"
         "${_INCLUDE_DIR}/managers_base/RsrcMgrBase.h"

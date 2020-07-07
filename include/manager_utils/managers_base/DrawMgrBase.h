@@ -17,23 +17,11 @@ class InputEvent;
 class Renderer;
 class MonitorWindow;
 struct DrawParams;
+struct DrawMgrBaseConfig;
 
 class DrawMgrBase : public MgrBase {
  public:
-  /** @brief
-   *
-   *  @param Renderer *      - the actual renderer used for drawing
-   *  @param MonitorWindow * - the program window
-   *  @param const int32_t   - monitor display mode
-   *                                     (full screen, windowed, etc ...)
-   *  @param const int32_t   - the width of a single monitor (in px)
-   *  @param const int32_t   - the height of a single monitor (in px)
-   * */
-  explicit DrawMgrBase(Renderer* renderer,
-                       MonitorWindow* window,
-                       const int32_t displayMode,
-                       const int32_t monitorWidth,
-                       const int32_t monitorHeight);
+  explicit DrawMgrBase(const DrawMgrBaseConfig &cfg);
 
   virtual ~DrawMgrBase();
 
