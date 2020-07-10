@@ -147,26 +147,26 @@ void SoundMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
 void SoundMgrBase::setGlobalVolume(const SoundLevel soundLevel) {
   _systemSoundLevel = soundLevel;
 
-  SoundMixer::setAllChannelsVolume(getEnumClassValue(_systemSoundLevel));
+  SoundMixer::setAllChannelsVolume(getEnumValue(_systemSoundLevel));
 
   // check if music is already loaded
   if (nullptr != _music) {
     // since music is playing on a different dedicated channel ->
     // it's sound needs to be set manually
-    SoundMixer::setMusicVolume(getEnumClassValue(_systemSoundLevel));
+    SoundMixer::setMusicVolume(getEnumValue(_systemSoundLevel));
   }
 }
 
 void SoundMgrBase::increaseGlobalVolume() {
   ++_systemSoundLevel;
 
-  SoundMixer::setAllChannelsVolume(getEnumClassValue(_systemSoundLevel));
+  SoundMixer::setAllChannelsVolume(getEnumValue(_systemSoundLevel));
 
   // check if music is already loaded
   if (nullptr != _music) {
     // since music is playing on a different dedicated channel ->
     // it's sound needs to be set manually
-    SoundMixer::setMusicVolume(getEnumClassValue(_systemSoundLevel));
+    SoundMixer::setMusicVolume(getEnumValue(_systemSoundLevel));
   }
 }
 
@@ -217,7 +217,7 @@ int32_t SoundMgrBase::loadMusic(const uint64_t rsrcId) {
       // music sound needs to be changed with system sound level on load,
       // because SoundMixer::setAllChannelsVolume() does not affect
       // audio channel associated with music, if such is not loaded
-      SoundMixer::setMusicVolume(getEnumClassValue(_systemSoundLevel));
+      SoundMixer::setMusicVolume(getEnumValue(_systemSoundLevel));
     }
   }
 
@@ -279,7 +279,7 @@ void SoundMgrBase::setMusicVolume(const SoundLevel soundLevel) {
     return;
   }
 
-  SoundMixer::setMusicVolume(getEnumClassValue(soundLevel));
+  SoundMixer::setMusicVolume(getEnumValue(soundLevel));
 }
 
 SoundLevel SoundMgrBase::getMusicVolume() const {
@@ -366,7 +366,7 @@ void SoundMgrBase::setChunkVolume(const uint64_t rsrcId,
     LOGERR("Error in gRsrcMgrBase->getChunkSound() for chunk: %#16lX", rsrcId);
   } else  // it is valid chunk
   {
-    SoundMixer::setChunkVolume(chunk, getEnumClassValue(soundLevel));
+    SoundMixer::setChunkVolume(chunk, getEnumValue(soundLevel));
   }
 }
 
@@ -505,7 +505,7 @@ void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
         } else {
           // reset sound to it's original value
           SoundMixer::setChunkVolume(chunk,
-                                     getEnumClassValue(soundData->soundLevel));
+                                     getEnumValue(soundData->soundLevel));
         }
       }
 
