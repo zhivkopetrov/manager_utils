@@ -220,8 +220,6 @@ class DrawMgrBase : public MgrBase {
    * */
   inline int32_t getMonitorHeight() const { return _SCREEN_HEIGHT; }
 
-  bool isFullScreenModeActive() const;
-
   void moveGlobalX(const int32_t x);
 
   void moveGlobalY(const int32_t y);
@@ -237,8 +235,6 @@ class DrawMgrBase : public MgrBase {
   // The window we'll be rendering to
   MonitorWindow* _window;
 
-  // Holds the current window display mode (fullscreen or not)
-  int32_t _displayMode;
   // Hold maximum frame rate cap
   uint32_t _maxFrames;
 

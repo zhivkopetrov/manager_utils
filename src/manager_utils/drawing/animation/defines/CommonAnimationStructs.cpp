@@ -17,7 +17,6 @@ AnimBaseConfig::AnimBaseConfig()
    timerId(INIT_INT32_VALUE),
    animDirection(AnimDir::UNKNOWN),
    isTimerPauseble(false){
-  reset();
 }
 
 void AnimBaseConfig::reset() {

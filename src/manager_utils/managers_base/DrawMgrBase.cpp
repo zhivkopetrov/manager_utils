@@ -18,13 +18,9 @@
 
 DrawMgrBase* gDrawMgrBase = nullptr;
 
-// SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS
-#define FULL_SCREEN_MODE 1 | 16
-
 DrawMgrBase::DrawMgrBase(const DrawMgrBaseConfig &cfg)
     : _renderer(cfg.renderer),
       _window(cfg.window),
-      _displayMode(cfg.displayMode),
       _maxFrames(0),
       _SCREEN_WIDTH(cfg.monitorWidth),
       _SCREEN_HEIGHT(cfg.monitorHeight) {
@@ -75,10 +71,6 @@ void DrawMgrBase::addRendererData(const uint8_t* data, const uint64_t bytes) {
 void DrawMgrBase::shutdownRenderer() { _renderer->shutdownRenderer_UT(); }
 
 void DrawMgrBase::swapBackBuffers() { _renderer->swapBackBuffers_UT(); }
-
-bool DrawMgrBase::isFullScreenModeActive() const {
-  return _displayMode == (FULL_SCREEN_MODE);
-}
 
 uint64_t DrawMgrBase::getTotalWidgetCount() const {
   return _renderer->getTotalWidgetCount_UT();
