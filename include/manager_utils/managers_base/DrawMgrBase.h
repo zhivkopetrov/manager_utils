@@ -9,6 +9,7 @@
 
 // Own components headers
 #include "manager_utils/managers_base/MgrBase.h"
+#include "manager_utils/managers_base/config/DrawMgrBaseConfig.hpp"
 #include "sdl_utils/drawing/RendererDefines.h"
 
 // Forward declarations
@@ -80,8 +81,16 @@ class DrawMgrBase : public MgrBase {
 
   //================== END MgrBase related functions =====================
 
-  //======================================================================
-  /** @brief used to provide the renderer with an API to comunicate with
+  /** @brief used to enter the main(thread) rendering loop
+   * */
+  void startRenderingLoop();
+
+  /** @brief used to sending the main(thread) a message to exit it's
+   *         render loop
+   * */
+  void shutdownRenderer();
+
+  /** @brief used to provide the renderer with an API to communicate with
    *         containers that are responsible for holding
    *                              the loaded SDL_Surface's/SDL_Texture's
    *
@@ -116,7 +125,6 @@ class DrawMgrBase : public MgrBase {
    *                  you are doing
    * */
   void finishFrame(const bool overrideRendererLockCheck = false);
-  //=====================================================================
 
   /** @brief transfer draw specific data from Widgets to renderer
    *
@@ -156,11 +164,6 @@ class DrawMgrBase : public MgrBase {
    *                             sizeof(DrawParams) * SIZE)
    * */
   void addRendererData(const uint8_t* data, const uint64_t bytes);
-
-  /** @brief used to sending the main(thread) a message to exit it's
-   *         render loop
-   * */
-  void shutdownRenderer();
 
   /** @brief used to swap the command back buffers
    *                       (swap the update and rendering thread targets)
@@ -212,19 +215,23 @@ class DrawMgrBase : public MgrBase {
    *
    *  @return int32_t - screen width
    * */
-  inline int32_t getMonitorWidth() const { return _SCREEN_WIDTH; }
+  inline int32_t getMonitorWidth() const { return _config.monitorHeight; }
 
   /** @brief used to acquire screen height
    *
    *  @return int32_t - screen height
    * */
-  inline int32_t getMonitorHeight() const { return _SCREEN_HEIGHT; }
+  inline int32_t getMonitorHeight() const { return _config.monitorHeight; }
 
   void moveGlobalX(const int32_t x);
 
   void moveGlobalY(const int32_t y);
 
   void resetAbsoluteGlobalMovement();
+
+  inline Renderer *getRenderer() {
+    return _renderer;
+  }
 
  private:
   // Hide renderer implementation under user defined renderer class.
@@ -238,9 +245,7 @@ class DrawMgrBase : public MgrBase {
   // Hold maximum frame rate cap
   uint32_t _maxFrames;
 
-  // Screen dimension
-  const int32_t _SCREEN_WIDTH;
-  const int32_t _SCREEN_HEIGHT;
+  DrawMgrBaseConfig _config;
 };
 
 extern DrawMgrBase* gDrawMgrBase;

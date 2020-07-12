@@ -98,7 +98,7 @@ void Text::create(const uint64_t fontId,
   copyTextContent(text);
 
   gRsrcMgrBase->loadText(_fontId, _textContent, _color,
-                         &_drawParams.textId, &_imageWidth, &_imageHeight);
+                         _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -168,7 +168,7 @@ void Text::setText(const char* text) {
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
   gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, &_imageWidth, &_imageHeight);
+                           _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -193,7 +193,7 @@ void Text::setColor(const Color& color) {
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
   gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, &_imageWidth, &_imageHeight);
+                           _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -220,7 +220,7 @@ void Text::setTextAndColor(const char* text, const Color& color) {
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
   gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, &_imageWidth, &_imageHeight);
+                           _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).

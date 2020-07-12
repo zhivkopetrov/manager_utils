@@ -112,7 +112,7 @@ void SpriteBuffer::create(const int32_t coordinateX,
   setFrameRect(Rectangle(0, 0, spriteBufferWidth, spriteBufferHeight));
 
   gRsrcMgrBase->createSpriteBuffer(spriteBufferWidth, spriteBufferHeight,
-                                   &_drawParams.spriteBufferId);
+                                   _drawParams.spriteBufferId);
 }
 
 void SpriteBuffer::destroy() {
