@@ -45,8 +45,9 @@ int32_t DrawMgrBase::init() {
     LOGERR("_window.init() failed");
     return EXIT_FAILURE;
   }
+  _config.rendererConfig.window = _window->getWindow();
 
-  if (EXIT_SUCCESS != _renderer->init(_window->getWindow())) {
+  if (EXIT_SUCCESS != _renderer->init(_config.rendererConfig)) {
     LOGERR("_renderer.init() failed");
     return EXIT_FAILURE;
   }
@@ -119,7 +120,7 @@ void DrawMgrBase::swapBackBuffers() {
   _renderer->swapBackBuffers_UT();
 }
 
-uint64_t DrawMgrBase::getTotalWidgetCount() const {
+uint32_t DrawMgrBase::getTotalWidgetCount() const {
   return _renderer->getTotalWidgetCount_UT();
 }
 

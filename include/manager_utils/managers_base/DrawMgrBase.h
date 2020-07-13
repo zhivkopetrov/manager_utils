@@ -10,7 +10,7 @@
 // Own components headers
 #include "manager_utils/managers_base/MgrBase.h"
 #include "manager_utils/managers_base/config/DrawMgrBaseConfig.hpp"
-#include "sdl_utils/drawing/RendererDefines.h"
+#include "sdl_utils/drawing/defines/RendererDefines.h"
 
 // Forward declarations
 class SDLContainers;
@@ -176,9 +176,9 @@ class DrawMgrBase : public MgrBase {
   /** @brief used to monitor the number of widgets
    *                              currently being drawn by the renderer
    *
-   *  @returns uint64_t - total widget count by the renderer
+   *  @returns uint32_t - total widget count by the renderer
    * */
-  uint64_t getTotalWidgetCount() const;
+  uint32_t getTotalWidgetCount() const;
 
   /** @brief used to unlock renderer (for more information check
    *                ::unlockRenderer() in thirdparty/sdlutils/Renderer.h)
