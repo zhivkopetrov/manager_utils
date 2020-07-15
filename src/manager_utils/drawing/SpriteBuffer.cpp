@@ -115,6 +115,13 @@ void SpriteBuffer::create(const int32_t coordinateX,
                                    _drawParams.spriteBufferId);
 }
 
+void SpriteBuffer::create(const Rectangle& dimensions,
+                          const double rotationAngle,
+                          const Point& rotationCenter) {
+  SpriteBuffer::create(dimensions.x, dimensions.y, dimensions.w, dimensions.h,
+                       rotationAngle, rotationCenter);
+}
+
 void SpriteBuffer::destroy() {
   if (_isDestroyed) {
     LOGERR("Warning, trying to destroy a SpriteBuffer "

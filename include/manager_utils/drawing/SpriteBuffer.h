@@ -173,12 +173,9 @@ class SpriteBuffer : public Widget {
               const Point& rotationCenter = Point::UNDEFINED);
 
   /* override of 6 param create method */
-  inline void create(const Rectangle& dimensions,
-                     const double rotationAngle = ZERO_ANGLE,
-                     const Point& rotationCenter = Point::UNDEFINED) {
-    SpriteBuffer::create(dimensions.x, dimensions.y, dimensions.w, dimensions.h,
-                         rotationAngle, rotationCenter);
-  }
+  void create(const Rectangle& dimensions,
+              const double rotationAngle = ZERO_ANGLE,
+              const Point& rotationCenter = Point::UNDEFINED);
 
   /** @brief used to destroy the SpriteBuffer
    * */
