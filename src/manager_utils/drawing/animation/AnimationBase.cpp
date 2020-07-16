@@ -140,3 +140,60 @@ void AnimationBase::drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) {
     spriteBuffer.addWidget(_img);
   }
 }
+
+void AnimationBase::setAnimOpacity(const int32_t opacity) {
+  _img.setOpacity(opacity);
+}
+
+void AnimationBase::activateAnimationAlphaModulation() {
+  _img.activateAlphaModulation();
+}
+
+void AnimationBase::setPosition(const int32_t x, const int32_t y) {
+  _img.setPosition(x, y);
+  _cfg.startPos.x = x;
+  _cfg.startPos.y = y;
+}
+
+void AnimationBase::setX(const int32_t x) {
+  _img.setX(x);
+  _cfg.startPos.x = x;
+}
+
+void AnimationBase::setY(const int32_t y) {
+  _img.setY(y);
+  _cfg.startPos.y = y;
+}
+
+void AnimationBase::setPosition(const Point& pos) {
+  _img.setPosition(pos);
+  _cfg.startPos = pos;
+}
+
+void AnimationBase::moveRight(const int32_t dX) {
+  _img.moveRight(dX);
+  _cfg.startPos.x += dX;
+}
+
+void AnimationBase::moveLeft(const int32_t dX) {
+  _img.moveLeft(dX);
+  _cfg.startPos.x -= dX;
+}
+
+void AnimationBase::moveUp(const int32_t dY) {
+  _img.moveUp(dY);
+  _cfg.startPos.y -= dY;
+}
+
+void AnimationBase::moveDown(const int32_t dY) {
+  _img.moveDown(dY);
+  _cfg.startPos.y += dY;
+}
+
+void AnimationBase::setFrame(const int32_t frameIdx) {
+  _img.setFrame(frameIdx);
+}
+
+void AnimationBase::setAnimCropRectangle(const Rectangle& cropRect) {
+  _img.setCropRect(cropRect);
+}

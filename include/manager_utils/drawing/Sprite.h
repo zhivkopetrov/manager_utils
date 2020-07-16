@@ -42,7 +42,7 @@ class Sprite {
    *
    *  @param int32_t - frame index
    * */
-  inline int32_t getFrame() const { return _currFrame; }
+  int32_t getFrame() const { return _currFrame; }
 
   /** @brief used to obtain currently set frame index
    *         NOTE: since index is used every as an int32_T -> static_cast
@@ -50,7 +50,7 @@ class Sprite {
    *
    *  @return int32_t - total frame count
    * */
-  inline int32_t getFrameCount() const {
+  int32_t getFrameCount() const {
     return static_cast<int32_t>(_spriteData.size());
   }
 
@@ -75,13 +75,13 @@ class Sprite {
    *
    *  @returns Rectangle - frame Rectangle dimensions
    * */
-  inline Rectangle getFrameRect() const { return _spriteData[_currFrame]; }
+  Rectangle getFrameRect() const { return _spriteData[_currFrame]; }
 
   /** @brief used to obtain currently set resource ID for the sprite
    *
    *  @return uint64_t - unique resource ID
    * */
-  inline uint64_t getFramesRsrcId() const { return _rsrcId; }
+  uint64_t getFramesRsrcId() const { return _rsrcId; }
 
  private:
   // A vector containing all frame Rectangles for the Image owner

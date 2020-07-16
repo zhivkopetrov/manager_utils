@@ -269,30 +269,30 @@ class SpriteBuffer : public Widget {
    *
    *  @param const int32_t - relative X offset
    * */
-  inline void moveItemsRight(const int32_t x) { _itemsOffsetX += x; }
+  void moveItemsRight(const int32_t x) { _itemsOffsetX += x; }
 
   /** @brief used to move all stored SpriteBuffer items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative X offset
    * */
-  inline void moveItemsLeft(const int32_t x) { _itemsOffsetX -= x; }
+  void moveItemsLeft(const int32_t x) { _itemsOffsetX -= x; }
 
   /** @brief used to move all stored SpriteBuffer items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative Y offset
    * */
-  inline void moveItemsDown(const int32_t y) { _itemsOffsetY += y; }
+  void moveItemsDown(const int32_t y) { _itemsOffsetY += y; }
 
   /** @brief used to move all stored SpriteBuffer items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative Y offset
    * */
-  inline void moveItemsUp(const int32_t y) { _itemsOffsetY -= y; }
+  void moveItemsUp(const int32_t y) { _itemsOffsetY -= y; }
 
-  inline uint64_t getStoredItemsCount() const { return _storedItems.size(); }
+  uint64_t getStoredItemsCount() const { return _storedItems.size(); }
 
  private:
   /** @brief used to transform relative sprite buffer coordinates to

@@ -70,30 +70,28 @@ class AnimationBase : public TimerClient {
    *
    *  @param AnimationEndCb* - the new end handler of the animation
    * */
-  inline void setEndHandler(AnimationEndCb* endCb) { _endCb = endCb; }
+  void setEndHandler(AnimationEndCb* endCb) { _endCb = endCb; }
 
   /** @brief used to hide animation - so it will not be drawn
    * */
-  inline void hideAnimation() { _isVisible = false; }
+  void hideAnimation() { _isVisible = false; }
 
   /** @brief used to hide animation - so it will not be drawn
    * */
-  inline void showAnimation() { _isVisible = true; }
+  void showAnimation() { _isVisible = true; }
 
   /** @brief used to check whether animation is visible or not
    *
    *  @return bool - is animation active or not
    * */
-  inline bool isVisible() const { return _isVisible; }
+  bool isVisible() const { return _isVisible; }
 
   /**
    * @brief change the opacity of the animating image
    *
    * @param const int32_t opacity -
    */
-  inline void setAnimOpacity(const int32_t opacity) {
-    _img.setOpacity(opacity);
-  }
+  void setAnimOpacity(const int32_t opacity);
 
   /** @brief used to check whether the current animation is active
    *         Note: function polls if the animations timer is active.
@@ -115,75 +113,46 @@ class AnimationBase : public TimerClient {
   /**
    * @brief function to allow the animation fading in and out effect
    */
-  inline void activateAnimationAlphaModulation() {
-    _img.activateAlphaModulation();
-  }
+  void activateAnimationAlphaModulation();
 
-  inline int32_t getWidth() const { return _img.getFrameWidth(); }
+  int32_t getWidth() const { return _img.getFrameWidth(); }
 
-  inline int32_t getHeight() const { return _img.getFrameHeight(); }
+  int32_t getHeight() const { return _img.getFrameHeight(); }
 
-  inline int32_t getX() const { return _img.getX(); }
+  int32_t getX() const { return _img.getX(); }
 
-  inline int32_t getY() const { return _img.getY(); }
+  int32_t getY() const { return _img.getY(); }
 
-  inline Point getPosition() const { return _img.getPosition(); }
+  Point getPosition() const { return _img.getPosition(); }
 
-  inline void setPosition(const int32_t x, const int32_t y) {
-    _img.setPosition(x, y);
-    _cfg.startPos.x = x;
-    _cfg.startPos.y = y;
-  }
+  void setPosition(const int32_t x, const int32_t y);
 
-  inline void setX(const int32_t x) {
-    _img.setX(x);
-    _cfg.startPos.x = x;
-  }
+  void setX(const int32_t x);
 
-  inline void setY(const int32_t y) {
-    _img.setY(y);
-    _cfg.startPos.y = y;
-  }
+  void setY(const int32_t y);
 
-  inline void setPosition(const Point& pos) {
-    _img.setPosition(pos);
-    _cfg.startPos = pos;
-  }
+  void setPosition(const Point& pos);
 
-  inline void moveRight(const int32_t dX) {
-    _img.moveRight(dX);
-    _cfg.startPos.x += dX;
-  }
+  void moveRight(const int32_t dX);
 
-  inline void moveLeft(const int32_t dX) {
-    _img.moveLeft(dX);
-    _cfg.startPos.x -= dX;
-  }
+  void moveLeft(const int32_t dX);
 
-  inline void moveUp(const int32_t dY) {
-    _img.moveUp(dY);
-    _cfg.startPos.y -= dY;
-  }
+  void moveUp(const int32_t dY);
 
-  inline void moveDown(const int32_t dY) {
-    _img.moveDown(dY);
-    _cfg.startPos.y += dY;
-  }
+  void moveDown(const int32_t dY);
 
-  inline void setFrame(const int32_t frameIdx) { _img.setFrame(frameIdx); }
+  void setFrame(const int32_t frameIdx);
 
-  inline int32_t getFrame() const { return _img.getFrame(); }
+  int32_t getFrame() const { return _img.getFrame(); }
 
-  inline int32_t getFrameCount() const { return _img.getFrameCount(); }
+  int32_t getFrameCount() const { return _img.getFrameCount(); }
 
   /** @brief used to set external crop rectangle for the underlying
    *         animation images
    *
    *  @param const Rectangle & - image crop rectangle
    * */
-  inline void setAnimCropRectangle(const Rectangle& cropRect) {
-    _img.setCropRect(cropRect);
-  }
+  void setAnimCropRectangle(const Rectangle& cropRect);
 
  protected:
   /** @brief used to configure animation before you need to start it.

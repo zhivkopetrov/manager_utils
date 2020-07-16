@@ -75,7 +75,7 @@ class ButtonBase : public TouchEntity {
    *
    *  @returns bool     - isInside or not
    * */
-  virtual bool containsEvent(const InputEvent& e) override final;
+  bool containsEvent(const InputEvent& e) final;
 
   /** @brief invoked when event was PRESSED inside this TouchEntity
    *         and event leaves the borders of the TouchEntity when no
@@ -84,7 +84,7 @@ class ButtonBase : public TouchEntity {
    *
    *  @param const InputEvent & - engine's InputEvent
    * */
-  virtual void onLeave(const InputEvent& e) override;
+  void onLeave(const InputEvent& e) override;
 
   /** @brief invoked when event was PRESSED inside this TouchEntity
    *         and event leaves the borders of the TouchEntity when no
@@ -94,18 +94,18 @@ class ButtonBase : public TouchEntity {
    *
    *  @param const InputEvent & - engine's InputEvent
    * */
-  virtual void onReturn(const InputEvent& e) override;
+  void onReturn(const InputEvent& e) override;
 
   /** @brief used to lock this TouchEntity for incoming InputEvent
    * */
-  virtual void lockInput() override {
+  void lockInput() override {
     _isInputUnlocked = false;
     _buttonTexture.setFrame(DISABLED);
   }
 
   /** @brief used to unlock this TouchEntity for incoming InputEvent
    * */
-  virtual void unlockInput() override {
+  void unlockInput() override {
     _isInputUnlocked = true;
     _buttonTexture.setFrame(UNCLICKED);
   }
@@ -126,11 +126,9 @@ class ButtonBase : public TouchEntity {
 
   /** @brief used to destroy underlying button texture
    * */
-  inline void destroyTexture() { _buttonTexture.destroy(); }
+  void destroyTexture();
 
-  inline void draw() {
-    _buttonTexture.draw();
-  }
+  void draw();
 
   /** @brief used to set _buttonTexture position.
    *
@@ -138,42 +136,28 @@ class ButtonBase : public TouchEntity {
    *  @param const int32_t - new Y coordinate
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void setPosition(const int32_t x, const int32_t y) {
-    _originalEventRect.x = x;
-    _originalEventRect.y = y;
-    _buttonTexture.setPosition(x, y);
-  }
+  void setPosition(const int32_t x, const int32_t y);
 
   /** @brief used to set _buttonTexture position.
    *
    *  @param const Point - new coordinates
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void setPosition(const Point& pos) {
-    _originalEventRect.x = pos.x;
-    _originalEventRect.y = pos.y;
-    _buttonTexture.setPosition(pos);
-  }
+  void setPosition(const Point& pos);
 
   /** @brief used to set _buttonTexture X coordinate.
    *
    *  @param const int32_t - new X coordinate
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void setX(const int32_t x) {
-    _originalEventRect.x = x;
-    _buttonTexture.setX(x);
-  }
+  void setX(const int32_t x);
 
   /** @brief used to set _buttonTexture Y coordinate.
    *
    *  @param const int32_t - new Y coordinate
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void setY(const int32_t y) {
-    _originalEventRect.y = y;
-    _buttonTexture.setY(y);
-  }
+  void setY(const int32_t y);
 
   /** @brief used to set Image Rect to point to a specific frame Rect.
    *         Even if Image does not have sprites it is still valid to
@@ -181,61 +165,47 @@ class ButtonBase : public TouchEntity {
    *
    *  @param const int32_t - input frame index
    * */
-  inline void setFrame(const int32_t frameIndex) {
-    _buttonTexture.setFrame(frameIndex);
-  }
+  void setFrame(const int32_t frameIndex);
 
   /** @brief used to set next valid frame index.
    *         NOTE: if maxFrames are reached frame 0 is set.
    * */
-  inline void setNextFrame() { _buttonTexture.setNextFrame(); }
+  void setNextFrame();
 
   /** @brief used to set previous valid frame index.
    *         NOTE: if -1 index is reached frame _maxFrames - 1 is set.
    * */
-  inline void setPrevFrame() { _buttonTexture.setPrevFrame(); }
+  void setPrevFrame();
 
   /** @brief used to move _buttonTexture vertically.
    *
    *  @param const int32_t - Y coordinate offset
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void moveDown(const int32_t y) {
-    _originalEventRect.y += y;
-    _buttonTexture.moveDown(y);
-  }
+  void moveDown(const int32_t y);
 
   /** @brief used to move _buttonTexture vertically.
    *
    *  @param const int32_t - Y coordinate offset
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void moveUp(const int32_t y) {
-    _originalEventRect.y -= y;
-    _buttonTexture.moveUp(y);
-  }
+  void moveUp(const int32_t y);
 
   /** @brief used to move _buttonTexture horizontally.
    *
    *  @param const int32_t - X coordinate offset
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void moveLeft(const int32_t x) {
-    _originalEventRect.x -= x;
-    _buttonTexture.moveLeft(x);
-  }
+  void moveLeft(const int32_t x);
 
   /** @brief used to move _buttonTexture horizontally.
    *
    *  @param const int32_t - X coordinate offset
    *         NOTE: the position is relative to the current monitorWindow.
    * */
-  inline void moveRight(const int32_t x) {
-    _originalEventRect.x += x;
-    _buttonTexture.moveRight(x);
-  }
+  void moveRight(const int32_t x);
 
-  inline bool isCreated() const { return _buttonTexture.isCreated(); }
+  bool isCreated() const { return _buttonTexture.isCreated(); }
 
   const Image &getButtonTexture() const { return _buttonTexture; };
 
@@ -246,7 +216,7 @@ class ButtonBase : public TouchEntity {
    *  WARNING: even if user defined capture event rectangle is present,
    *           the position of the _originalEventRect are returned.
    * */
-  inline Point getPosition() const {
+  Point getPosition() const {
     return Point(_originalEventRect.x, _originalEventRect.y);
   }
 
@@ -257,7 +227,7 @@ class ButtonBase : public TouchEntity {
    *  WARNING: even if user defined capture event rectangle is present,
    *           the X coordinate of the _originalEventRect is returned.
    * */
-  inline int32_t getX() const { return _originalEventRect.x; }
+  int32_t getX() const { return _originalEventRect.x; }
 
   /** @brief used to get absolute _buttonTexture Y coordinate
    *
@@ -266,7 +236,7 @@ class ButtonBase : public TouchEntity {
    *  WARNING: even if user defined capture event rectangle is present,
    *           the Y coordinate of the _originalEventRect is returned.
    * */
-  inline int32_t getY() const { return _originalEventRect.y; }
+  int32_t getY() const { return _originalEventRect.y; }
 
   /** @brief used to get width _buttonTexture dimension
    *
@@ -275,7 +245,7 @@ class ButtonBase : public TouchEntity {
    *  WARNING: even if user defined capture event rectangle is present,
    *           the width of the _originalEventRect is returned.
    * */
-  inline int32_t getWidth() const { return _originalEventRect.w; }
+  int32_t getWidth() const { return _originalEventRect.w; }
 
   /** @brief used to get height _buttonTexture dimension
    *
@@ -284,19 +254,19 @@ class ButtonBase : public TouchEntity {
    *  WARNING: even if user defined capture event rectangle is present,
    *           the height of the _originalEventRect is returned.
    * */
-  inline int32_t getHeight() const { return _originalEventRect.h; }
+  int32_t getHeight() const { return _originalEventRect.h; }
 
   /** @brief used to obtain currently set frame index
    *
    *  @param int32_t - frame index
    * */
-  inline int32_t getFrame() const { return _buttonTexture.getFrame(); }
+  int32_t getFrame() const { return _buttonTexture.getFrame(); }
 
   /** @brief used to obtain maximum frame count
    *
    *  @param int32_t - frame index
    * */
-  inline int32_t getFrameCount() const {
+  int32_t getFrameCount() const {
     return _buttonTexture.getFrameCount();
   }
 
@@ -304,7 +274,7 @@ class ButtonBase : public TouchEntity {
    *
    *  @returns Rectangle - Button bounding rectangle
    * */
-  inline Rectangle getButtonRect() const {
+  Rectangle getButtonRect() const {
     return _buttonTexture.getImageRect();
   }
 
@@ -322,26 +292,24 @@ class ButtonBase : public TouchEntity {
    *
    *  @const Rectangle & - new frame Rectangle dimensions
    * */
-  inline void addFrame(const Rectangle& rectFrame) {
-    _buttonTexture.addFrame(rectFrame);
-  }
+  void addFrame(const Rectangle& rectFrame);
 
   /** @brief used to hide the button widget (so it not be
    *                     unnecessary drawn when draw() method is called)
    * */
-  inline void hide() { _buttonTexture.hide(); }
+  void hide() { _buttonTexture.hide(); }
 
   /** @brief used to show the button widget (so it will be drawn
    *                                       when draw() method is called)
    * */
-  inline void show() { _buttonTexture.show(); }
+  void show() { _buttonTexture.show(); }
 
   /** @brief used to determine whether the Button's widget
    *                                                    is hidden or not
    *
    *  @return bool - is Button widget hidden or not
    * */
-  inline bool isVisible() const { return _buttonTexture.isVisible(); }
+  bool isVisible() const { return _buttonTexture.isVisible(); }
 
   //=================== END Image related functions ======================
 
@@ -365,7 +333,7 @@ class ButtonBase : public TouchEntity {
    *
    *  @return bool - user provided capture event rectangle is set or not
    * */
-  inline bool isEventCaptureRectSet() const { return _isCaptureEventRectSet; }
+  bool isEventCaptureRectSet() const { return _isCaptureEventRectSet; }
 
  protected:
   /** Define ButtonStates in order to use _someButton.setFrame(CLICKED)

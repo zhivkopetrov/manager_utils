@@ -30,11 +30,11 @@ class FrameAnimation : public AnimationBase {
 
   /** @brief used to start the loaded/configured animation.
    * */
-  virtual void start() override final;
+  void start() final;
 
   /** @brief used to manually stop a loaded/configured animation.
    * */
-  virtual void stop() override final;
+  void stop() final;
 
   /** @brief used to reset a loaded/configured animation internals so it
    *         can be started again from the start without the need of
@@ -44,11 +44,11 @@ class FrameAnimation : public AnimationBase {
    *               AnimationBase::hideAnimation() you need to manually
    *               invoke AnimationBase::showAnimation().
    * */
-  virtual void reset() override final;
+  void reset() final;
 
   /** @brief TimerClient Timer tick implementation
    * */
-  virtual void onTimeout(const int32_t timerId) override final;
+  void onTimeout(const int32_t timerId) final;
 
   //=============== END AnimationBase related functions ==================
 
@@ -86,7 +86,7 @@ class FrameAnimation : public AnimationBase {
    *
    *  @return AnimDir - the current direction of animation movement
    * */
-  inline AnimDir getCurrDirection() const { return _cfg.animDirection; }
+  AnimDir getCurrDirection() const { return _cfg.animDirection; }
 
   /** @brief used to explicitly set the first frame of the FrameAnimation.
    *         This can be used in order to use the animation as a simple

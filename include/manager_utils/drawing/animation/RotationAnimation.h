@@ -32,11 +32,11 @@ class RotationAnimation : public AnimationBase {
 
   /** @brief used to start the loaded/configured animation.
    * */
-  virtual void start() override final;
+  void start() final;
 
   /** @brief used to manually stop a loaded/configured animation.
    * */
-  virtual void stop() override final;
+  void stop() final;
 
   /** @brief used to reset a loaded/configured animation internals so it
    *         can be started again from the start without the need of
@@ -46,11 +46,11 @@ class RotationAnimation : public AnimationBase {
    *               AnimationBase::hideAnimation() you need to manually
    *               invoke AnimationBase::showAnimation().
    * */
-  virtual void reset() override final;
+  void reset() final;
 
   /** @brief TimerClient Timer tick implementation
    * */
-  virtual void onTimeout(const int32_t timerId) override final;
+  void onTimeout(const int32_t timerId) final;
 
   //=============== END AnimationBase related functions ==================
 
@@ -114,19 +114,19 @@ class RotationAnimation : public AnimationBase {
    *
    *  @return AnimDir - the current direction of animation movement
    * */
-  inline AnimDir getCurrDirection() const { return _currAnimDir; }
+  AnimDir getCurrDirection() const { return _currAnimDir; }
 
-  inline double getRotationAngleStep() const { return _rotAngleStep; }
+  double getRotationAngleStep() const { return _rotAngleStep; }
 
-  inline double getRotationAngleLeft() const {
+  double getRotationAngleLeft() const {
     return _totalRotAngle - _currRotAngle;
   }
 
-  inline void slowDown(const double value) {
+  void slowDown(const double value) {
     (_rotAngleStep - value >= 0) ? _rotAngleStep -= value : _rotAngleStep = 0;
   }
 
-  inline void speedUp(const double value) { _rotAngleStep += value; }
+  void speedUp(const double value) { _rotAngleStep += value; }
 
  private:
   /** @brief used to set the next logical frame for

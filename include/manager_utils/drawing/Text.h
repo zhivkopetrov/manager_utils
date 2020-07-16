@@ -85,7 +85,7 @@ class Text : public Widget {
    *
    *  @returns const char*  - text content of the Text instance
    * */
-  inline const char* getText() const { return _textContent; }
+  const char* getText() const { return _textContent; }
 
  private:
   /** @brief used to make a deep copy of the input text

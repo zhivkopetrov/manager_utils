@@ -257,6 +257,14 @@ uint64_t CreditRotation::getEndValue() const {
   return _final;
 }
 
+void CreditRotation::activateTextScaling() {
+  _balanceText.activateScaling();
+}
+
+void CreditRotation::setTextMaxScalingWidth(const int32_t maxWidth) {
+  _balanceText.setMaxScalingWidth(maxWidth);
+}
+
 void CreditRotation::onTimeout(const int32_t timerId) {
   if (timerId == _increaseTimerId) {
     // if visible amount is equal to real amount stop change it

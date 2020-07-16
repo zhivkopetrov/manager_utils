@@ -39,11 +39,11 @@ class PulseAnimation : public AnimationBase {
 
   /** @brief used to start the loaded/configured animation.
    * */
-  virtual void start() override final;
+   void start() final;
 
   /** @brief used to manually stop a loaded/configured animation.
    * */
-  virtual void stop() override final;
+  void stop() final;
 
   /** @brief used to reset a loaded/configured animation internals so it
    *         can be started again from the start without the need of
@@ -53,11 +53,11 @@ class PulseAnimation : public AnimationBase {
    *               AnimationBase::hideAnimation() you need to manually
    *               invoke AnimationBase::showAnimation().
    * */
-  virtual void reset() override final;
+  void reset() final;
 
   /** @brief TimerClient Timer tick implementation
    * */
-  virtual void onTimeout(const int32_t timerId) override final;
+  void onTimeout(const int32_t timerId) final;
 
   //=============== END AnimationBase related functions ==================
 
@@ -91,7 +91,7 @@ class PulseAnimation : public AnimationBase {
    * @param numberOfRepeats - the number of full pulses the animation must
    * perform.
    **/
-  inline void setNumberOfRepeats(const uint16_t numberOfRepeats) {
+  void setNumberOfRepeats(const uint16_t numberOfRepeats) {
     _numOfRepeats = numberOfRepeats;
   }
 
@@ -120,12 +120,7 @@ class PulseAnimation : public AnimationBase {
    * @brief set the center position of the image if
    *                                 PulseAlignType::CENTERED is provided
    */
-  inline void centerImage() {
-    const int32_t DIFF_X = (_origImgWidth - _img.getScaledWidth()) >> 1;
-    const int32_t DIFF_Y = (_origImgHeight - _img.getScaledHeight()) >> 1;
-
-    _img.setPosition(_cfg.startPos.x + DIFF_X, _cfg.startPos.y + DIFF_Y);
-  }
+  void centerImage();
 
   /** @brief used to completely reset AnimationBase internal variables
    * */

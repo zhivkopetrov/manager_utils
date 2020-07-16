@@ -37,7 +37,7 @@ class SoundMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t init() override;
+  int32_t init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -48,29 +48,29 @@ class SoundMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t recover() override;
+  int32_t recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
-  virtual void deinit() override;
+  void deinit() override;
 
   /** @brief used to process the current manager (poll him on every
    *         engine cycle so the managers can do any internal updates, if
    *                                                     such are needed).
    * */
-  virtual void process() override;
+  void process() override;
 
   /** @brief captures user inputs (if any)
    *
    *  @param const InputEvent & - user input event
    * */
-  virtual void handleEvent(const InputEvent& e) override;
+  void handleEvent(const InputEvent& e) override;
 
   /** @brief returns the name of the current manager
    *
    *  @return const char * - current manager name
    * */
-  virtual const char* getName() override;
+  const char* getName() override;
 
   //================== END MgrBase related functions =====================
 
@@ -78,7 +78,7 @@ class SoundMgrBase : public MgrBase {
    *
    *  @return SoundLevel - the system sound level
    * */
-  inline SoundLevel getGlobalVolumeLevel() const { return _systemSoundLevel; }
+  SoundLevel getGlobalVolumeLevel() const { return _systemSoundLevel; }
 
   //=================== START Music related functions ====================
 
@@ -141,7 +141,7 @@ class SoundMgrBase : public MgrBase {
    *
    *  @return bool - music is loaded or not
    * */
-  inline bool isMusicLoaded() const { return nullptr != _music; }
+  bool isMusicLoaded() const { return nullptr != _music; }
 
   /** @brief used to determine whether the music is currently playing
    *

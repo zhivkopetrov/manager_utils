@@ -406,6 +406,13 @@ void PulseAnimation::executeInfiniteBackward() {
   }
 }
 
+void PulseAnimation::centerImage() {
+  const int32_t DIFF_X = (_origImgWidth - _img.getScaledWidth()) >> 1;
+  const int32_t DIFF_Y = (_origImgHeight - _img.getScaledHeight()) >> 1;
+
+  _img.setPosition(_cfg.startPos.x + DIFF_X, _cfg.startPos.y + DIFF_Y);
+}
+
 void PulseAnimation::resetConfigInternal() {
   AnimationBase::resetConfigInternal();
 

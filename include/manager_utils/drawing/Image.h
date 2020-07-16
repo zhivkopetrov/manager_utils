@@ -69,7 +69,7 @@ class Image : public Widget {
   /**
    * @brief a getter, so the recource ID is public information
    */
-  inline uint64_t getRsrcId() const { return _drawParams.rsrcId; }
+  uint64_t getRsrcId() const { return _drawParams.rsrcId; }
 
   /** @brief used to set Image Rect to point to a specific frame Rect.
    *         Even if Image does not have sprites it is still valid to

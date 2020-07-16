@@ -423,6 +423,11 @@ int64_t TimerMgrBase::getTimerRemainingInterval(const int32_t timerId) const {
   return remainingTime;
 }
 
+bool TimerMgrBase::isActiveTimerId(const int32_t timerId) const {
+  return (_removeTimerSet.end() == _removeTimerSet.find(timerId)) &&
+         (_timerMap.end() != _timerMap.find(timerId));
+}
+
 void TimerMgrBase::onTimerTimeout(const int32_t timerId, TimerData& timerData) {
   TRACE_ENTRY_EXIT;
 
@@ -599,4 +604,8 @@ void TimerMgrBase::onInitEnd() {
   // reset the timer so it can clear the "stored" time since the creation
   // of the TimerMgrBase instance and this function call
   _timeInternal.getElapsed();
+}
+
+bool TimerMgrBase::isTimerLocatedInTheTimerMap(const int32_t timerId) const {
+  return _timerMap.end() != _timerMap.find(timerId);
 }

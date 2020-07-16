@@ -92,23 +92,21 @@ class CreditRotation : public TimerClientSpeedAdjustable {
   /**
    * @brief activate the text scaling
    */
-  inline void activateTextScaling() { _balanceText.activateScaling(); }
+  void activateTextScaling();
 
   /**
    * @brief set the text max scaling width
    *
    * @param maxWidth - max scaling width
    */
-  inline void setTextMaxScalingWidth(const int32_t maxWidth) {
-    _balanceText.setMaxScalingWidth(maxWidth);
-  }
+  void setTextMaxScalingWidth(const int32_t maxWidth);
 
   /**
    * @brief an interface function to get the credit rotation rectangle
    */
-  inline Rectangle getRect() const { return _area; }
+  Rectangle getRect() const { return _area; }
 
-  inline uint64_t getCredit() const { return _currentValue; }
+  uint64_t getCredit() const { return _currentValue; }
 
  protected:
   // period for timers

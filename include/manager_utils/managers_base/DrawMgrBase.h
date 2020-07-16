@@ -44,7 +44,7 @@ class DrawMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t init() override;
+  int32_t init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -55,29 +55,29 @@ class DrawMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t recover() override;
+  int32_t recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
-  virtual void deinit() override;
+  void deinit() override;
 
   /** @brief used to process the current manager (poll him on every
    *         engine cycle so the managers can do any internal updates, if
    *                                                     such are needed).
    * */
-  virtual void process() override;
+  void process() override;
 
   /** @brief captures user inputs (if any)
    *
    *  @param const InputEvent & - user input event
    * */
-  virtual void handleEvent(const InputEvent& e) override;
+  void handleEvent(const InputEvent& e) override;
 
   /** @brief returns the name of the current manager
    *
    *  @return const char * - current manager name
    * */
-  virtual const char* getName() override;
+  const char* getName() override;
 
   //================== END MgrBase related functions =====================
 
@@ -201,7 +201,7 @@ class DrawMgrBase : public MgrBase {
    *
    *  @param const uint32_t - max frame cap
    * */
-  inline void setMaxFrameRate(const uint32_t maxFrames) {
+  void setMaxFrameRate(const uint32_t maxFrames) {
     _maxFrames = maxFrames;
   }
 
@@ -209,19 +209,19 @@ class DrawMgrBase : public MgrBase {
    *
    *  @return uint32_t - max frames
    * */
-  inline uint32_t getMaxFrameRate() const { return _maxFrames; }
+  uint32_t getMaxFrameRate() const { return _maxFrames; }
 
   /** @brief used to acquire screen width
    *
    *  @return int32_t - screen width
    * */
-  inline int32_t getMonitorWidth() const { return _config.monitorHeight; }
+  int32_t getMonitorWidth() const { return _config.monitorHeight; }
 
   /** @brief used to acquire screen height
    *
    *  @return int32_t - screen height
    * */
-  inline int32_t getMonitorHeight() const { return _config.monitorHeight; }
+  int32_t getMonitorHeight() const { return _config.monitorHeight; }
 
   void moveGlobalX(const int32_t x);
 
@@ -229,7 +229,7 @@ class DrawMgrBase : public MgrBase {
 
   void resetAbsoluteGlobalMovement();
 
-  inline Renderer *getRenderer() {
+  Renderer *getRenderer() {
     return _renderer;
   }
 

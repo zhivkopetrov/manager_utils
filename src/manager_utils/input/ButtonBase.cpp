@@ -116,6 +116,67 @@ void ButtonBase::create(const uint64_t rsrcId) {
   touchEntityEventRect = &_originalEventRect;
 }
 
+void ButtonBase::destroyTexture() {
+  _buttonTexture.destroy();
+}
+
+void ButtonBase::draw() {
+  _buttonTexture.draw();
+}
+
+void ButtonBase::setPosition(const int32_t x, const int32_t y) {
+  _originalEventRect.x = x;
+  _originalEventRect.y = y;
+  _buttonTexture.setPosition(x, y);
+}
+void ButtonBase::setPosition(const Point& pos) {
+  _originalEventRect.x = pos.x;
+  _originalEventRect.y = pos.y;
+  _buttonTexture.setPosition(pos);
+}
+
+void ButtonBase::setX(const int32_t x) {
+  _originalEventRect.x = x;
+  _buttonTexture.setX(x);
+}
+
+void ButtonBase::setY(const int32_t y) {
+  _originalEventRect.y = y;
+  _buttonTexture.setY(y);
+}
+
+void ButtonBase::setFrame(const int32_t frameIndex) {
+  _buttonTexture.setFrame(frameIndex);
+}
+
+void ButtonBase::setNextFrame() {
+  _buttonTexture.setNextFrame();
+}
+
+void ButtonBase::setPrevFrame() {
+  _buttonTexture.setPrevFrame();
+}
+
+void ButtonBase::moveDown(const int32_t y) {
+  _originalEventRect.y += y;
+  _buttonTexture.moveDown(y);
+}
+
+void ButtonBase::moveUp(const int32_t y) {
+  _originalEventRect.y -= y;
+  _buttonTexture.moveUp(y);
+}
+
+void ButtonBase::ButtonBase::moveLeft(const int32_t x) {
+  _originalEventRect.x -= x;
+  _buttonTexture.moveLeft(x);
+}
+
+void ButtonBase::moveRight(const int32_t x) {
+  _originalEventRect.x += x;
+  _buttonTexture.moveRight(x);
+}
+
 void ButtonBase::setEventCaptureRect(const Rectangle& rect) {
   _isCaptureEventRectSet = true;
   _captureEventRect = rect;
@@ -126,9 +187,6 @@ void ButtonBase::setEventCaptureRect(const Rectangle& rect) {
   touchEntityEventRect = &_captureEventRect;
 }
 
-/** @brief used to reset user defined capture event rectangle. By doing
- *         so the default image frame rectangle will be used
- * */
 void ButtonBase::resetEventCaptureRect() {
   _isCaptureEventRectSet = false;
   _captureEventRect = Rectangle::UNDEFINED;
@@ -145,4 +203,8 @@ Rectangle ButtonBase::getButtonEventRect() const {
   }
 
   return _originalEventRect;
+}
+
+void ButtonBase::addFrame(const Rectangle& rectFrame) {
+  _buttonTexture.addFrame(rectFrame);
 }

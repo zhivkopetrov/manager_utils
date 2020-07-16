@@ -40,7 +40,7 @@ class TimerMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t init() override;
+  int32_t init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -51,29 +51,29 @@ class TimerMgrBase : public MgrBase {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t recover() override;
+  int32_t recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
-  virtual void deinit() override;
+  void deinit() override;
 
   /** @brief used to process the current manager (poll him on every
    *         engine cycle so the managers can do any internal updates, if
    *                                                     such are needed).
    * */
-  virtual void process() override;
+  void process() override;
 
   /** @brief captures user inputs (if any)
    *
    *  @param const InputEvent & - user input event
    * */
-  virtual void handleEvent(const InputEvent& e) override;
+  void handleEvent(const InputEvent& e) override;
 
   /** @brief returns the name of the current manager
    *
    *  @return const char * - current manager name
    * */
-  virtual const char* getName() override;
+  const char* getName() override;
 
   //================== END MgrBase related functions =====================
 
@@ -98,7 +98,7 @@ class TimerMgrBase : public MgrBase {
    *        This will mean that for 19+ contiguous engine cycle those same
    *        timers onTimeout() will be wrongly invoked.
    * */
-  inline void forceUpdate() { TimerMgrBase::process(); }
+  void forceUpdate() { TimerMgrBase::process(); }
 
   /** @brief starts timer with provided arguments
    *    this functions does not return error code for performance reasons
@@ -248,17 +248,14 @@ class TimerMgrBase : public MgrBase {
    *
    *  @returns bool - is active timer or not
    * */
-  inline bool isActiveTimerId(const int32_t timerId) const {
-    return (_removeTimerSet.end() == _removeTimerSet.find(timerId)) &&
-           (_timerMap.end() != _timerMap.find(timerId));
-  }
+  bool isActiveTimerId(const int32_t timerId) const;
 
   /** @brief used to acquire the size of the actual active timers
    *                                                      in the system
    *
    *  @return uint64_t - active timers count
    * */
-  inline uint64_t getActiveTimersCount() const { return _timerMap.size(); }
+  uint64_t getActiveTimersCount() const { return _timerMap.size(); }
 
   /** @brief paused all timers(which has TimerGroup::INTERRUPTIBLE)
    *
@@ -281,7 +278,7 @@ class TimerMgrBase : public MgrBase {
    * @brief expose the timer speed so that outside parties can
    *      benefit from it
    * */
-  inline int32_t getTimerSpeed() const { return _timerSpeed; }
+  int32_t getTimerSpeed() const { return _timerSpeed; }
 
   /** @brief must be called on project init() method end in order to
    *         set proper internal TimerMgrBase calculations */
@@ -324,9 +321,7 @@ class TimerMgrBase : public MgrBase {
    *
    *  @return bool - is timer present in the timerMap or not
    * */
-  inline bool isTimerLocatedInTheTimerMap(const int32_t timerId) const {
-    return _timerMap.end() != _timerMap.find(timerId);
-  }
+  bool isTimerLocatedInTheTimerMap(const int32_t timerId) const;
 
   /** Used to measure elapsed time and update _timerMap
    *                                               on every engine cycle

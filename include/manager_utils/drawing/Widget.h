@@ -55,7 +55,7 @@ class Widget {
    *
    *  @returns bool - has crop or not
    * */
-  inline bool hasCrop() const { return _drawParams.hasCrop; }
+  bool hasCrop() const { return _drawParams.hasCrop; }
 
   /** @brief used to enabled alpha modulation (Widget transparency)
    * */
@@ -78,7 +78,7 @@ class Widget {
    *
    *  @return bool - scaling is ON or OFF
    *  */
-  inline bool isScalingActive() const { return _drawParams.hasScaling; }
+  bool isScalingActive() const { return _drawParams.hasScaling; }
 
   /** @brief used to set maximum width for horizontal scaling
    *
@@ -144,10 +144,7 @@ class Widget {
    *
    *  @param const double - scale (for both X and Y axis)
    * */
-  inline void setScale(const double scale) {
-    setScaleX(scale);
-    setScaleY(scale);
-  }
+  void setScale(const double scale);
 
   /**
    * @brief used to scale Widget to both its X and Y axis but keeps the
@@ -175,10 +172,7 @@ class Widget {
    *  @param const double - scale X
    *  @param const double - scale Y
    * */
-  inline void setScaleXY(const double scaleX, const double scaleY) {
-    setScaleX(scaleX);
-    setScaleY(scaleY);
-  }
+  void setScaleXY(const double scaleX, const double scaleY);
 
   /** @brief used to set widget position.
    *
@@ -246,7 +240,7 @@ class Widget {
    *         NOTE2: this function modifies full image width
    *         (not current frame width).
    * */
-  inline void setImageWidth(const int32_t width) { _imageWidth = width; }
+  void setImageWidth(const int32_t width) { _imageWidth = width; }
 
   /** @brief used to set widget height value.
    *
@@ -257,7 +251,7 @@ class Widget {
    *         NOTE2: this function modifies full image height
    *         (not current frame width).
    * */
-  inline void setImageHeight(const int32_t height) { _imageHeight = height; }
+  void setImageHeight(const int32_t height) { _imageHeight = height; }
 
   /** @brief used to set frame width value.
    *
@@ -300,7 +294,7 @@ class Widget {
    *         NOTE: if rotation center is not set - rotation be done
    *                 around _drawParams.width / 2, _drawParams.height / 2.
    * */
-  inline void setRotationCenter(const int32_t x, const int32_t y) {
+  void setRotationCenter(const int32_t x, const int32_t y) {
     _drawParams.centerPos.x = x;
     _drawParams.centerPos.y = y;
   }
@@ -312,7 +306,7 @@ class Widget {
    *         NOTE: if rotation center is not set - rotation be done
    *                 around _drawParams.width / 2, _drawParams.height / 2.
    * */
-  inline void setRotationCenter(const Point& pos) {
+  void setRotationCenter(const Point& pos) {
     _drawParams.centerPos = pos;
   }
 
@@ -322,7 +316,7 @@ class Widget {
    *         NOTE: (+) positive values rotates clockwise
    *               (-) negative values rotates anti-clockwise
    * */
-  inline void setRotation(const double rotationAngle) {
+  void setRotation(const double rotationAngle) {
     _drawParams.angle = rotationAngle;
   }
 
@@ -346,7 +340,7 @@ class Widget {
    *
    *  @return int32_t - current Widget opacity
    * */
-  inline int32_t getOpacity() const { return _drawParams.opacity; }
+  int32_t getOpacity() const { return _drawParams.opacity; }
 
   /** @brief used to acquire absolute rotation angle of the widget
    *
@@ -354,37 +348,37 @@ class Widget {
    *         NOTE: (+) positive values rotates clockwise
    *               (-) negative values rotates anti-clockwise
    * */
-  inline double getRotation() const { return _drawParams.angle; }
+  double getRotation() const { return _drawParams.angle; }
 
   /** @brief used to get absolute image coordinates
    *
    *  @returns Point - absolute image coordinates
    * */
-  inline Point getPosition() const { return _drawParams.pos; }
+  Point getPosition() const { return _drawParams.pos; }
 
   /** @brief used to get absolute image X coordinate
    *
    *  @returns int32_t - absolute image X coordinate
    * */
-  inline int32_t getX() const { return _drawParams.pos.x; }
+  int32_t getX() const { return _drawParams.pos.x; }
 
   /** @brief used to get absolute image Y coordinate
    *
    *  @returns int32_t - absolute image Y coordinate
    * */
-  inline int32_t getY() const { return _drawParams.pos.y; }
+  int32_t getY() const { return _drawParams.pos.y; }
 
   /** @brief used to get frame width dimension
    *
    *  @returns int32_t - frame width dimension
    * */
-  inline int32_t getFrameWidth() const { return _origFrameRect.w; }
+  int32_t getFrameWidth() const { return _origFrameRect.w; }
 
   /** @brief used to get frame height dimension
    *
    *  @returns int32_t - frame height dimension
    * */
-  inline int32_t getFrameHeight() const { return _origFrameRect.h; }
+  int32_t getFrameHeight() const { return _origFrameRect.h; }
 
   /** @brief used to get frame width dimension
    *
@@ -393,7 +387,7 @@ class Widget {
    *
    *  @returns int32_t - frame width dimension
    * */
-  inline int32_t getCroppedFrameWidth() const {
+  int32_t getCroppedFrameWidth() const {
     return _drawParams.frameRect.w;
   }
 
@@ -404,7 +398,7 @@ class Widget {
    *
    *  @returns int32_t - frame height dimension
    * */
-  inline int32_t getCroppedFrameHeight() const {
+  int32_t getCroppedFrameHeight() const {
     return _drawParams.frameRect.h;
   }
 
@@ -412,7 +406,7 @@ class Widget {
    *
    *  @returns int32_t - frame rectangle
    * */
-  inline Rectangle getFrameRect() const { return _drawParams.frameRect; }
+  Rectangle getFrameRect() const { return _drawParams.frameRect; }
 
   /** @brief used to get Image/Widget bounding rectangle
    *  WARNING: even if crop is enabled -> original Image Rectangle is
@@ -420,7 +414,7 @@ class Widget {
    *
    *  @returns Rectangle - Image/Widget bounding rectangle
    * */
-  inline Rectangle getImageRect() const {
+  Rectangle getImageRect() const {
     return Rectangle(_drawParams.pos, _origFrameRect.w, _origFrameRect.h);
   }
 
@@ -431,7 +425,7 @@ class Widget {
    *
    *  @returns Rectangle - absolute cropped image rectangle
    * */
-  inline Rectangle getCropRect() const {
+  Rectangle getCropRect() const {
     return _drawParams.hasCrop
                ? _drawParams.frameCropRect
                : Rectangle(_drawParams.pos, _drawParams.frameRect.w,
@@ -446,14 +440,14 @@ class Widget {
    *
    *  @returns int32_t - full image width
    * */
-  inline int32_t getImageWidth() const { return _imageWidth; }
+   int32_t getImageWidth() const { return _imageWidth; }
 
   /** @brief used to get full image height dimension
    *         NOTE: not to be mistaken with getFrameHeight()
    *
    *  @returns int32_t - full image height
    * */
-  inline int32_t getImageHeight() const { return _imageHeight; }
+   int32_t getImageHeight() const { return _imageHeight; }
 
   /** @brief used to acquire the widget scaled width value.
    *
@@ -495,29 +489,29 @@ class Widget {
    *
    *  @param DrawParams - current Widget DrawParams
    * */
-  inline DrawParams getDrawParams() const { return _drawParams; }
+  DrawParams getDrawParams() const { return _drawParams; }
 
   /** @brief used to determine whether the widget is created or not
    *
    *  @return bool - is Widget created or not
    * */
-  inline bool isCreated() const { return _isCreated; }
+  bool isCreated() const { return _isCreated; }
 
   /** @brief used to hide widget (so it not be unnecessary drawn
    *                                       when draw() method is called)
    * */
-  inline void hide() { _isVisible = false; }
+  void hide() { _isVisible = false; }
 
   /** @brief used to show the widget (so it will be drawn
    *                                       when draw() method is called)
    * */
-  inline void show() { _isVisible = true; }
+  void show() { _isVisible = true; }
 
   /** @brief used to determine whether the widget is hidden or not
    *
    *  @return bool - is Widget hidden or not
    * */
-  inline bool isVisible() const { return _isVisible; }
+  bool isVisible() const { return _isVisible; }
 
  protected:
   /** @brief used to reset all Widget internal data. This function should

@@ -36,7 +36,7 @@ class RsrcMgrBase : public MgrBase, public SDLContainers {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t init() override;
+  int32_t init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -47,29 +47,29 @@ class RsrcMgrBase : public MgrBase, public SDLContainers {
    *
    *  @return int32_t - error code
    * */
-  virtual int32_t recover() override;
+  int32_t recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
-  virtual void deinit() override;
+  void deinit() override;
 
   /** @brief used to process the current manager (poll him on every
    *         engine cycle so the managers can do any internal updates, if
    *                                                     such are needed).
    * */
-  virtual void process() override;
+  void process() override;
 
   /** @brief captures user inputs (if any)
    *
    *  @param const InputEvent & - user input event
    * */
-  virtual void handleEvent(const InputEvent& e) override;
+  void handleEvent(const InputEvent& e) override;
 
   /** @brief returns the name of the current manager
    *
    *  @return const char * - current manager name
    * */
-  virtual const char* getName() override;
+  const char* getName() override;
 
   //================== END MgrBase related functions =====================
 
@@ -89,7 +89,7 @@ class RsrcMgrBase : public MgrBase, public SDLContainers {
    *         WARNING: this method will be called from the main(drawing)
    *                  thread. Do not forget to lock your data!
    **/
-  virtual void onLoadTextureMultipleCompleted(const int32_t batchId);
+  void onLoadTextureMultipleCompleted(const int32_t batchId);
 
   /** @brief used to acquire the occupied GPU VRAM from the RsrcMgrBase
    *

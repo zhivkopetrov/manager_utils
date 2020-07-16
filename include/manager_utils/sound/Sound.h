@@ -56,7 +56,7 @@ class Sound : public SoundWidget {
    *                           Sound again - it needs to be re-created.
    *                                      (Invoking of .create() method)
    * */
-  virtual void destroy() override;
+  void destroy() override;
 
   /** @brief used to set sound volume for the Sound
    *         NOTE: this function does not return error code
@@ -64,38 +64,38 @@ class Sound : public SoundWidget {
    *
    *  @param const SoundLevel - input sound level
    * */
-  virtual void setVolume(const SoundLevel soundLevel) override;
+  void setVolume(const SoundLevel soundLevel) override;
 
   /** @brief used to play sound under the Sound
    *
    *  @param const int32_t - number of repeats (-1 for
    *                                              endless loop /~65000/ )
    * */
-  virtual void play(const int32_t loops = 0) override;
+  void play(const int32_t loops = 0) override;
 
   /** @brief used to stop the Sound if it's playing.
    * */
-  virtual void stop() override;
+  void stop() override;
 
   /** @brief used to determine whether the Sound is playing
    *
    *  @return bool - is playing or not
    * */
-  virtual bool isPlaying() const override;
+  bool isPlaying() const override;
 
   /** @brief used to determine whether the Sound is paused
    *
    *  @return bool - is paused or not
    * */
-  virtual bool isPaused() const override;
+  bool isPaused() const override;
 
   /** @brief used to pause a Sound
    * */
-  virtual void pause() override;
+  void pause() override;
 
   /** @brief used to pause a Sound(that was previously paused)
    * */
-  virtual void resume() override;
+  void resume() override;
 
   //================= END SoundWidget related functions ==================
 

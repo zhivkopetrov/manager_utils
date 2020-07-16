@@ -445,6 +445,11 @@ void Widget::setScaleY(const double scaleY) {
   }
 }
 
+void Widget::setScale(const double scale) {
+  setScaleX(scale);
+  setScaleY(scale);
+}
+
 void Widget::setScaleCentered(const double scale, const Point &startPos) {
   if (!_drawParams.hasScaling) {
     LOGERR("Error! Scaling not enabled for widget with rsrcId: %#16lX",
@@ -452,14 +457,19 @@ void Widget::setScaleCentered(const double scale, const Point &startPos) {
     return;
   }
 
-  const int32_t NEW_SCALED_W = static_cast<const int32_t>(_imageWidth * scale);
-  const int32_t NEW_SCALED_H = static_cast<const int32_t>(_imageHeight * scale);
+  const int32_t NEW_SCALED_W = static_cast<int32_t>(_imageWidth * scale);
+  const int32_t NEW_SCALED_H = static_cast<int32_t>(_imageHeight * scale);
 
   const int32_t DIFF_X = (_imageWidth - NEW_SCALED_W) >> 1;
   const int32_t DIFF_Y = (_imageHeight - NEW_SCALED_H) >> 1;
 
   setScale(scale);
   setPosition(startPos.x + DIFF_X, startPos.y + DIFF_Y);
+}
+
+void Widget::setScaleXY(const double scaleX, const double scaleY) {
+  setScaleX(scaleX);
+  setScaleY(scaleY);
 }
 
 void Widget::setPosition(const int32_t x, const int32_t y) {

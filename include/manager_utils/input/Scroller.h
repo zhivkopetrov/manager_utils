@@ -43,7 +43,7 @@ class Scroller : public TouchEntity {
    *
    *  @returns bool     - isInside or not
    * */
-  virtual bool containsEvent(const InputEvent& e) override final;
+  bool containsEvent(const InputEvent& e) final;
 
   /** @brief invoked when event was PRESSED inside this TouchEntity
    *         and event leaves the borders of the TouchEntity when no
@@ -52,7 +52,7 @@ class Scroller : public TouchEntity {
    *
    *  @param const InputEvent & - engine's InputEvent
    * */
-  virtual void onLeave(const InputEvent& e) override;
+  void onLeave(const InputEvent& e) override;
 
   /** @brief invoked when event was PRESSED inside this TouchEntity
    *         and event leaves the borders of the TouchEntity when no
@@ -62,7 +62,7 @@ class Scroller : public TouchEntity {
    *
    *  @param const InputEvent & - engine's InputEvent
    * */
-  virtual void onReturn(const InputEvent& e) override;
+  void onReturn(const InputEvent& e) override;
 
   /** @brief called when the scroller receives a TouchEvent::Release
    * */
@@ -70,11 +70,11 @@ class Scroller : public TouchEntity {
 
   /** @brief used to lock this TouchEntity for incoming InputEvent
    * */
-  virtual void lockInput() override { _isInputUnlocked = false; }
+  void lockInput() override { _isInputUnlocked = false; }
 
   /** @brief used to unlock this TouchEntity for incoming InputEvent
    * */
-  virtual void unlockInput() override { _isInputUnlocked = true; }
+  void unlockInput() override { _isInputUnlocked = true; }
 
   //================ END TouchEntity related functions ===================
 
@@ -96,14 +96,14 @@ class Scroller : public TouchEntity {
    *
    *  @return int32_t - relative X coordinate movement
    * */
-  inline int32_t getMovementX() const { return _movementX; }
+  int32_t getMovementX() const { return _movementX; }
 
   /** @brief used to acquire relative Y coordinate movement since
    *                                                           last frame
    *
    *  @return int32_t - relative Y coordinate movement
    * */
-  inline int32_t getMovementY() const { return _movementY; }
+  int32_t getMovementY() const { return _movementY; }
 
   /** @brief used to process user input
    *
