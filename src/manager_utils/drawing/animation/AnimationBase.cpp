@@ -90,8 +90,6 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
     _cfg.startPos = _img->getPosition();
   }
 
-
-
   if (AnimDir::UNKNOWN == _cfg.animDirection) {
     LOGERR(
         "Error, animation with rsrcId: %#16lX has AnimDir::UNKNOWN, "

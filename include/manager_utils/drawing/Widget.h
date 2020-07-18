@@ -33,6 +33,14 @@ class Widget {
    * */
   void draw();
 
+  /** @brief set flip type (mirror widget)
+   *
+   *  @param const WidgetFlipType - /NONE, VERTICAL, HORIZONTAL, etc.../
+   * */
+  void setFlipType(const WidgetFlipType flipType) {
+    _drawParams.widgetFlipType = flipType;
+  }
+
   /** @brief used to set crop rectangle.
    *         NOTE: this method affects Widget's frame rectangle.
    *
@@ -349,6 +357,14 @@ class Widget {
    *               (-) negative values rotates anti-clockwise
    * */
   double getRotation() const { return _drawParams.angle; }
+
+  /** @brief used to get the currently set widget flip type (mirror widget)
+   *
+   *  @return WidgetFlipType - /NONE, VERTICAL, HORIZONTAL, etc.../
+   * */
+  WidgetFlipType getFlipType() const {
+    return _drawParams.widgetFlipType;
+  }
 
   /** @brief used to get absolute image coordinates
    *
