@@ -111,8 +111,8 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
 
     _alignType = alignType;
 
-    _origImgWidth = _img.getFrameWidth();
-    _origImgHeight = _img.getFrameHeight();
+    _origImgWidth = _img->getFrameWidth();
+    _origImgHeight = _img->getFrameHeight();
 
     if (MIN_SCALE_FACTOR > minScale || MAX_SCALE_FACTOR < minScale) {
       LOGERR(
@@ -167,15 +167,15 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
 
   if (EXIT_SUCCESS == err) {
     _isCfgComplete = true;
-    _img.activateScaling();
+    _img->activateScaling();
 
     if (AnimDir::FORWARD == _cfg.animDirection) {
       _currScale = MAX_SCALE_FACTOR;
-      _img.setScale(_currScale);
+      _img->setScale(_currScale);
     } else  // AnimDir::BACKWARD == _cfg.animDirection
     {
       _currScale = _minScale;
-      _img.setScale(_currScale);
+      _img->setScale(_currScale);
 
       if (PulseAlignType::CENTER == _alignType) {
         centerImage();
@@ -258,7 +258,7 @@ void PulseAnimation::reset() {
     resetScale = _minScale;
   }
 
-  _img.setScale(resetScale);
+  _img->setScale(resetScale);
 
   if (PulseAlignType::CENTER == _alignType) {
     centerImage();
@@ -303,7 +303,7 @@ void PulseAnimation::onTimeout(const int32_t timerId) {
 void PulseAnimation::executeFiniteForward() {
   --_currShrinkStep;
   _currScale -= _scaleStep;
-  _img.setScale(_currScale);
+  _img->setScale(_currScale);
 
   // animation has reached it's end
   if (0 == _currShrinkStep) {
@@ -326,7 +326,7 @@ void PulseAnimation::executeFiniteForward() {
 void PulseAnimation::executeFiniteBackward() {
   --_currShrinkStep;
   _currScale += _scaleStep;
-  _img.setScale(_currScale);
+  _img->setScale(_currScale);
 
   // animation has restarted
   if (0 == _currShrinkStep) {
@@ -365,7 +365,7 @@ void PulseAnimation::executeFiniteBackward() {
 void PulseAnimation::executeInfiniteForward() {
   --_currShrinkStep;
   _currScale -= _scaleStep;
-  _img.setScale(_currScale);
+  _img->setScale(_currScale);
 
   // animation has restarted
   if (0 == _currShrinkStep) {
@@ -387,7 +387,7 @@ void PulseAnimation::executeInfiniteForward() {
 void PulseAnimation::executeInfiniteBackward() {
   --_currShrinkStep;
   _currScale += _scaleStep;
-  _img.setScale(_currScale);
+  _img->setScale(_currScale);
 
   // animation has restarted
   if (0 == _currShrinkStep) {
@@ -407,10 +407,10 @@ void PulseAnimation::executeInfiniteBackward() {
 }
 
 void PulseAnimation::centerImage() {
-  const int32_t DIFF_X = (_origImgWidth - _img.getScaledWidth()) >> 1;
-  const int32_t DIFF_Y = (_origImgHeight - _img.getScaledHeight()) >> 1;
+  const int32_t DIFF_X = (_origImgWidth - _img->getScaledWidth()) >> 1;
+  const int32_t DIFF_Y = (_origImgHeight - _img->getScaledHeight()) >> 1;
 
-  _img.setPosition(_cfg.startPos.x + DIFF_X, _cfg.startPos.y + DIFF_Y);
+  _img->setPosition(_cfg.startPos.x + DIFF_X, _cfg.startPos.y + DIFF_Y);
 }
 
 void PulseAnimation::resetConfigInternal() {

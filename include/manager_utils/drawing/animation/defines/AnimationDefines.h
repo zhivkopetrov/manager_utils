@@ -12,6 +12,11 @@
 
 // Forward declarations
 
+enum class AnimImageType  : uint8_t {
+  INTERNAL = 0,
+  EXTERNAL
+};
+
 enum class AnimType : uint8_t {
   FINITE = 0,
   INFINITE = 1,

@@ -250,7 +250,7 @@ void PositionAnimation::reset() {
   _numOfRepeats = _origNumOfRepeats;
   _numOfSteps = _origNumOfSteps;
   _currAnimDir = _cfg.animDirection;
-  _img.setPosition(_cfg.startPos);
+  _img->setPosition(_cfg.startPos);
 }
 
 void PositionAnimation::onTimeout(const int32_t timerId) {
@@ -283,21 +283,21 @@ void PositionAnimation::executeFiniteForward() {
   --_numOfSteps;
 
   // move to X axis
-  _img.moveRight(_stepX);
+  _img->moveRight(_stepX);
 
   // move to Y axis
-  _img.moveDown(_stepY);
+  _img->moveDown(_stepY);
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
     // check for X axis remainder
     if (_remainderX) {
-      _img.moveRight(_remainderX);
+      _img->moveRight(_remainderX);
     }
 
     // check for Y axis remainder
     if (_remainderY) {
-      _img.moveDown(_remainderY);
+      _img->moveDown(_remainderY);
     }
 
     if (PosAnimType::ONE_DIRECTIONAL == _posAnimDir) {
@@ -333,21 +333,21 @@ void PositionAnimation::executeFiniteBackward() {
   --_numOfSteps;
 
   // move to X axis
-  _img.moveLeft(_stepX);
+  _img->moveLeft(_stepX);
 
   // move to Y axis
-  _img.moveUp(_stepY);
+  _img->moveUp(_stepY);
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
     // check for X axis remainder
     if (_remainderX) {
-      _img.moveLeft(_remainderX);
+      _img->moveLeft(_remainderX);
     }
 
     // check for Y axis remainder
     if (_remainderY) {
-      _img.moveUp(_remainderY);
+      _img->moveUp(_remainderY);
     }
 
     if (PosAnimType::ONE_DIRECTIONAL == _posAnimDir) {
@@ -406,21 +406,21 @@ void PositionAnimation::executeInfiniteForward() {
   --_numOfSteps;
 
   // move to X axis
-  _img.moveRight(_stepX);
+  _img->moveRight(_stepX);
 
   // move to Y axis
-  _img.moveDown(_stepY);
+  _img->moveDown(_stepY);
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
     // check for X axis remainder
     if (_remainderX) {
-      _img.moveRight(_remainderX);
+      _img->moveRight(_remainderX);
     }
 
     // check for Y axis remainder
     if (_remainderY) {
-      _img.moveDown(_remainderY);
+      _img->moveDown(_remainderY);
     }
 
     // swap direction to backwards
@@ -433,21 +433,21 @@ void PositionAnimation::executeInfiniteBackward() {
   --_numOfSteps;
 
   // move to X axis
-  _img.moveLeft(_stepX);
+  _img->moveLeft(_stepX);
 
   // move to Y axis
-  _img.moveUp(_stepY);
+  _img->moveUp(_stepY);
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
     // check for X axis remainder
     if (_remainderX) {
-      _img.moveLeft(_remainderX);
+      _img->moveLeft(_remainderX);
     }
 
     // check for Y axis remainder
     if (_remainderY) {
-      _img.moveUp(_remainderY);
+      _img->moveUp(_remainderY);
     }
 
     // If there is an callback attached -> execute it
@@ -510,5 +510,5 @@ void PositionAnimation::forceInternalsReset() {
   _numOfRepeats = _origNumOfRepeats;
   _numOfSteps = _origNumOfSteps;
   _currAnimDir = _cfg.animDirection;
-  _img.setPosition(_cfg.startPos);
+  _img->setPosition(_cfg.startPos);
 }

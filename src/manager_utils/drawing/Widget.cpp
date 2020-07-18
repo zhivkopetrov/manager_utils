@@ -14,6 +14,10 @@
 #include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
 
+namespace {
+constexpr auto MAX_SCALE_FACTOR_INTERNAL = MAX_SCALE_FACTOR + 0.01;
+}
+
 // default constructor
 Widget::Widget()
     : _isCreated(false),
@@ -412,10 +416,10 @@ void Widget::setScaleX(const double scaleX) {
         "Error, setScaleX() for Widget with rsrcId: "
         "%#16lX with value %lf is forbidden.",
         _drawParams.rsrcId, MIN_SCALE_FACTOR);
-  } else if (MIN_SCALE_FACTOR > scaleX || MAX_SCALE_FACTOR < scaleX) {
+  } else if (MIN_SCALE_FACTOR > scaleX || MAX_SCALE_FACTOR_INTERNAL < scaleX) {
     LOGERR(
         "Error, setScaleX() for Widget with rsrcId: %#16lX with param "
-        "%lf only takes values in range (%lf - %lf)",
+        "%lf only takes values in range (%lf - %lf]",
         _drawParams.rsrcId, scaleX, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
   } else {
     _scaleXFactor = scaleX;
@@ -429,15 +433,15 @@ void Widget::setScaleY(const double scaleY) {
         "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
         " .setScaleY() with param %lf, will not be performed",
         _drawParams.rsrcId, scaleY);
-  } else if (FloatingPointUtils::areAlmostEqual(scaleY, MAX_SCALE_FACTOR)) {
+  } else if (FloatingPointUtils::areAlmostEqual(scaleY, MIN_SCALE_FACTOR)) {
     LOGERR(
         "Error, setScaleY() for Widget with rsrcId: "
         "%#16lX with value %lf is forbidden.",
         _drawParams.rsrcId, MIN_SCALE_FACTOR);
-  } else if (MIN_SCALE_FACTOR > scaleY || MAX_SCALE_FACTOR < scaleY) {
+  } else if (MIN_SCALE_FACTOR > scaleY || MAX_SCALE_FACTOR_INTERNAL < scaleY) {
     LOGERR(
         "Error, setScaleY() for Widget with rsrcId: %#16lX with param "
-        "%lf only takes values in range (%lf - %lf)",
+        "%lf only takes values in range (%lf - %lf]",
         _drawParams.rsrcId, scaleY, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
   } else {
     _scaleYFactor = scaleY;

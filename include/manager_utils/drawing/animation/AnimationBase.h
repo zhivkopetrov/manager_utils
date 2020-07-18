@@ -2,9 +2,6 @@
 #define MANAGER_UTILS_ANIMATIONBASE_H_
 
 /*
- * AnimationBase.h
- *
- *
  *  Brief: A common class that every type of animation should inherit from.
  *
  *         NOTE: Animations could be reconfigured and used again without the
@@ -115,15 +112,15 @@ class AnimationBase : public TimerClient {
    */
   void activateAnimationAlphaModulation();
 
-  int32_t getWidth() const { return _img.getFrameWidth(); }
+  int32_t getWidth() const { return _img->getFrameWidth(); }
 
-  int32_t getHeight() const { return _img.getFrameHeight(); }
+  int32_t getHeight() const { return _img->getFrameHeight(); }
 
-  int32_t getX() const { return _img.getX(); }
+  int32_t getX() const { return _img->getX(); }
 
-  int32_t getY() const { return _img.getY(); }
+  int32_t getY() const { return _img->getY(); }
 
-  Point getPosition() const { return _img.getPosition(); }
+  Point getPosition() const { return _img->getPosition(); }
 
   void setPosition(const int32_t x, const int32_t y);
 
@@ -143,9 +140,9 @@ class AnimationBase : public TimerClient {
 
   void setFrame(const int32_t frameIdx);
 
-  int32_t getFrame() const { return _img.getFrame(); }
+  int32_t getFrame() const { return _img->getFrame(); }
 
-  int32_t getFrameCount() const { return _img.getFrameCount(); }
+  int32_t getFrameCount() const { return _img->getFrameCount(); }
 
   /** @brief used to set external crop rectangle for the underlying
    *         animation images
@@ -173,11 +170,11 @@ class AnimationBase : public TimerClient {
   /** Base configuration for all animations */
   AnimBaseConfig _cfg;
 
+  /** Common image for all animations */
+  Image* _img;
+
   /** Base end callback for all animations */
   AnimationEndCb* _endCb;
-
-  /** Common image for all animations */
-  Image _img;
 
   /** Holds active/disabled state of animation - so no unnecessary
    *  renderer draw calls are made

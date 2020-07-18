@@ -76,10 +76,10 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
 
   if (EXIT_SUCCESS == err) {
     if (AnimDir::BACKWARD == _cfg.animDirection) {
-      _img.setFrame(_img.getFrameCount() - 1);  // set last frame
+      _img->setFrame(_img->getFrameCount() - 1);  // set last frame
     }
 
-    _origFrameCount = _img.getFrameCount();
+    _origFrameCount = _img->getFrameCount();
 
     _animType = animType;
 
@@ -92,7 +92,7 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
       LOGERR(
           "Error configuration not complete. Reason: bad repeatIndex: "
           "%hu, because totalImageFrames: %d",
-          _repeatIndex, _img.getFrameCount());
+          _repeatIndex, _img->getFrameCount());
       err = EXIT_FAILURE;
     }
   }
@@ -136,10 +136,10 @@ void FrameAnimation::swapDirection() {
   // swap current animation direction
   if (AnimDir::FORWARD == _cfg.animDirection) {
     _cfg.animDirection = AnimDir::BACKWARD;
-    _img.setFrame(_img.getFrameCount() - 1);  // set last frame
+    _img->setFrame(_img->getFrameCount() - 1);  // set last frame
   } else if (AnimDir::BACKWARD == _cfg.animDirection) {
     _cfg.animDirection = AnimDir::FORWARD;
-    _img.setFrame(0);  // set first frame
+    _img->setFrame(0);  // set first frame
   }
 }
 
@@ -161,10 +161,10 @@ void FrameAnimation::setFirstFrame() {
   }
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
-    _img.setFrame(0);
+    _img->setFrame(0);
   } else  // AnimDir::BACKWARD == _cfg.animDirection
   {
-    _img.setFrame(_origFrameCount - 1);
+    _img->setFrame(_origFrameCount - 1);
   }
 }
 
@@ -187,10 +187,10 @@ void FrameAnimation::setLastFrame() {
   }
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
-    _img.setFrame(_origFrameCount - 1);
+    _img->setFrame(_origFrameCount - 1);
   } else  // AnimDir::BACKWARD == _cfg.animDirection
   {
-    _img.setFrame(0);
+    _img->setFrame(0);
   }
 }
 
@@ -275,10 +275,10 @@ void FrameAnimation::reset() {
   _numOfRepeats = _origNumOfRepeats;
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
-    _img.setFrame(0);  // set first frame
+    _img->setFrame(0);  // set first frame
   } else               // AnimType::BACKWARD == _cfg.animDirection
   {
-    _img.setFrame(_origFrameCount - 1);  // set last frame
+    _img->setFrame(_origFrameCount - 1);  // set last frame
   }
 }
 
@@ -309,10 +309,10 @@ void FrameAnimation::onTimeout(const int32_t timerId) {
 }
 
 void FrameAnimation::executeFiniteForward() {
-  _img.setNextFrame();
+  _img->setNextFrame();
 
   // animation has ended
-  if (_origFrameCount - 1 == _img.getFrame()) {
+  if (_origFrameCount - 1 == _img->getFrame()) {
     if (0 < _numOfRepeats) {
       --_numOfRepeats;  // decrease remaining animation repetitions
     }
@@ -336,17 +336,17 @@ void FrameAnimation::executeFiniteForward() {
     {
       if (0 != _repeatIndex) {
         // there is repeatIndex set -> use it
-        _img.setFrame(_repeatIndex);
+        _img->setFrame(_repeatIndex);
       }
     }
   }
 }
 
 void FrameAnimation::executeFiniteBackward() {
-  _img.setPrevFrame();
+  _img->setPrevFrame();
 
   // animation has restarted
-  if (0 == _img.getFrame()) {
+  if (0 == _img->getFrame()) {
     if (0 < _numOfRepeats) {
       --_numOfRepeats;  // decrease remaining animation repetitions
     }
@@ -370,17 +370,17 @@ void FrameAnimation::executeFiniteBackward() {
     {
       if (0 != _repeatIndex) {
         // there is repeatIndex set -> use it
-        _img.setFrame(_origFrameCount - _repeatIndex);
+        _img->setFrame(_origFrameCount - _repeatIndex);
       }
     }
   }
 }
 
 void FrameAnimation::executeInfiniteForward() {
-  _img.setNextFrame();
+  _img->setNextFrame();
 
   // animation has restarted
-  if (_origFrameCount - 1 == _img.getFrame()) {
+  if (_origFrameCount - 1 == _img->getFrame()) {
     // If there is an callback attached -> execute it
     if (nullptr != _endCb) {
       _endCb->onAnimationCycle();
@@ -388,16 +388,16 @@ void FrameAnimation::executeInfiniteForward() {
 
     if (0 != _repeatIndex) {
       // there is repeatIndex set -> use it
-      _img.setFrame(_repeatIndex);
+      _img->setFrame(_repeatIndex);
     }
   }
 }
 
 void FrameAnimation::executeInfiniteBackward() {
-  _img.setPrevFrame();
+  _img->setPrevFrame();
 
   // animation has ended
-  if (0 == _img.getFrame()) {
+  if (0 == _img->getFrame()) {
     // If there is an callback attached -> execute it
     if (nullptr != _endCb) {
       _endCb->onAnimationCycle();
@@ -405,7 +405,7 @@ void FrameAnimation::executeInfiniteBackward() {
 
     if (0 != _repeatIndex) {
       // there is repeatIndex set -> use it
-      _img.setFrame(_origFrameCount - _repeatIndex);
+      _img->setFrame(_origFrameCount - _repeatIndex);
     }
   }
 }

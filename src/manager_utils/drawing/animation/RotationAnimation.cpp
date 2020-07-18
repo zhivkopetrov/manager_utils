@@ -103,7 +103,7 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
     _currAnimDir = AnimDir::FORWARD;
 
     if (Point::UNDEFINED != rotationCenter) {
-      _img.setRotationCenter(rotationCenter);
+      _img->setRotationCenter(rotationCenter);
     }
 
     if (ZERO_ANGLE > _rotAngleStep) {
@@ -184,7 +184,7 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
   if (EXIT_SUCCESS == err) {
     // when initial animation direction is set to backwards
     if (AnimDir::BACKWARD == _cfg.animDirection) {
-      _img.rotate(-_totalRotAngle);
+      _img->rotate(-_totalRotAngle);
       _currRotAngle = -_totalRotAngle;
       _animCycleWatchAngle = -_totalRotAngle;
     }
@@ -282,7 +282,7 @@ void RotationAnimation::reset() {
     resetAngle = -_totalRotAngle;
   }
 
-  _img.setRotation(resetAngle);
+  _img->setRotation(resetAngle);
   _currRotAngle = resetAngle;
   _animCycleWatchAngle = resetAngle;
   _currAnimDir = AnimDir::FORWARD;
@@ -356,7 +356,7 @@ void RotationAnimation::advance(const double advanceAngle) {
     return;
   }
 
-  _img.rotate(advanceAngle);
+  _img->rotate(advanceAngle);
 
   _currRotAngle += advanceAngle;
 
@@ -412,7 +412,7 @@ void RotationAnimation::swapDirection() {
 }
 
 void RotationAnimation::executeFiniteForward() {
-  _img.rotate(_rotAngleStep);
+  _img->rotate(_rotAngleStep);
 
   _currRotAngle += _rotAngleStep;
 
@@ -454,7 +454,7 @@ void RotationAnimation::executeFiniteForward() {
 }
 
 void RotationAnimation::executeFiniteBackward() {
-  _img.rotate(-_rotAngleStep);
+  _img->rotate(-_rotAngleStep);
 
   _currRotAngle -= _rotAngleStep;
 
@@ -496,7 +496,7 @@ void RotationAnimation::executeFiniteBackward() {
 }
 
 void RotationAnimation::executeInfiniteForward() {
-  _img.rotate(_rotAngleStep);
+  _img->rotate(_rotAngleStep);
 
   _currRotAngle += _rotAngleStep;
 
@@ -516,7 +516,7 @@ void RotationAnimation::executeInfiniteForward() {
        * This is explicitly needed to prevent floating point
        * rounding errors.
        * */
-      _img.setRotation(_totalRotAngle);
+      _img->setRotation(_totalRotAngle);
 
       _currRotAngle = _totalRotAngle;
       _animCycleWatchAngle = _totalRotAngle;
@@ -534,7 +534,7 @@ void RotationAnimation::executeInfiniteForward() {
        * This is explicitly needed to prevent floating point
        * rounding errors.
        * */
-      _img.setRotation(ZERO_ANGLE);
+      _img->setRotation(ZERO_ANGLE);
 
       _currRotAngle = ZERO_ANGLE;
       _animCycleWatchAngle = ZERO_ANGLE;
@@ -546,7 +546,7 @@ void RotationAnimation::executeInfiniteForward() {
 }
 
 void RotationAnimation::executeInfiniteBackward() {
-  _img.rotate(-_rotAngleStep);
+  _img->rotate(-_rotAngleStep);
 
   _currRotAngle -= _rotAngleStep;
 
@@ -566,7 +566,7 @@ void RotationAnimation::executeInfiniteBackward() {
        * This is explicitly needed to prevent floating point
        * rounding errors.
        * */
-      _img.setRotation(ZERO_ANGLE);
+      _img->setRotation(ZERO_ANGLE);
 
       _currRotAngle = ZERO_ANGLE;
       _animCycleWatchAngle = ZERO_ANGLE;
@@ -584,7 +584,7 @@ void RotationAnimation::executeInfiniteBackward() {
        * This is explicitly needed to prevent floating point
        * rounding errors.
        * */
-      _img.setRotation(-_totalRotAngle);
+      _img->setRotation(-_totalRotAngle);
 
       _currRotAngle = -_totalRotAngle;
       _animCycleWatchAngle = -_totalRotAngle;

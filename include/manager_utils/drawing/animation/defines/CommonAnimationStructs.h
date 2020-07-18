@@ -13,17 +13,20 @@
 #include "utils/drawing/Point.h"
 
 // Forward declarations
+class Image;
 
 struct AnimBaseConfig {
   AnimBaseConfig();
 
   void reset();
 
+  Image *externalImage;
   uint64_t rsrcId;
   Point startPos;
   int64_t timerInterval;
   int32_t timerId;
   AnimDir animDirection;
+  AnimImageType animImageType;
   bool isTimerPauseble;
 };
 
