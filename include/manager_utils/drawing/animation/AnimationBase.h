@@ -37,7 +37,7 @@ class SpriteBuffer;
 class AnimationBase : public TimerClient {
  public:
   AnimationBase();
-  virtual ~AnimationBase() = default;
+  virtual ~AnimationBase();
 
   // move constructor needed for STL containers empalce_back/push_back
   AnimationBase(AnimationBase&& movedOther);

@@ -17,6 +17,15 @@
 AnimationBase::AnimationBase()
     : _img(nullptr), _endCb(nullptr), _isVisible(true), _isCfgComplete(false) {}
 
+AnimationBase::~AnimationBase() {
+  if (AnimImageType::INTERNAL == _cfg.animImageType) {
+    if (nullptr != _img) {
+      delete _img;
+      _img = nullptr;
+    }
+  }
+}
+
 // move constructor
 AnimationBase::AnimationBase(AnimationBase&& movedOther)
     : TimerClient(std::move(movedOther)),
@@ -112,7 +121,6 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
 }
 
 void AnimationBase::resetConfigInternal() {
-  _cfg.reset();
   if (nullptr != _img) {
     _img->destroy();
     if (AnimImageType::INTERNAL == _cfg.animImageType) {
@@ -120,6 +128,8 @@ void AnimationBase::resetConfigInternal() {
       _img = nullptr;
     }
   }
+
+  _cfg.reset();
   _endCb = nullptr;
   _isVisible = true;
   _isCfgComplete = false;
