@@ -116,20 +116,20 @@ void Widget::activateAlphaModulation() {
 
   _isAlphaModulationEnabled = true;
 
-  const int32_t BLENDMODE = BLENDMODE_BLEND;
+  const BlendMode blendMode = BlendMode::BLEND;
 
   // NOTE: for third parameter either rsrcId(uint64_t) or
   //      uniqueContainerId(int32_t) so the bigger size is chosen
   //      for the buffer population
-  uint8_t data[sizeof(_drawParams.widgetType) + sizeof(BLENDMODE) +
+  uint8_t data[sizeof(_drawParams.widgetType) + sizeof(blendMode) +
                sizeof(_drawParams.rsrcId)];
   uint64_t populatedBytes = 0;
 
   memcpy(data, &_drawParams.widgetType, sizeof(_drawParams.widgetType));
   populatedBytes += sizeof(_drawParams.widgetType);
 
-  memcpy(data + populatedBytes, &BLENDMODE, sizeof(BLENDMODE));
-  populatedBytes += sizeof(BLENDMODE);
+  memcpy(data + populatedBytes, &blendMode, sizeof(blendMode));
+  populatedBytes += sizeof(blendMode);
 
   if (WidgetType::IMAGE == _drawParams.widgetType) {
     memcpy(data + populatedBytes, &_drawParams.rsrcId,
@@ -159,20 +159,20 @@ void Widget::deactivateAlphaModulation() {
 
   _isAlphaModulationEnabled = false;
 
-  const int32_t BLENDMODE = BLENDMODE_NONE;
+  const BlendMode blendMode = BlendMode::NONE;
 
   // NOTE: for third parameter either rsrcId(uint64_t) or
   //      uniqueContainerId(int32_t) so the bigger size is chosen
   //      for the buffer population
-  uint8_t data[sizeof(_drawParams.widgetType) + sizeof(BLENDMODE) +
+  uint8_t data[sizeof(_drawParams.widgetType) + sizeof(blendMode) +
                sizeof(_drawParams.rsrcId)];
   uint64_t populatedBytes = 0;
 
   memcpy(data, &_drawParams.widgetType, sizeof(_drawParams.widgetType));
   populatedBytes += sizeof(_drawParams.widgetType);
 
-  memcpy(data + populatedBytes, &BLENDMODE, sizeof(BLENDMODE));
-  populatedBytes += sizeof(BLENDMODE);
+  memcpy(data + populatedBytes, &blendMode, sizeof(blendMode));
+  populatedBytes += sizeof(blendMode);
 
   if (WidgetType::IMAGE == _drawParams.widgetType) {
     memcpy(data + populatedBytes, &_drawParams.rsrcId,
