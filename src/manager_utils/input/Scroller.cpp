@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
@@ -12,6 +11,7 @@
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 #include "utils/LimitValues.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -64,8 +64,6 @@ Scroller& Scroller::operator=(Scroller&& movedOther) {
 
 int32_t Scroller::init(const Rectangle& boundaryRect, const Point& startPos,
                        const ScrollerType scrollerType) {
-  int32_t err = EXIT_SUCCESS;
-
   _boundaryRect = boundaryRect;
   _prevPos = startPos;
   _scrollerType = scrollerType;
@@ -75,7 +73,7 @@ int32_t Scroller::init(const Rectangle& boundaryRect, const Point& startPos,
 
   touchEntityEventRect = &_boundaryRect;
 
-  return err;
+  return SUCCESS;
 }
 
 bool Scroller::containsEvent(const InputEvent& e) {

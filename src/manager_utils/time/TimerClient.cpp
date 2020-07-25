@@ -12,12 +12,14 @@
 #include "utils/debug/FunctionTracer.hpp"
 #include "utils/debug/StackTrace.hpp"
 #include "utils/LimitValues.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
+namespace {
 // Hold step for increase of the limit for currently auto-managed timers
-#define RESIZE_STEP 5
-
-#define MAX_TIMERS 30
+constexpr auto RESIZE_STEP = 5;
+constexpr auto MAX_TIMERS = 30;
+}
 
 // default constructor
 TimerClient::TimerClient()
@@ -29,11 +31,8 @@ TimerClient::TimerClient(TimerClient&& movedOther) {
   for (int32_t i = 0; i < movedOther._maxTimersCount; ++i) {
     if (INIT_INT32_VALUE != movedOther._timerIdList[i]) {
       // started timer found -> stop the search
-      LOGERR(
-          "Warning, TimerClient instance is being moved while "
-          "there are active timers attached to it. This is an "
-          "illegal operation.");
-
+      LOGERR("Warning, TimerClient instance is being moved while there are "
+             "active timers attached to it. This is an illegal operation.");
       break;
     }
   }
@@ -56,11 +55,8 @@ TimerClient& TimerClient::operator=(TimerClient&& movedOther) {
     for (int32_t i = 0; i < movedOther._maxTimersCount; ++i) {
       if (INIT_INT32_VALUE != movedOther._timerIdList[i]) {
         // started timer found -> stop the search
-        LOGERR(
-            "Warning, TimerClient instance is being moved while "
-            "there are active timers attached to it. This is an "
-            "illegal operation.");
-
+        LOGERR("Warning, TimerClient instance is being moved while there are "
+               "active timers attached to it. This is an illegal operation.");
         break;
       }
     }
@@ -141,7 +137,7 @@ void TimerClient::startTimer(const int64_t interval, const int32_t timerId,
       return;
     }
 
-    if (EXIT_SUCCESS != resizeTimerList()) {
+    if (SUCCESS != resizeTimerList()) {
       LOGERR("Warning, timer with ID: %d could not be started", timerId);
 
       return;
@@ -276,7 +272,7 @@ int32_t TimerClient::resizeTimerList() {
     LOGERR("Error, bad alloc for _timerIdList");
 
     _maxTimersCount -= RESIZE_STEP;
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   // copy timer id's from the smaller buffer
@@ -297,28 +293,17 @@ int32_t TimerClient::resizeTimerList() {
 
   increasedList = nullptr;
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 int32_t TimerClient::removeTimerIdFromList(const int32_t timerId) {
-  TRACE_ENTRY_EXIT;
-
-  int32_t err = EXIT_SUCCESS;
-
-  bool foundTimer = false;
-
   for (int32_t i = 0; i < _maxTimersCount; ++i) {
     if (timerId == _timerIdList[i]) {
-      foundTimer = true;
       --_currTimerCount;                   // lower total timers count
       _timerIdList[i] = INIT_INT32_VALUE;  // free the slot
-      break;                               // and end the search
+      return SUCCESS;                      // and end the search
     }
   }
 
-  if (false == foundTimer) {
-    err = EXIT_FAILURE;
-  }
-
-  return err;
+  return FAILURE;
 }

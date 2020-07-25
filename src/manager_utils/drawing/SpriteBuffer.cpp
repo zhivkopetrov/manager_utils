@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <cstring>
 
 // Other libraries headers
@@ -12,6 +11,7 @@
 // Own components headers
 #include "manager_utils/managers_base/DrawMgrBase.h"
 #include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -163,7 +163,7 @@ void SpriteBuffer::unlock() {
 
   _isLocked = false;
 
-  if (EXIT_SUCCESS != gDrawMgrBase->unlockRenderer()) {
+  if (SUCCESS != gDrawMgrBase->unlockRenderer()) {
     LOGERR(
         "Error, SpriteBuffer with ID: %d can not be unlocked, because some "
         "other entity is currently in possession of the main renderer lock. "
@@ -195,7 +195,7 @@ void SpriteBuffer::lock() {
 
   _isLocked = true;
 
-  if (EXIT_SUCCESS != gDrawMgrBase->lockRenderer()) {
+  if (SUCCESS != gDrawMgrBase->lockRenderer()) {
     LOGERR("gDrawMgrBase->lockRenderer() failed");
 
     return;
@@ -296,10 +296,9 @@ void SpriteBuffer::updateRanged(const int32_t fromIndex,
     return;
   }
 
-  const uint32_t SIZE = static_cast<uint32_t>(_storedItems.size());
+  const int32_t SIZE = static_cast<int32_t>(_storedItems.size());
 
-  if ((0 > fromIndex) || (fromIndex > toIndex) ||
-      (toIndex >= static_cast<int32_t>(SIZE))) {
+  if ((0 > fromIndex) || (fromIndex > toIndex) || (toIndex >= SIZE)) {
     LOGERR(
         "Error, Illegal ranges provided. fromIndex: %d, toIndex: %d, "
         "storedItems.size(): %u for SpriteBuffer with ID: %d",

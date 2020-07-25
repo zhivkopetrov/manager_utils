@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 
 // Other libraries headers
 
@@ -13,6 +12,7 @@
 #include "sdl_utils/drawing/MonitorWindow.h"
 #include "sdl_utils/drawing/Renderer.h"
 #include "utils/debug/FunctionTracer.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 DrawMgrBase *gDrawMgrBase = nullptr;
@@ -31,32 +31,32 @@ int32_t DrawMgrBase::init() {
   _window = new MonitorWindow(_config.monitorWidth, _config.monitorHeight);
   if (nullptr == _window) {
     LOGERR("Error, bad alloc for _window");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   _renderer = new Renderer;
   if (nullptr == _renderer) {
     LOGERR("Error, bad alloc for _renderer");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
-  if (EXIT_SUCCESS !=
+  if (SUCCESS !=
       _window->init(_config.windowDisplayMode, _config.windowBorderMode)) {
     LOGERR("_window.init() failed");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
   _config.rendererConfig.window = _window->getWindow();
 
-  if (EXIT_SUCCESS != _renderer->init(_config.rendererConfig)) {
+  if (SUCCESS != _renderer->init(_config.rendererConfig)) {
     LOGERR("_renderer.init() failed");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 int32_t DrawMgrBase::recover() {
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 void DrawMgrBase::deinit() {

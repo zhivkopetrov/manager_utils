@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
@@ -12,6 +11,7 @@
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.hpp"
 #include "utils/data_type/FloatingPointUtils.h"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -73,18 +73,18 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
                                      const PosAnimType posAnimDir,
                                      const AnimType animType,
                                      const double totalRotationAngle) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
-  if (EXIT_SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
         "%#16lX",
         cfg.rsrcId);
 
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _posAnimDir = posAnimDir;
     _animType = animType;
     _rotAngleStep = rotationAngleStep;
@@ -113,22 +113,22 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "rotationAngleStep value with AnimDir::BACKWARD.",
           _rotAngleStep);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir &&
         AnimType::INFINITE == animType) {
       LOGERR(
           "Error, Rotation animation of type ONE_DIRECTIONAL could not"
           " be of type INFINITE. Configuration failed.");
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (FloatingPointUtils::areAlmostEqual(ZERO_ANGLE, _rotAngleStep) ||
         FloatingPointUtils::areAlmostEqual(FULL_ROTATION_ANGLE,
                                            _rotAngleStep)) {
@@ -138,11 +138,11 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "angle > %f and angle < %f degrees.",
           _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (FULL_ROTATION_ANGLE < _rotAngleStep) {
       LOGERR(
           "Error configuration not complete. Reason: too big "
@@ -150,11 +150,11 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "> %f and angle < %f degrees.",
           _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (ZERO_ANGLE > totalRotationAngle) {
       LOGERR(
           "Error configuration not complete. Reason: negative "
@@ -162,11 +162,11 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "totalRotationAngle value with AnimDir::BACKWARD.",
           _totalRotAngle);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (AnimType::FINITE == _animType &&
         FloatingPointUtils::areAlmostEqual(ZERO_ANGLE,
                                            totalRotationAngle)) {
@@ -177,11 +177,11 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "animation type to AnimType::INFINITE.",
           ZERO_ANGLE, ZERO_ANGLE);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     // when initial animation direction is set to backwards
     if (AnimDir::BACKWARD == _cfg.animDirection) {
       _img->rotate(-_totalRotAngle);
@@ -190,9 +190,9 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _isCfgComplete = true;
-  } else  // EXIT_FAILURE == true
+  } else  // FAILURE == true
   {
     LOGERR("RotationAnimation configuration failed!");
 

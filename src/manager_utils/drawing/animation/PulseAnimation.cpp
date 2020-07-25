@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
@@ -12,6 +11,7 @@
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.hpp"
 #include "utils/data_type/FloatingPointUtils.h"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -85,18 +85,18 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
                                   AnimationEndCb* endCb,
                                   const AnimType animType,
                                   const uint16_t numberOfRepeats) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
-  if (EXIT_SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
         "%#16lX",
         cfg.rsrcId);
 
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _animType = animType;
 
     _currAnimDir = cfg.animDirection;
@@ -121,11 +121,11 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
           "range %f - %f(non-inclusive)",
           minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (FloatingPointUtils::areAlmostEqual(MIN_SCALE_FACTOR, minScale) ||
         FloatingPointUtils::areAlmostEqual(MAX_SCALE_FACTOR, minScale)) {
       LOGERR(
@@ -134,11 +134,11 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
           "range %f - %f(non-inclusive)",
           minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (MAX_SHRINK_STEPS < numberOfShrinkSteps || 0 >= numberOfShrinkSteps) {
       LOGERR(
           "Error configuration not complete. Reason: invalid value "
@@ -146,13 +146,13 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
           "1 - 200(inclusive)",
           numberOfShrinkSteps);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     } else {
       _scaleStep = (MAX_SCALE_FACTOR - _minScale) / numberOfShrinkSteps;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if ((AnimDir::BACKWARD == cfg.animDirection) &&
         (PulseAlignType::TOP_LEFT == _alignType)) {
       LOGERR(
@@ -161,11 +161,11 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
           "PulseAlignType::TOP_LEFT at the same time. Consider using "
           "PulseAlignType::CENTER");
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _isCfgComplete = true;
     _img->activateScaling();
 
@@ -181,7 +181,7 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
         centerImage();
       }
     }
-  } else  // EXIT_FAILURE == true
+  } else  // FAILURE == true
   {
     LOGERR("PulseAnimation configuration failed!");
     resetConfigInternal();

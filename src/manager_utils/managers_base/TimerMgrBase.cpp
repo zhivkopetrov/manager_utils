@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 
 // Other libraries headers
 
@@ -14,6 +13,7 @@
 #include "utils/debug/FunctionTracer.hpp"
 #include "utils/debug/StackTrace.hpp"
 #include "utils/LimitValues.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 TimerMgrBase* gTimerMgrBase = nullptr;
@@ -35,10 +35,10 @@ TimerMgrBase::~TimerMgrBase() {
 int32_t TimerMgrBase::init() {
   TRACE_ENTRY_EXIT;
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
-int32_t TimerMgrBase::recover() { return EXIT_SUCCESS; }
+int32_t TimerMgrBase::recover() { return SUCCESS; }
 
 void TimerMgrBase::deinit() {
   // free dynamically allocated timer data resources
@@ -503,7 +503,7 @@ void TimerMgrBase::removeTimersInternal() {
           // send signal to TimerClient instance to remove timerId
           // from it's list of managed timers
 
-          if (EXIT_SUCCESS !=
+          if (SUCCESS !=
               mapIt->second.tcInstance->removeTimerIdFromList(mapIt->first)) {
             LOGERR(
                 "Warning, internal error in "

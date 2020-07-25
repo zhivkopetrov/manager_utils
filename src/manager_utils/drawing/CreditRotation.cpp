@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <string>
 
 // Other libraries headers
@@ -12,6 +11,7 @@
 // Own components headers
 #include "utils/common/Position.h"
 #include "utils/LimitValues.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 CreditRotation::CreditRotation()
@@ -49,14 +49,14 @@ int32_t CreditRotation::init(const uint64_t startValue, const uint64_t fontId,
     _balanceBackground.create(backgroundRsrcId);
   }
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 int32_t CreditRotation::recover(const uint64_t amount) {
   _currentValue = amount;
   setAmountText();
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 void CreditRotation::setAmountText() {

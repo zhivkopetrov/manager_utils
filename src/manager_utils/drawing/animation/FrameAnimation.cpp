@@ -4,13 +4,13 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -63,18 +63,18 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
                                   const AnimType animType,
                                   const uint16_t repeatIndex,
                                   const uint16_t numberOfRepeats) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
-  if (EXIT_SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
         "%#16lX",
         cfg.rsrcId);
 
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (AnimDir::BACKWARD == _cfg.animDirection) {
       _img->setFrame(_img->getFrameCount() - 1);  // set last frame
     }
@@ -93,13 +93,13 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
           "Error configuration not complete. Reason: bad repeatIndex: "
           "%hu, because totalImageFrames: %d",
           _repeatIndex, _img->getFrameCount());
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _isCfgComplete = true;
-  } else  // EXIT_FAILURE == true
+  } else  // FAILURE == true
   {
     LOGERR("FrameAnimation configuration failed!");
     resetConfigInternal();

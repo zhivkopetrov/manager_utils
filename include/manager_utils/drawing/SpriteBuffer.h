@@ -45,33 +45,27 @@
  *
  *     int32_t init()
  *     {
- *         int32_t err = EXIT_SUCCESS;
- *
  *         img1.create();
  *         img2.create();
  *         text.create( "Eclipse > CodeBlocks", some other params ... );
  *
  *         SpriteBuffer spriteBuffer;
- *         if(EXIT_SUCCESS != spriteBuffer.create())
+ *         if(SUCCESS != spriteBuffer.create())
  *         {
  *              LOGERR("spriteBuffer.create() failed")
- *
- *              err = EXIT_FAILURE;
+ *              return FAILURE;
  *         }
  *
- *         if(EXIT_SUCCESS == err)
- *         {
- *             spriteBuffer.addWidget(img);
- *             spriteBuffer.addWidget(img2);
- *             spriteBuffer.addWidget(text);
+ *         spriteBuffer.addWidget(img);
+ *         spriteBuffer.addWidget(img2);
+ *         spriteBuffer.addWidget(text);
  *
- *             //lock and unlock are only needed for the ::update method()
- *             spriteBuffer.unlock();
- *             spriteBuffer.update();
- *             spriteBuffer.lock();
- *         }
+ *         //lock and unlock are only needed for the ::update method()
+ *         spriteBuffer.unlock();
+ *         spriteBuffer.update();
+ *         spriteBuffer.lock();
  *
- *         return err;
+ *         return SUCCESS;
  *     }
  *
  *     void draw(const Graphics & g)

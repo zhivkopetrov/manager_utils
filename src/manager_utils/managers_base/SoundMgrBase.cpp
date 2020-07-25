@@ -4,7 +4,6 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <cstring>
 #include <vector>
 #include <mutex>
@@ -18,6 +17,7 @@
 #include "sdl_utils/sound/SoundMixer.h"
 #include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/debug/FunctionTracer.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 SoundMgrBase* gSoundMgrBase = nullptr;
@@ -42,24 +42,24 @@ SoundMgrBase::~SoundMgrBase() {
 int32_t SoundMgrBase::init() {
   TRACE_ENTRY_EXIT;
 
-  if (EXIT_SUCCESS !=
+  if (SUCCESS !=
       SoundMixer::allocateSoundChannels(SUPPORTED_SOUND_CHANNELS)) {
     LOGERR("Error in allocateSoundChannels() for requestedChannels: %d",
            SUPPORTED_SOUND_CHANNELS);
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
-  if (EXIT_SUCCESS !=
+  if (SUCCESS !=
       SoundMixer::setCallbackOnChannelFinish(onChannelFinished)) {
     LOGERR("Error in setCallbackOnChannelFinish()");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   _panningMap = new int32_t[SUPPORTED_SOUND_CHANNELS];
 
   if (nullptr == _panningMap) {
     LOGERR("Error, bad alloc for _panningMap -> Terminating ...");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   // initialize all values to 0
@@ -69,7 +69,7 @@ int32_t SoundMgrBase::init() {
 
   if (nullptr == _usedChannels) {
     LOGERR("Error, bad alloc for _usedChannels -> Terminating ...");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   // initialize all values to 0
@@ -79,17 +79,17 @@ int32_t SoundMgrBase::init() {
 
   if (nullptr == _usedChannelsEndCb) {
     LOGERR("Error, bad alloc for _usedChannelsEndCb -> Terminating...");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   for (int32_t i = 0; i < SUPPORTED_SOUND_CHANNELS; ++i) {
     _usedChannelsEndCb[i] = nullptr;
   }
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
-int32_t SoundMgrBase::recover() { return EXIT_SUCCESS; }
+int32_t SoundMgrBase::recover() { return SUCCESS; }
 
 void SoundMgrBase::deinit() {
   TRACE_ENTRY_EXIT;
@@ -186,7 +186,7 @@ void SoundMgrBase::changeOSVolume(const int32_t soundLevel) {
       LOGERR("Error, pipe command %s could not be executed. Reason: %s",
              command.c_str(), strerror(errno));
     } else {
-      if (EXIT_SUCCESS != pclose(fp)) {
+      if (SUCCESS != pclose(fp)) {
         LOGERR("Error, pclose() failed. Reason: %s", strerror(errno));
       }
     }
@@ -194,34 +194,29 @@ void SoundMgrBase::changeOSVolume(const int32_t soundLevel) {
 }
 
 int32_t SoundMgrBase::loadMusic(const uint64_t rsrcId) {
-  int32_t err = EXIT_SUCCESS;
-
   // check if music is already loaded
   if (nullptr != _music) {
     LOGERR(
         "Music is already loaded. Two simultaneously loaded musics is"
         "forbidden. Unload the currently loaded music with "
         "SoundMgr::unloadMusic() and then load your music");
-
-    err = EXIT_FAILURE;
+    return FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
-    _loadedMusicRsrcId = rsrcId;
+  _loadedMusicRsrcId = rsrcId;
 
-    gRsrcMgrBase->getMusicSound(rsrcId, _music);
+  gRsrcMgrBase->getMusicSound(rsrcId, _music);
 
-    if (nullptr == _music) {
-      LOGERR("gRsrcMgrBase->getMusicSound() failed for rsrcId: %#16lX", rsrcId);
-    } else {
-      // music sound needs to be changed with system sound level on load,
-      // because SoundMixer::setAllChannelsVolume() does not affect
-      // audio channel associated with music, if such is not loaded
-      SoundMixer::setMusicVolume(getEnumValue(_systemSoundLevel));
-    }
+  if (nullptr == _music) {
+    LOGERR("gRsrcMgrBase->getMusicSound() failed for rsrcId: %#16lX", rsrcId);
+  } else {
+    // music sound needs to be changed with system sound level on load,
+    // because SoundMixer::setAllChannelsVolume() does not affect
+    // audio channel associated with music, if such is not loaded
+    SoundMixer::setMusicVolume(getEnumValue(_systemSoundLevel));
   }
 
-  return err;
+  return SUCCESS;
 }
 
 void SoundMgrBase::trySelfUnloadMusic(const uint64_t rsrcId,
@@ -232,7 +227,7 @@ void SoundMgrBase::trySelfUnloadMusic(const uint64_t rsrcId,
   if (nullptr != _music && _loadedMusicRsrcId == rsrcId) {
     const SoundData* soundData = nullptr;
 
-    if (EXIT_SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
+    if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
       LOGERR("gRsrcMgrBase->getSoundData() failed for rsrcId: %#16lX", rsrcId);
     } else {
       // only request change if value was change during run-time
@@ -317,22 +312,24 @@ void SoundMgrBase::playLoadedMusic(const int32_t loops,
 
 void SoundMgrBase::stopLoadedMusic() {
   // check if music is loaded in the first place
-  if (nullptr != _music) {
-    if (SoundMixer::isMusicPlaying()) {
-      // call the sound API to stop the music if it was playing
-      SoundMixer::stopMusic();
+  if (nullptr == _music) {
+    return;
+  }
 
-      const int32_t channelId = findAssociatedChannel(_loadedMusicRsrcId);
+  if (false == SoundMixer::isMusicPlaying()) {
+    return;
+  }
 
-      if (INVALID_CHANNEL_ID != channelId) {
-        // call music callback (if such is set)
-        if (nullptr != _usedChannelsEndCb[channelId]) {
-          _usedChannelsEndCb[channelId]->onSoundWidgetEnd();
+  // call the sound API to stop the music
+  SoundMixer::stopMusic();
 
-          // do not reset the callback variable -
-          //                                  it might be used again
-        }
-      }
+  const int32_t channelId = findAssociatedChannel(_loadedMusicRsrcId);
+
+  if (INVALID_CHANNEL_ID != channelId) {
+    // call music callback (if such is set)
+    if (nullptr != _usedChannelsEndCb[channelId]) {
+      _usedChannelsEndCb[channelId]->onSoundWidgetEnd();
+      // do not reset the callback variable - it might be used again
     }
   }
 }
@@ -393,33 +390,31 @@ void SoundMgrBase::playChunk(const uint64_t rsrcId, const int32_t loops,
 
   gRsrcMgrBase->getChunkSound(rsrcId, chunk);
 
-  if (nullptr != chunk) {
-    const int32_t channelId = getNextFreeChannel();
-
-    if (INVALID_CHANNEL_ID != channelId) {
-      if (channelId == SoundMixer::playChunk(chunk, channelId, loops)) {
-        _usedChannels[channelId] = rsrcId;
-        _usedChannelsEndCb[channelId] = endCb;
-      } else {
-        LOGERR(
-            "SDL_Mixer failed to play into the requested sound "
-            "channelId: %d",
-            channelId);
-      }
-    } else {
-      LOGERR(
-          "Error, maximum sound supported channels count %d is "
-          "reached. Sound will with rsrcId: %#16lX will not be "
-          "played. Increase the number of maximum sound supported "
-          "channels _SUPPORTED_SOUND_CHANNELS",
-          SUPPORTED_SOUND_CHANNELS, rsrcId);
-    }
-  } else {
-    LOGERR(
-        "Error in getChunkSound() for rsrcId: %#16lX. "
-        "Chunk could not be played!",
-        rsrcId);
+  if (nullptr == chunk) {
+    LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
+           "Chunk could not be played!", rsrcId);
+    return;
   }
+
+  const int32_t channelId = getNextFreeChannel();
+  if (INVALID_CHANNEL_ID == channelId) {
+    LOGERR(
+        "Error, maximum sound supported channels count %d is "
+        "reached. Sound will with rsrcId: %#16lX will not be "
+        "played. Increase the number of maximum sound supported "
+        "channels _SUPPORTED_SOUND_CHANNELS",
+        SUPPORTED_SOUND_CHANNELS, rsrcId);
+    return;
+  }
+
+  if (channelId != SoundMixer::playChunk(chunk, channelId, loops)) {
+    LOGERR("SDL_Mixer failed to play into the requested sound channelId: %d",
+           channelId);
+    return;
+  }
+
+  _usedChannels[channelId] = rsrcId;
+  _usedChannelsEndCb[channelId] = endCb;
 }
 
 void SoundMgrBase::playChunkWithPanning(const uint64_t rsrcId,
@@ -430,41 +425,35 @@ void SoundMgrBase::playChunkWithPanning(const uint64_t rsrcId,
   Mix_Chunk* chunk = nullptr;
 
   gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+  if (nullptr == chunk) {
+    LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
+           "Chunk could not be played!", rsrcId);
+    return;
+  }
 
-  if (nullptr != chunk) {
-    const int32_t channelId = getNextFreeChannel();
-
-    if (INVALID_CHANNEL_ID != channelId) {
-      if (channelId == SoundMixer::playChunk(chunk, channelId, loops)) {
-        _usedChannels[channelId] = rsrcId;
-        _usedChannelsEndCb[channelId] = endCb;
-
-        if (EXIT_SUCCESS !=
-            setChannelPanning(channelId, leftVolume, rightVolume)) {
-          LOGERR(
-              "Error in setChannelPanning() for channel: %d "
-              "leftVolume: %hhu, rightVolume: %hhu",
-              channelId, leftVolume, rightVolume);
-        }
-      } else {
-        LOGERR(
-            "SDL_Mixer failed to play into the requested sound "
-            "channelId: %d",
-            channelId);
-      }
-    } else {
-      LOGERR(
-          "Error, maximum sound supported channels count %d is "
-          "reached. Sound will with rsrcId: %#16lX will not be "
-          "played. Increase the number of maximum sound supported "
-          "channels _SUPPORTED_SOUND_CHANNELS",
-          SUPPORTED_SOUND_CHANNELS, rsrcId);
-    }
-  } else {
+  const int32_t channelId = getNextFreeChannel();
+  if (INVALID_CHANNEL_ID == channelId) {
     LOGERR(
-        "Error in getChunkSound() for rsrcId: %#16lX. "
-        "Chunk could not be played!",
-        rsrcId);
+        "Error, maximum sound supported channels count %d is "
+        "reached. Sound will with rsrcId: %#16lX will not be "
+        "played. Increase the number of maximum sound supported "
+        "channels _SUPPORTED_SOUND_CHANNELS",
+        SUPPORTED_SOUND_CHANNELS, rsrcId);
+    return;
+  }
+
+  if (channelId != SoundMixer::playChunk(chunk, channelId, loops)) {
+    LOGERR("SDL_Mixer failed to play into the requested sound "
+           "channelId: %d", channelId);
+    return;
+  }
+
+  _usedChannels[channelId] = rsrcId;
+  _usedChannelsEndCb[channelId] = endCb;
+
+  if (SUCCESS != setChannelPanning(channelId, leftVolume, rightVolume)) {
+    LOGERR("Error in setChannelPanning() for channel: %d leftVolume: %hhu, "
+           "rightVolume: %hhu", channelId, leftVolume, rightVolume);
   }
 }
 
@@ -472,11 +461,9 @@ void SoundMgrBase::stopChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR(
-        "Error, rsrcId: %#16lX is not associated with a valid sound "
-        "channel! SoundMgr::stopChunk() will not take effect",
+    LOGERR("Error, rsrcId: %#16lX is not associated with a valid sound "
+           "channel! SoundMgr::stopChunk() will not take effect",
         rsrcId);
-
     return;
   }
 
@@ -487,39 +474,39 @@ void SoundMgrBase::stopChunk(const uint64_t rsrcId) {
 void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
                                     const SoundLevel soundLevel) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
+  if (INVALID_CHANNEL_ID == channelId) {
+    return;
+  }
 
-  if (INVALID_CHANNEL_ID != channelId) {
-    const SoundData* soundData = nullptr;
+  const SoundData* soundData = nullptr;
+  if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
+    LOGERR("gRsrcMgrBase->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+    return;
+  }
 
-    if (EXIT_SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
-      LOGERR("gRsrcMgrBase->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+  // only request change if value was change during run-time
+  if (soundLevel != soundData->soundLevel) {
+    Mix_Chunk* chunk = nullptr;
+
+    gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+
+    if (nullptr == chunk) {
+      LOGERR("Error in getChunkSound() for rsrcId: %#16lX", rsrcId);
     } else {
-      // only request change if value was change during run-time
-      if (soundLevel != soundData->soundLevel) {
-        Mix_Chunk* chunk = nullptr;
-
-        gRsrcMgrBase->getChunkSound(rsrcId, chunk);
-
-        if (nullptr == chunk) {
-          LOGERR("Error in getChunkSound() for rsrcId: %#16lX", rsrcId);
-        } else {
-          // reset sound to it's original value
-          SoundMixer::setChunkVolume(chunk,
-                                     getEnumValue(soundData->soundLevel));
-        }
-      }
-
-      /** Since the widget is about to be destroyed by it's destructor
-       * assure that it has no soundCallback attached, because
-       * sounds callbacks are executed on the next engine process() cycle
-       * when the widget will already be destroyed
-       * */
-      _usedChannelsEndCb[channelId] = nullptr;
-
-      // call the sound API to stop the channel
-      SoundMixer::stopChannel(channelId);
+      // reset sound to it's original value
+      SoundMixer::setChunkVolume(chunk, getEnumValue(soundData->soundLevel));
     }
   }
+
+  /** Since the widget is about to be destroyed by it's destructor
+   * assure that it has no soundCallback attached, because
+   * sounds callbacks are executed on the next engine process() cycle
+   * when the widget will already be destroyed
+   * */
+  _usedChannelsEndCb[channelId] = nullptr;
+
+  // call the sound API to stop the channel
+  SoundMixer::stopChannel(channelId);
 }
 
 bool SoundMgrBase::isChunkPlaying(const uint64_t rsrcId) const {
@@ -634,7 +621,7 @@ void SoundMgrBase::pauseChannel(const int32_t channel) {
 int32_t SoundMgrBase::setChannelPanning(const int32_t channel,
                                         const uint8_t leftVolume,
                                         const uint8_t rightVolume) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
@@ -642,22 +629,22 @@ int32_t SoundMgrBase::setChannelPanning(const int32_t channel,
         " supported sound channels currently supported: %d",
         channel, SUPPORTED_SOUND_CHANNELS);
 
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
-    if (EXIT_SUCCESS !=
+  if (SUCCESS == err) {
+    if (SUCCESS !=
         SoundMixer::setChannelPanning(channel, leftVolume, rightVolume)) {
       LOGERR(
           "Error in setChannelPanning() for channel: %d leftVolume: "
           "%hhu, rightVolume: %hhu",
           channel, leftVolume, rightVolume);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     // mark that the current channel has requested panning, so later on
     // the panning could be automatically reseted
     _panningMap[channel] = 1;
@@ -667,28 +654,28 @@ int32_t SoundMgrBase::setChannelPanning(const int32_t channel,
 }
 
 int32_t SoundMgrBase::resetChannelPanning(const int32_t channel) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
         "Warning, invalid channel provided: %d. Max number of"
         " supported sound channels currently supported: %d",
         channel, SUPPORTED_SOUND_CHANNELS);
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
-    if (EXIT_SUCCESS != SoundMixer::setChannelPanning(channel, 255, 255)) {
+  if (SUCCESS == err) {
+    if (SUCCESS != SoundMixer::setChannelPanning(channel, 255, 255)) {
       LOGERR(
           "Error in setChannelPanning() for channel: %d, "
           "leftVolume: 255, rightVolume: 255",
           channel);
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     // unmark the current channel as panned
     _panningMap[channel] = 0;
   }
@@ -729,7 +716,7 @@ void SoundMgrBase::resetChannel(const int32_t channel) {
   // check if channel was using panning
   if (_panningMap[channel]) {
     // if so -> request panning reset
-    if (EXIT_SUCCESS != resetChannelPanning(channel)) {
+    if (SUCCESS != resetChannelPanning(channel)) {
       LOGERR("Error in resetChannelPanning for channel: %d", channel);
     }
   }

@@ -10,6 +10,7 @@
 // Own components headers
 #include "manager_utils/managers_base/RsrcMgrBase.h"
 #include "manager_utils/sound/SoundWidgetEndCb.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -55,32 +56,30 @@ SoundWidget& SoundWidget::operator=(SoundWidget&& movedOther) {
 }
 
 void SoundWidget::create(const uint64_t rsrcId, SoundWidgetEndCb* endCb) {
-  if (!_isCreated) {
-    _endCb = endCb;
-
-    _isCreated = true;
-    _isDestroyed = false;
-
-    const SoundData* soundData = nullptr;
-    if (EXIT_SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
-      LOGERR(
-          "Error, getSoundData() failed for rsrcId: %#16lX, "
-          "will not create SoundWidget",
-          rsrcId);
-
-      return;
-    }
-
-    _rsrcId = soundData->header.hashValue;
-
-    _soundType = soundData->soundType;
-    _soundLevel = soundData->soundLevel;
-  } else {
-    LOGERR(
-        "Error, SoundWidget with _rsrcId: %#16lX already created,"
-        " will not create twice",
-        _rsrcId);
+  if (_isCreated) {
+    LOGERR("Error, SoundWidget with _rsrcId: %#16lX already created,"
+           " will not create twice", _rsrcId);
+    return;
   }
+
+  _endCb = endCb;
+  _isCreated = true;
+  _isDestroyed = false;
+
+  const SoundData* soundData = nullptr;
+  if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
+    LOGERR(
+        "Error, getSoundData() failed for rsrcId: %#16lX, "
+        "will not create SoundWidget",
+        rsrcId);
+
+    return;
+  }
+
+  _rsrcId = soundData->header.hashValue;
+
+  _soundType = soundData->soundType;
+  _soundLevel = soundData->soundLevel;
 }
 
 void SoundWidget::destroy() {

@@ -4,13 +4,13 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 
 // Other libraries headers
 
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 #include "utils/debug/FunctionTracer.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 RsrcMgrBase* gRsrcMgrBase = nullptr;
@@ -22,15 +22,15 @@ RsrcMgrBase::~RsrcMgrBase() { TRACE_ENTRY_EXIT; }
 int32_t RsrcMgrBase::init() {
   TRACE_ENTRY_EXIT;
 
-  if (EXIT_SUCCESS != SDLContainers::init()) {
+  if (SUCCESS != SDLContainers::init()) {
     LOGERR("Error in SDLContainers::init() -> Terminating ...");
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
-int32_t RsrcMgrBase::recover() { return EXIT_SUCCESS; }
+int32_t RsrcMgrBase::recover() { return SUCCESS; }
 
 void RsrcMgrBase::deinit() { SDLContainers::deinit(); }
 

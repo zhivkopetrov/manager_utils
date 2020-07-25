@@ -11,6 +11,7 @@
 #include "manager_utils/managers_base/RsrcMgrBase.h"
 #include "manager_utils/drawing/Sprite.h"
 #include "utils/data_type/EnumClassUtils.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -50,7 +51,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
   gRsrcMgrBase->loadResourceOnDemandSingle(rsrcId);
   const ResourceData* rsrcData = nullptr;
-  if (EXIT_SUCCESS != gRsrcMgrBase->getRsrcData(rsrcId, rsrcData)) {
+  if (SUCCESS != gRsrcMgrBase->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
         "Error, getRsrcData failed for rsrcId: %#16lX, "
         "will not create Image",

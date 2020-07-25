@@ -4,13 +4,13 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.hpp"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -84,60 +84,60 @@ int32_t PositionAnimation::configure(const AnimBaseConfig& cfg,
                                      const PosAnimType posAnimDir,
                                      const AnimType animType,
                                      const uint16_t numberOfRepeats) {
-  int32_t err = EXIT_SUCCESS;
+  int32_t err = SUCCESS;
 
-  if (EXIT_SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
         "%#16lX",
         cfg.rsrcId);
 
-    err = EXIT_FAILURE;
+    err = FAILURE;
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (AnimDir::BACKWARD == _cfg.animDirection ||
         AnimDir::UNKNOWN == _cfg.animDirection) {
       LOGERR(
           "Error, Position animation direction could only be "
           "of type FORWARD. Configuration failed.");
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (0 == numberOfSteps) {
       LOGERR(
           "Error, Position animation numberOfSteps can not be 0."
           "Configuration failed.");
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir &&
         AnimType::INFINITE == animType) {
       LOGERR(
           "Error, Position animation of type ONE_DIRECTIONAL could not"
           " be of type INFINITE. Configuration failed.");
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir && 1 != numberOfRepeats) {
       LOGERR(
           "Error, Position animation of type ONE_DIRECTIONAL could not"
           " have numberOfRepeats different than 1. Configuration "
           "failed.");
 
-      err = EXIT_FAILURE;
+      err = FAILURE;
     }
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _animType = animType;
 
     _numOfRepeats = numberOfRepeats;
@@ -161,9 +161,9 @@ int32_t PositionAnimation::configure(const AnimBaseConfig& cfg,
     _currAnimDir = _cfg.animDirection;
   }
 
-  if (EXIT_SUCCESS == err) {
+  if (SUCCESS == err) {
     _isCfgComplete = true;
-  } else  // EXIT_FAILURE == true
+  } else  // FAILURE == true
   {
     LOGERR("PositionAnimation configuration failed!");
     resetConfigInternal();

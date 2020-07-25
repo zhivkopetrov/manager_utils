@@ -4,13 +4,13 @@
 // C system headers
 
 // C++ system headers
-#include <cstdlib>
 #include <utility>
 
 // Other libraries headers
 
 // Own components headers
 #include "manager_utils/drawing/SpriteBuffer.h"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // default constructor
@@ -75,7 +75,7 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
   if (AnimImageType::INTERNAL == cfg.animImageType) {
     if (0 == _cfg.rsrcId) {
       LOGERR("Error, rsrcId not provided for animation!");
-      return EXIT_FAILURE;
+      return FAILURE;
     }
 
     _img = new Image;
@@ -96,7 +96,7 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
         "which is forbidden. Consider using AnimDir::FORWARD or "
         "AnimDir::BACKWARD",
         _cfg.rsrcId);
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   if (0 == _cfg.timerId) {
@@ -104,7 +104,7 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
         "Error, timerId not provided for animation with rsrcId: "
         "%#16lX",
         _cfg.rsrcId);
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
   if (20 > _cfg.timerInterval) {
@@ -112,10 +112,10 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
         "Error, timeInterval of %ld is forbidden. The minimum "
         "possible timerInterval is 20ms",
         _cfg.timerInterval);
-    return EXIT_FAILURE;
+    return FAILURE;
   }
 
-  return EXIT_SUCCESS;
+  return SUCCESS;
 }
 
 void AnimationBase::resetConfigInternal() {
