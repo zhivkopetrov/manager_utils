@@ -33,7 +33,7 @@
  *
  *             void updateSomeLogic();
  *
- *             void draw(const Graphics & g);
+ *             void draw();
  *
  *         private:
  *         Image img1;
@@ -68,7 +68,7 @@
  *         return SUCCESS;
  *     }
  *
- *     void draw(const Graphics & g)
+ *     void draw()
  *     {
  *         g.drawWidget(spriteBuffer);
  *     }

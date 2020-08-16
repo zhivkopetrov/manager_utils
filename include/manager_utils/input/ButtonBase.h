@@ -41,7 +41,6 @@
 
 // Forward declarations
 class InputEvent;
-class Graphics;
 
 class ButtonBase : public TouchEntity {
  public:
@@ -70,8 +69,6 @@ class ButtonBase : public TouchEntity {
   /** @brief used to check whether event is inside
    *                                       current frameRectangle or not
    *         NOTE: concrete implementation of TouchEntity function
-   *
-   *  @param Graphics & - graphics instance
    *
    *  @returns bool     - isInside or not
    * */

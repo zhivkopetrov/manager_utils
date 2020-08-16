@@ -39,8 +39,6 @@ class Scroller : public TouchEntity {
    *                                       current frameRectangle or not
    *         NOTE: concrete implementation of TouchEntity function
    *
-   *  @param Graphics & - graphics instance
-   *
    *  @returns bool     - isInside or not
    * */
   bool containsEvent(const InputEvent& e) final;
