@@ -89,7 +89,7 @@ class RsrcMgrBase : public MgrBase, public SDLContainers {
    *         WARNING: this method will be called from the main(drawing)
    *                  thread. Do not forget to lock your data!
    **/
-  void onLoadTextureMultipleCompleted(const int32_t batchId);
+  void onLoadTextureMultipleCompleted(const int32_t batchId) override;
 
   /** @brief used to acquire the occupied GPU VRAM from the RsrcMgrBase
    *
