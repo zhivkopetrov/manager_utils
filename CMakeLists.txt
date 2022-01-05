@@ -13,7 +13,7 @@ endif()
 project(manager_utils)
    
 set(_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/manager_utils)       
-set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/manager_utils)
+set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_library(
     ${PROJECT_NAME} 
