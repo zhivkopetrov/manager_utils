@@ -206,8 +206,8 @@ void Widget::activateScaling() {
   _drawParams.scaledWidth = _origFrameRect.w;
   _drawParams.scaledHeight = _origFrameRect.h;
 
-  _scaleXFactor = 1.0;
-  _scaleYFactor = 1.0;
+  _scaleXFactor = MAX_SCALE_FACTOR;
+  _scaleYFactor = MAX_SCALE_FACTOR;
 }
 
 void Widget::deactivateScaling() {
