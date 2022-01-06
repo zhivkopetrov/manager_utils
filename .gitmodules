@@ -1,6 +1,0 @@
-[submodule "cmake_helpers"]
-	path = cmake_helpers
-	url = https://github.com/zhivkopetrov/cmake_helpers.git
-[submodule "sdl_utils"]
-	path = sdl_utils
-	url = https://github.com/zhivkopetrov/sdl_utils.git
