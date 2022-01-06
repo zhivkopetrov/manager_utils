@@ -7,11 +7,10 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/SoundMgr.h"
-
-#include "utils/Log.h"
 
 Music::~Music() {
   // attempt to destroy SoundWidget only if it

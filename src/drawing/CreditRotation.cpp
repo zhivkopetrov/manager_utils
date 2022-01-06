@@ -7,12 +7,12 @@
 #include <string>
 
 // Other libraries headers
-
-// Own components headers
 #include "utils/common/Position.h"
-#include "utils/LimitValues.hpp"
+#include "utils/LimitValues.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
+
+// Own components headers
 
 CreditRotation::CreditRotation()
     : _timerPeriod(INIT_UINT8_VALUE),

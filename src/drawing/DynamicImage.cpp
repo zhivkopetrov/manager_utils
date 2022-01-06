@@ -6,16 +6,13 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/data_type/EnumClassUtils.h"
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/drawing/Sprite.h"
-#include "utils/data_type/EnumClassUtils.hpp"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
-
-// default constructor
-DynamicImage::DynamicImage() {}
 
 // move constructor
 DynamicImage::DynamicImage(DynamicImage&& movedOther)

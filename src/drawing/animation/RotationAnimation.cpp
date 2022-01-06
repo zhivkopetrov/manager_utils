@@ -7,12 +7,12 @@
 #include <utility>
 
 // Other libraries headers
-
-// Own components headers
-#include "manager_utils/drawing/animation/AnimationEndCb.hpp"
 #include "utils/data_type/FloatingPointUtils.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
+
+// Own components headers
+#include "manager_utils/drawing/animation/AnimationEndCb.h"
 
 // default constructor
 RotationAnimation::RotationAnimation()

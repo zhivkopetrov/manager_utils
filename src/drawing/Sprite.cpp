@@ -6,9 +6,9 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/Log.h"
 
 // Own components headers
-#include "utils/Log.h"
 
 Sprite::Sprite() : _currFrame(0), _maxFrames(0), _rsrcId(0) {}
 

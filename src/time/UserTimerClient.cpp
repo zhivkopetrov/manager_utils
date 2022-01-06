@@ -6,11 +6,10 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/TimerMgr.h"
-
-#include "utils/Log.h"
 
 void UserTimerClient::startTimer(const int64_t interval, const int32_t timerId,
                                  const cbFunc func, const cbFunc freeFunc,

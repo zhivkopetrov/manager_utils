@@ -1,15 +1,15 @@
-#ifndef MANAGER_UTILS_DRAWMGRBASECONFIG_HPP_
-#define MANAGER_UTILS_DRAWMGRBASECONFIG_HPP_
+#ifndef MANAGER_UTILS_DRAWMGRBASECONFIG_H_
+#define MANAGER_UTILS_DRAWMGRBASECONFIG_H_
 
 //C system headers
 
 //C++ system headers
 
 //Other libraries headers
+#include "sdl_utils/drawing/defines/MonitorDefines.h"
+#include "sdl_utils/drawing/config/RendererConfig.h"
 
 //Own components headers
-#include "sdl_utils/drawing/defines/MonitorDefines.h"
-#include "sdl_utils/drawing/config/RendererConfig.hpp"
 
 //Forward declarations
 
@@ -21,4 +21,4 @@ struct DrawMgrConfig {
   WindowBorderMode windowBorderMode = WindowBorderMode::UNKNOWN;
 };
 
-#endif /* MANAGER_UTILS_DRAWMGRBASECONFIG_HPP_ */
+#endif /* MANAGER_UTILS_DRAWMGRBASECONFIG_H_ */

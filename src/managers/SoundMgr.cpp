@@ -9,16 +9,16 @@
 #include <mutex>
 
 // Other libraries headers
+#include "sdl_utils/input/InputEvent.h"
+#include "sdl_utils/sound/SoundMixer.h"
+#include "utils/data_type/EnumClassUtils.h"
+#include "utils/debug/FunctionTracer.h"
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/RsrcMgr.h"
-#include "manager_utils/sound/SoundWidgetEndCb.hpp"
-#include "sdl_utils/input/InputEvent.h"
-#include "sdl_utils/sound/SoundMixer.h"
-#include "utils/data_type/EnumClassUtils.hpp"
-#include "utils/debug/FunctionTracer.hpp"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
+#include "manager_utils/sound/SoundWidgetEndCb.h"
 
 SoundMgr* gSoundMgr = nullptr;
 

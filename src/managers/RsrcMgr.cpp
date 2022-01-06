@@ -6,12 +6,12 @@
 // C++ system headers
 
 // Other libraries headers
-
-// Own components headers
 #include "sdl_utils/input/InputEvent.h"
-#include "utils/debug/FunctionTracer.hpp"
+#include "utils/debug/FunctionTracer.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
+
+// Own components headers
 
 RsrcMgr* gRsrcMgr = nullptr;
 

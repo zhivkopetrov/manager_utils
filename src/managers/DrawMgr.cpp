@@ -6,14 +6,14 @@
 // C++ system headers
 
 // Other libraries headers
-
-// Own components headers
 #include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/drawing/MonitorWindow.h"
 #include "sdl_utils/drawing/Renderer.h"
-#include "utils/debug/FunctionTracer.hpp"
+#include "utils/debug/FunctionTracer.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
+
+// Own components headers
 
 DrawMgr *gDrawMgr = nullptr;
 

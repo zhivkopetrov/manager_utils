@@ -7,12 +7,12 @@
 #include <cstring>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/DrawMgr.h"
 #include "manager_utils/managers/RsrcMgr.h"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
 
 // default constructor
 SpriteBuffer::SpriteBuffer()

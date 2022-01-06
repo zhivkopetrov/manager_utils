@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_SOUNDWIDGETENDCB_HPP_
-#define MANAGER_UTILS_SOUNDWIDGETENDCB_HPP_
+#ifndef MANAGER_UTILS_SOUNDWIDGETENDCB_H_
+#define MANAGER_UTILS_SOUNDWIDGETENDCB_H_
 
 // C system headers
 
@@ -28,4 +28,4 @@ class SoundWidgetEndCb {
   virtual int32_t onSoundWidgetEnd() { return 0; }
 };
 
-#endif /* MANAGER_UTILS_SOUNDWIDGETENDCB_HPP_ */
+#endif /* MANAGER_UTILS_SOUNDWIDGETENDCB_H_ */

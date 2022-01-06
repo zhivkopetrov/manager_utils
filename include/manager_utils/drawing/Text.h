@@ -7,11 +7,10 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/drawing/Color.h"
 
 // Own components headers
-#include "Widget.h"
-
-#include "utils/drawing/Color.h"
+#include "manager_utils/drawing/Widget.h"
 
 // Forward Declarations
 

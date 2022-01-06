@@ -6,15 +6,15 @@
 // C++ system headers
 
 // Other libraries headers
+#include "sdl_utils/input/InputEvent.h"
+#include "utils/debug/FunctionTracer.h"
+#include "utils/debug/StackTrace.h"
+#include "utils/LimitValues.h"
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/time/TimerClient.h"
-#include "sdl_utils/input/InputEvent.h"
-#include "utils/debug/FunctionTracer.hpp"
-#include "utils/debug/StackTrace.hpp"
-#include "utils/LimitValues.hpp"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
 
 TimerMgr* gTimerMgr = nullptr;
 

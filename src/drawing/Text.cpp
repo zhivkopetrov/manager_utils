@@ -8,11 +8,11 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/LimitValues.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/RsrcMgr.h"
-#include "utils/LimitValues.hpp"
-#include "utils/Log.h"
 
 // default constructor
 Text::Text()

@@ -6,9 +6,9 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/LimitValues.h"
 
 // Own components headers
-#include "utils/LimitValues.hpp"
 
 AnimBaseConfig::AnimBaseConfig()
  : externalImage(nullptr),

@@ -7,10 +7,10 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "resource_utils/defines/SoundDefines.h"
 
 // Own components headers
 #include "manager_utils/managers/MgrBase.h"
-#include "resource_utils/defines/SoundDefines.h"
 
 // Forward declarations
 class InputEvent;

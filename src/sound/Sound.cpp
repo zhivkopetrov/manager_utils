@@ -7,10 +7,10 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/SoundMgr.h"
-#include "utils/Log.h"
 
 // move constructor
 Sound::Sound(Sound&& movedOther) : SoundWidget(std::move(movedOther)) {}

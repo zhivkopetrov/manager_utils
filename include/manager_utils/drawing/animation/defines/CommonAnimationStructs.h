@@ -7,10 +7,10 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/drawing/Point.h"
 
 // Own components headers
 #include "manager_utils/drawing/animation/defines/AnimationDefines.h"
-#include "utils/drawing/Point.h"
 
 // Forward declarations
 class Image;

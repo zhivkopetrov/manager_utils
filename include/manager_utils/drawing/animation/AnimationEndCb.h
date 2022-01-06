@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_ANIMATIONENDCB_HPP_
-#define MANAGER_UTILS_ANIMATIONENDCB_HPP_
+#ifndef MANAGER_UTILS_ANIMATIONENDCB_H_
+#define MANAGER_UTILS_ANIMATIONENDCB_H_
 
 /*
  * AnimationEndCb.hpp
@@ -52,4 +52,4 @@ class AnimationEndCb {
   virtual int32_t onAnimationEnd() { return 0; }
 };
 
-#endif /* MANAGER_UTILS_ANIMATIONENDCB_HPP_ */
+#endif /* MANAGER_UTILS_ANIMATIONENDCB_H_ */

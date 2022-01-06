@@ -6,14 +6,14 @@
 //C++ system headers
 
 //Other libraries headers
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 //Own components headers
-#include "manager_utils/managers/config/ManagerHandlerConfig.hpp"
+#include "manager_utils/managers/config/ManagerHandlerConfig.h"
 #include "manager_utils/managers/DrawMgr.h"
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/managers/TimerMgr.h"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
 
 int32_t ManagerHandler::init(const ManagerHandlerConfig &cfg) {
   if (SUCCESS != allocateManagers(cfg)) {

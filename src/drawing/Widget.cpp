@@ -7,12 +7,12 @@
 #include <cstring>
 
 // Other libraries headers
-
-// Own components headers
-#include "manager_utils/managers/DrawMgr.h"
 #include "sdl_utils/drawing/GeometryUtils.h"
 #include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
+
+// Own components headers
+#include "manager_utils/managers/DrawMgr.h"
 
 namespace {
 constexpr auto MAX_SCALE_FACTOR_INTERNAL = MAX_SCALE_FACTOR + 0.01;

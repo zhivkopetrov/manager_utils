@@ -9,11 +9,11 @@
 #include <set>
 
 // Other libraries headers
+#include "utils/time/Time.h"
 
 // Own components headers
 #include "manager_utils/managers/MgrBase.h"
 #include "manager_utils/time/defines/TimerClientDefines.h"
-#include "utils/time/Time.h"
 
 // Forward declarations
 class InputEvent;

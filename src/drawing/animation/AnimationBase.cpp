@@ -7,11 +7,11 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/drawing/SpriteBuffer.h"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
 
 // default constructor
 AnimationBase::AnimationBase()

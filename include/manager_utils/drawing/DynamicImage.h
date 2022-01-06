@@ -14,7 +14,6 @@
 
 class DynamicImage : public Image {
  public:
-  DynamicImage();
   ~DynamicImage();
 
   // move constructor needed for STL containers emplace_back/push_back

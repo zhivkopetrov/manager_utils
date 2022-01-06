@@ -6,10 +6,10 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/Log.h"
 
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
-#include "utils/Log.h"
 
 // default constructor
 ButtonBase::ButtonBase()

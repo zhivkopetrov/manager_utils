@@ -34,10 +34,10 @@
 // C++ system headers
 
 // Other libraries headers
+#include "sdl_utils/input/TouchEntity.h"
 
 // Own components headers
 #include "manager_utils/drawing/Image.h"
-#include "sdl_utils/input/TouchEntity.h"
 
 // Forward declarations
 class InputEvent;

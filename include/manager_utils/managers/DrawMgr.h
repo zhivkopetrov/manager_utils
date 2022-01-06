@@ -6,11 +6,11 @@
 // C++ system headers
 
 // Other libraries headers
+#include "sdl_utils/drawing/defines/RendererDefines.h"
 
 // Own components headers
 #include "manager_utils/managers/MgrBase.h"
-#include "manager_utils/managers/config/DrawMgrConfig.hpp"
-#include "sdl_utils/drawing/defines/RendererDefines.h"
+#include "manager_utils/managers/config/DrawMgrConfig.h"
 
 // Forward declarations
 class SDLContainers;

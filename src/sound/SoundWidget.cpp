@@ -6,12 +6,12 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/RsrcMgr.h"
-#include "manager_utils/sound/SoundWidgetEndCb.hpp"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
+#include "manager_utils/sound/SoundWidgetEndCb.h"
 
 // default constructor
 SoundWidget::SoundWidget()

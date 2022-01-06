@@ -6,14 +6,14 @@
 // C++ system headers
 
 // Other libraries headers
+#include "utils/debug/FunctionTracer.h"
+#include "utils/debug/StackTrace.h"
+#include "utils/LimitValues.h"
+#include "utils/ErrorCode.h"
+#include "utils/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/TimerMgr.h"
-#include "utils/debug/FunctionTracer.hpp"
-#include "utils/debug/StackTrace.hpp"
-#include "utils/LimitValues.hpp"
-#include "utils/ErrorCode.h"
-#include "utils/Log.h"
 
 namespace {
 // Hold step for increase of the limit for currently auto-managed timers

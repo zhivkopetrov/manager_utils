@@ -7,11 +7,11 @@
 #include <cstdint>
 
 // Other libraries headers
-
-// Own components headers
 #include "sdl_utils/input/TouchEntity.h"
 #include "utils/drawing/Point.h"
 #include "utils/drawing/Rectangle.h"
+
+// Own components headers
 
 // Forward Declarations
 class InputEvent;
