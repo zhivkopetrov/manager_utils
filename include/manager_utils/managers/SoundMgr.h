@@ -17,7 +17,7 @@ class InputEvent;
 class SoundWidgetEndCb;
 typedef struct _Mix_Music Mix_Music;
 
-class SoundMgr : public MgrBase {
+class SoundMgr final : public MgrBase {
  public:
   SoundMgr();
   virtual ~SoundMgr();

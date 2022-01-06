@@ -20,7 +20,7 @@ class MonitorWindow;
 struct DrawParams;
 struct DrawMgrConfig;
 
-class DrawMgr : public MgrBase {
+class DrawMgr final : public MgrBase {
  public:
   explicit DrawMgr(const DrawMgrConfig &cfg);
 

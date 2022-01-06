@@ -19,7 +19,7 @@
 class InputEvent;
 class TimerClient;
 
-class TimerMgr : public MgrBase {
+class TimerMgr final : public MgrBase {
  public:
   TimerMgr();
   virtual ~TimerMgr();

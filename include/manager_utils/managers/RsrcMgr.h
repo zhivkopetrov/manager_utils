@@ -15,7 +15,7 @@
 // Forward declarations
 class InputEvent;
 
-class RsrcMgr : public MgrBase, public SDLContainers {
+class RsrcMgr final : public MgrBase, public SDLContainers {
  public:
   RsrcMgr(const SDLContainersConfig &cfg);
 
