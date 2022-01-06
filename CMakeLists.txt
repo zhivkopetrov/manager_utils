@@ -18,7 +18,7 @@ add_library(
         ${_INC_DIR}/drawing/Text.h
         ${_INC_DIR}/drawing/Widget.h
         ${_INC_DIR}/drawing/animation/AnimationBase.h
-        ${_INC_DIR}/drawing/animation/AnimationEndCb.hpp
+        ${_INC_DIR}/drawing/animation/AnimationEndCb.h
         ${_INC_DIR}/drawing/animation/FrameAnimation.h
         ${_INC_DIR}/drawing/animation/PositionAnimation.h
         ${_INC_DIR}/drawing/animation/PulseAnimation.h
@@ -27,8 +27,8 @@ add_library(
         ${_INC_DIR}/drawing/animation/defines/CommonAnimationStructs.h
         ${_INC_DIR}/input/ButtonBase.h
         ${_INC_DIR}/input/Scroller.h
-        ${_INC_DIR}/managers/config/ManagerHandlerConfig.hpp
-        ${_INC_DIR}/managers/config/DrawMgrConfig.hpp
+        ${_INC_DIR}/managers/config/ManagerHandlerConfig.h
+        ${_INC_DIR}/managers/config/DrawMgrConfig.h
         ${_INC_DIR}/managers/ManagerHandler.h
         ${_INC_DIR}/managers/MgrBase.h
         ${_INC_DIR}/managers/DrawMgr.h
@@ -38,7 +38,7 @@ add_library(
         ${_INC_DIR}/sound/Music.h
         ${_INC_DIR}/sound/Sound.h
         ${_INC_DIR}/sound/SoundWidget.h
-        ${_INC_DIR}/sound/SoundWidgetEndCb.hpp
+        ${_INC_DIR}/sound/SoundWidgetEndCb.h
         ${_INC_DIR}/time/TimerClient.h
         ${_INC_DIR}/time/TimerClientSpeedAdjustable.h
         ${_INC_DIR}/time/UserTimerClient.h
