@@ -13,7 +13,7 @@
 
 //Forward declarations
 
-struct DrawMgrBaseConfig {
+struct DrawMgrConfig {
   RendererConfig rendererConfig;
   int32_t monitorWidth = 0;
   int32_t monitorHeight = 0;

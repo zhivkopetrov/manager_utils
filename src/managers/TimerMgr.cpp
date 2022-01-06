@@ -1,5 +1,5 @@
 // Corresponding header
-#include "manager_utils/managers_base/TimerMgrBase.h"
+#include "manager_utils/managers/TimerMgr.h"
 
 // C system headers
 
@@ -16,31 +16,31 @@
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
-TimerMgrBase* gTimerMgrBase = nullptr;
+TimerMgr* gTimerMgr = nullptr;
 
 typedef std::map<int32_t, TimerData>::iterator _timerMapIt;
 typedef std::map<int32_t, TimerData>::const_iterator _timerMapConstIt;
 
 typedef std::set<int32_t>::iterator _removeTimerSetIt;
 
-TimerMgrBase::TimerMgrBase()
+TimerMgr::TimerMgr()
     : _timerSpeed(TimerSpeed::NORMAL), _isTimerMgrPaused(false) {
 
 }
 
-TimerMgrBase::~TimerMgrBase() {
+TimerMgr::~TimerMgr() {
   TRACE_ENTRY_EXIT;
 }
 
-int32_t TimerMgrBase::init() {
+int32_t TimerMgr::init() {
   TRACE_ENTRY_EXIT;
 
   return SUCCESS;
 }
 
-int32_t TimerMgrBase::recover() { return SUCCESS; }
+int32_t TimerMgr::recover() { return SUCCESS; }
 
-void TimerMgrBase::deinit() {
+void TimerMgr::deinit() {
   // free dynamically allocated timer data resources
   // no need to erase the elemenets -> the map destructor will do it
   for (_timerMapIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
@@ -54,9 +54,9 @@ void TimerMgrBase::deinit() {
   }
 }
 
-const char* TimerMgrBase::getName() { return "TimerMgrBase"; }
+const char* TimerMgr::getName() { return "TimerMgr"; }
 
-void TimerMgrBase::process() {
+void TimerMgr::process() {
   const int64_t millisecondsElapsed =
       _timeInternal.getElapsed().toMilliseconds();
 
@@ -80,10 +80,10 @@ void TimerMgrBase::process() {
   removeTimersInternal();
 }
 
-void TimerMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
+void TimerMgr::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
-void TimerMgrBase::changeSpeed() {
+void TimerMgr::changeSpeed() {
   switch (_timerSpeed) {
     case TimerSpeed::NORMAL:
       _timerSpeed = TimerSpeed::FAST;
@@ -103,7 +103,7 @@ void TimerMgrBase::changeSpeed() {
   }
 }
 
-void TimerMgrBase::startUserTimer(const int64_t interval, const int32_t timerId,
+void TimerMgr::startUserTimer(const int64_t interval, const int32_t timerId,
                                   const cbFunc func, const cbFunc freeFunc,
                                   void* funcData, const TimerType timerType,
                                   const TimerGroup timerGroup) {
@@ -141,7 +141,7 @@ void TimerMgrBase::startUserTimer(const int64_t interval, const int32_t timerId,
   _timerMap.emplace(timerId, timerData);
 }
 
-void TimerMgrBase::startTimerClientTimer(TimerClient* tcIstance,
+void TimerMgr::startTimerClientTimer(TimerClient* tcIstance,
                                          const int64_t interval,
                                          const int32_t timerId,
                                          const TimerType timerType,
@@ -172,7 +172,7 @@ void TimerMgrBase::startTimerClientTimer(TimerClient* tcIstance,
   _timerMap.emplace(timerId, timerData);
 }
 
-void TimerMgrBase::stopTimer(const int32_t timerId) {
+void TimerMgr::stopTimer(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
@@ -189,7 +189,7 @@ void TimerMgrBase::stopTimer(const int32_t timerId) {
   }
 }
 
-void TimerMgrBase::stopTimerAndDetachTimerClient(const int32_t timerId) {
+void TimerMgr::stopTimerAndDetachTimerClient(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   /** NOTE: timer could have already been stopped in some ::deinit() func
@@ -219,7 +219,7 @@ void TimerMgrBase::stopTimerAndDetachTimerClient(const int32_t timerId) {
   }
 }
 
-void TimerMgrBase::restartTimerClientTimerInterval(const int32_t timerId) {
+void TimerMgr::restartTimerClientTimerInterval(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
@@ -242,7 +242,7 @@ void TimerMgrBase::restartTimerClientTimerInterval(const int32_t timerId) {
   }
 }
 
-void TimerMgrBase::restartUserTimerInterval(const int32_t timerId) {
+void TimerMgr::restartUserTimerInterval(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
@@ -272,7 +272,7 @@ void TimerMgrBase::restartUserTimerInterval(const int32_t timerId) {
   }
 }
 
-void TimerMgrBase::addTimeToTimerClientTimer(const int32_t timerId,
+void TimerMgr::addTimeToTimerClientTimer(const int32_t timerId,
                                              const int64_t intervalToAdd) {
   if (isActiveTimerId(timerId)) {
     _timerMapIt it = _timerMap.find(timerId);
@@ -294,7 +294,7 @@ void TimerMgrBase::addTimeToTimerClientTimer(const int32_t timerId,
   }
 }
 
-void TimerMgrBase::addTimeToUserTimer(const int32_t timerId,
+void TimerMgr::addTimeToUserTimer(const int32_t timerId,
                                       const int64_t intervalToAdd) {
   TRACE_ENTRY_EXIT;
 
@@ -325,7 +325,7 @@ void TimerMgrBase::addTimeToUserTimer(const int32_t timerId,
   }
 }
 
-void TimerMgrBase::removeTimeFromTimerClientTimer(
+void TimerMgr::removeTimeFromTimerClientTimer(
     const int32_t timerId, const int64_t intervalToRemove) {
   TRACE_ENTRY_EXIT;
 
@@ -360,7 +360,7 @@ void TimerMgrBase::removeTimeFromTimerClientTimer(
   }
 }
 
-void TimerMgrBase::removeTimeFromUserTimer(const int32_t timerId,
+void TimerMgr::removeTimeFromUserTimer(const int32_t timerId,
                                            const int64_t intervalToRemove) {
   TRACE_ENTRY_EXIT;
 
@@ -402,7 +402,7 @@ void TimerMgrBase::removeTimeFromUserTimer(const int32_t timerId,
   }
 }
 
-int64_t TimerMgrBase::getTimerRemainingInterval(const int32_t timerId) const {
+int64_t TimerMgr::getTimerRemainingInterval(const int32_t timerId) const {
   int64_t remainingTime = 0;
 
   if (isActiveTimerId(timerId)) {
@@ -423,12 +423,12 @@ int64_t TimerMgrBase::getTimerRemainingInterval(const int32_t timerId) const {
   return remainingTime;
 }
 
-bool TimerMgrBase::isActiveTimerId(const int32_t timerId) const {
+bool TimerMgr::isActiveTimerId(const int32_t timerId) const {
   return (_removeTimerSet.end() == _removeTimerSet.find(timerId)) &&
          (_timerMap.end() != _timerMap.find(timerId));
 }
 
-void TimerMgrBase::onTimerTimeout(const int32_t timerId, TimerData& timerData) {
+void TimerMgr::onTimerTimeout(const int32_t timerId, TimerData& timerData) {
   TRACE_ENTRY_EXIT;
 
   if (_removeTimerSet.end() != _removeTimerSet.find(timerId)) {
@@ -471,7 +471,7 @@ void TimerMgrBase::onTimerTimeout(const int32_t timerId, TimerData& timerData) {
   timerData.remaining += timerData.interval;
 }
 
-void TimerMgrBase::removeTimersInternal() {
+void TimerMgr::removeTimersInternal() {
   // set is empty -> no timers requested external closing
   if (_removeTimerSet.empty()) {
     return;
@@ -522,7 +522,7 @@ void TimerMgrBase::removeTimersInternal() {
   _removeTimerSet.clear();
 }
 
-void TimerMgrBase::pauseAllTimers() {
+void TimerMgr::pauseAllTimers() {
   TRACE_ENTRY_EXIT;
 
   if (_isTimerMgrPaused) {
@@ -542,7 +542,7 @@ void TimerMgrBase::pauseAllTimers() {
   }
 }
 
-void TimerMgrBase::resumeAllTimers() {
+void TimerMgr::resumeAllTimers() {
   TRACE_ENTRY_EXIT;
 
   if (!_isTimerMgrPaused) {
@@ -562,7 +562,7 @@ void TimerMgrBase::resumeAllTimers() {
   }
 }
 
-int64_t TimerMgrBase::getClosestNonZeroTimerInterval() const {
+int64_t TimerMgr::getClosestNonZeroTimerInterval() const {
   int64_t interval = INIT_INT64_VALUE;
 
   for (_timerMapConstIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
@@ -600,12 +600,12 @@ int64_t TimerMgrBase::getClosestNonZeroTimerInterval() const {
   return interval;
 }
 
-void TimerMgrBase::onInitEnd() {
+void TimerMgr::onInitEnd() {
   // reset the timer so it can clear the "stored" time since the creation
-  // of the TimerMgrBase instance and this function call
+  // of the TimerMgr instance and this function call
   _timeInternal.getElapsed();
 }
 
-bool TimerMgrBase::isTimerLocatedInTheTimerMap(const int32_t timerId) const {
+bool TimerMgr::isTimerLocatedInTheTimerMap(const int32_t timerId) const {
   return _timerMap.end() != _timerMap.find(timerId);
 }

@@ -9,7 +9,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/SoundMgrBase.h"
+#include "manager_utils/managers/SoundMgr.h"
 
 #include "utils/Log.h"
 
@@ -45,9 +45,9 @@ void Music::destroy() {
   }
 
   // sanity check
-  if (nullptr != gSoundMgrBase) {
+  if (nullptr != gSoundMgr) {
     // check for auto-closing of music
-    gSoundMgrBase->trySelfUnloadMusic(_rsrcId, _soundLevel);
+    gSoundMgr->trySelfUnloadMusic(_rsrcId, _soundLevel);
   }
 
   // invoke base destroy
@@ -63,28 +63,28 @@ void Music::setVolume(const SoundLevel soundLevel) {
   } else  // it is valid SoundLevel value
   {
     _soundLevel = soundLevel;
-    gSoundMgrBase->setMusicVolume(_soundLevel);
+    gSoundMgr->setMusicVolume(_soundLevel);
   }
 }
 
 void Music::play(const int32_t loops) {
-  gSoundMgrBase->playLoadedMusic(loops, _endCb);
+  gSoundMgr->playLoadedMusic(loops, _endCb);
 }
 
-bool Music::isPlaying() const { return gSoundMgrBase->isMusicPlaying(); }
+bool Music::isPlaying() const { return gSoundMgr->isMusicPlaying(); }
 
-void Music::stop() { gSoundMgrBase->stopLoadedMusic(); }
+void Music::stop() { gSoundMgr->stopLoadedMusic(); }
 
-bool Music::isPaused() const { return gSoundMgrBase->isMusicPaused(); }
+bool Music::isPaused() const { return gSoundMgr->isMusicPaused(); }
 
-void Music::pause() { gSoundMgrBase->pauseMusic(); }
+void Music::pause() { gSoundMgr->pauseMusic(); }
 
-void Music::resume() { gSoundMgrBase->resumeMusic(); }
+void Music::resume() { gSoundMgr->resumeMusic(); }
 
-void Music::loadMusic() { gSoundMgrBase->loadMusic(_rsrcId); }
+void Music::loadMusic() { gSoundMgr->loadMusic(_rsrcId); }
 
 void Music::unloadMusic() {
-  gSoundMgrBase->trySelfUnloadMusic(_rsrcId, _soundLevel);
+  gSoundMgr->trySelfUnloadMusic(_rsrcId, _soundLevel);
 }
 
-void Music::rewind() { gSoundMgrBase->rewindMusic(); }
+void Music::rewind() { gSoundMgr->rewindMusic(); }

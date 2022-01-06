@@ -8,8 +8,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/DrawMgrBase.h"
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/drawing/Sprite.h"
 #include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/ErrorCode.h"
@@ -71,7 +70,7 @@ void Image::create(const uint64_t rsrcId) {
   }
 
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgrBase->getRsrcData(rsrcId, rsrcData)) {
+  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
         "Error, getRsrcData failed for rsrcId: %#16lX, "
         "will not create Image",
@@ -152,7 +151,7 @@ void Image::setTexture(const uint64_t rsrcId) {
   }
 
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgrBase->getRsrcData(rsrcId, rsrcData)) {
+  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
         "Error, getRsrcData failed for rsrcId: %#16lX, "
         "will not setTexture for Image",

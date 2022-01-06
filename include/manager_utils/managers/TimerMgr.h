@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_TIMERMGRBASE_H_
-#define MANAGER_UTILS_TIMERMGRBASE_H_
+#ifndef MANAGER_UTILS_TIMERMGR_H_
+#define MANAGER_UTILS_TIMERMGR_H_
 
 // C system headers
 
@@ -11,7 +11,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/MgrBase.h"
+#include "manager_utils/managers/MgrBase.h"
 #include "manager_utils/time/defines/TimerClientDefines.h"
 #include "utils/time/Time.h"
 
@@ -19,18 +19,18 @@
 class InputEvent;
 class TimerClient;
 
-class TimerMgrBase : public MgrBase {
+class TimerMgr : public MgrBase {
  public:
-  TimerMgrBase();
-  virtual ~TimerMgrBase();
+  TimerMgr();
+  virtual ~TimerMgr();
 
   // forbid the copy and move constructors
-  TimerMgrBase(const TimerMgrBase& other) = delete;
-  TimerMgrBase(TimerMgrBase&& other) = delete;
+  TimerMgr(const TimerMgr& other) = delete;
+  TimerMgr(TimerMgr&& other) = delete;
 
   // forbid the copy and move assignment operators
-  TimerMgrBase& operator=(const TimerMgrBase& other) = delete;
-  TimerMgrBase& operator=(TimerMgrBase&& other) = delete;
+  TimerMgr& operator=(const TimerMgr& other) = delete;
+  TimerMgr& operator=(TimerMgr&& other) = delete;
 
   //================= START MgrBase related functions ====================
 
@@ -91,13 +91,13 @@ class TimerMgrBase : public MgrBase {
    *      > The dynamic resource loading will take ~2000ms;
    *      > The game ::init() method passes and some timers are started
    *          (lets say with interval 50ms);
-   *      > On next engine cycle the TimerMgrBase is up processed and
+   *      > On next engine cycle the TimerMgr is up processed and
    *        the passes time is 2000ms resulting in a ticked timer
    *        with remaining interval of 50 - 2000 = - 1950ms.
    *        This will mean that for 19+ contiguous engine cycle those same
    *        timers onTimeout() will be wrongly invoked.
    * */
-  void forceUpdate() { TimerMgrBase::process(); }
+  void forceUpdate() { TimerMgr::process(); }
 
   /** @brief starts timer with provided arguments
    *    this functions does not return error code for performance reasons
@@ -280,7 +280,7 @@ class TimerMgrBase : public MgrBase {
   int32_t getTimerSpeed() const { return _timerSpeed; }
 
   /** @brief must be called on project init() method end in order to
-   *         set proper internal TimerMgrBase calculations */
+   *         set proper internal TimerMgr calculations */
   void onInitEnd();
 
  protected:
@@ -348,6 +348,6 @@ class TimerMgrBase : public MgrBase {
   bool _isTimerMgrPaused;
 };
 
-extern TimerMgrBase* gTimerMgrBase;
+extern TimerMgr* gTimerMgr;
 
-#endif /* MANAGER_UTILS_TIMERMGRBASE_H_ */
+#endif /* MANAGER_UTILS_TIMERMGR_H_ */

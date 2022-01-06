@@ -9,8 +9,8 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/DrawMgrBase.h"
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/DrawMgr.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
@@ -111,8 +111,8 @@ void SpriteBuffer::create(const int32_t coordinateX,
    * */
   setFrameRect(Rectangle(0, 0, spriteBufferWidth, spriteBufferHeight));
 
-  gRsrcMgrBase->createSpriteBuffer(spriteBufferWidth, spriteBufferHeight,
-                                   _drawParams.spriteBufferId);
+  gRsrcMgr->createSpriteBuffer(spriteBufferWidth, spriteBufferHeight,
+                               _drawParams.spriteBufferId);
 }
 
 void SpriteBuffer::create(const Rectangle& dimensions,
@@ -135,8 +135,8 @@ void SpriteBuffer::destroy() {
   }
 
   // sanity check, because manager could already been destroyed
-  if (nullptr != gRsrcMgrBase) {
-    gRsrcMgrBase->destroySpriteBuffer(_drawParams.spriteBufferId);
+  if (nullptr != gRsrcMgr) {
+    gRsrcMgr->destroySpriteBuffer(_drawParams.spriteBufferId);
   }
 
   Widget::reset();
@@ -163,7 +163,7 @@ void SpriteBuffer::unlock() {
 
   _isLocked = false;
 
-  if (SUCCESS != gDrawMgrBase->unlockRenderer()) {
+  if (SUCCESS != gDrawMgr->unlockRenderer()) {
     LOGERR(
         "Error, SpriteBuffer with ID: %d can not be unlocked, because some "
         "other entity is currently in possession of the main renderer lock. "
@@ -173,7 +173,7 @@ void SpriteBuffer::unlock() {
     return;
   }
 
-  gDrawMgrBase->addRendererCmd(
+  gDrawMgr->addRendererCmd(
       RendererCmd::CHANGE_RENDERER_TARGET,
       reinterpret_cast<const uint8_t *>(&_drawParams.spriteBufferId),
       sizeof(_drawParams.spriteBufferId));
@@ -195,8 +195,8 @@ void SpriteBuffer::lock() {
 
   _isLocked = true;
 
-  if (SUCCESS != gDrawMgrBase->lockRenderer()) {
-    LOGERR("gDrawMgrBase->lockRenderer() failed");
+  if (SUCCESS != gDrawMgr->lockRenderer()) {
+    LOGERR("gDrawMgr->lockRenderer() failed");
 
     return;
   }
@@ -221,7 +221,7 @@ void SpriteBuffer::reset() {
   _storedItems.clear();
 
   if (!_isCustomClearTargetSet) {
-    gDrawMgrBase->addRendererCmd(
+    gDrawMgr->addRendererCmd(
         RendererCmd::CLEAR_RENDERER_TARGET,
         reinterpret_cast<const uint8_t *>(&_clearColor), sizeof(_clearColor));
   } else  //_isCustomClearTargetSet is set
@@ -268,11 +268,11 @@ void SpriteBuffer::update() {
   transformToMonitorRelativeCoordinates(SIZE);
 
   // add size of used widgets
-  gDrawMgrBase->addRendererData(reinterpret_cast<const uint8_t *>(&SIZE),
+  gDrawMgr->addRendererData(reinterpret_cast<const uint8_t *>(&SIZE),
                                 sizeof(SIZE));
 
   // add the actual command and the data for the stored DrawParams
-  gDrawMgrBase->addRendererCmd(
+  gDrawMgr->addRendererCmd(
       RendererCmd::UPDATE_RENDERER_TARGET,
       reinterpret_cast<const uint8_t *>(_storedItems.data()),
       sizeof(DrawParams) * SIZE);
@@ -313,11 +313,11 @@ void SpriteBuffer::updateRanged(const int32_t fromIndex,
   const uint32_t NEW_ELEMENTS = toIndex - fromIndex + 1;
 
   // add size of used widgets
-  gDrawMgrBase->addRendererData(
+  gDrawMgr->addRendererData(
       reinterpret_cast<const uint8_t *>(&NEW_ELEMENTS), sizeof(NEW_ELEMENTS));
 
   // add the actual command and the data for the stored DrawParams
-  gDrawMgrBase->addRendererCmd(
+  gDrawMgr->addRendererCmd(
       RendererCmd::UPDATE_RENDERER_TARGET,
       reinterpret_cast<const uint8_t *>(&_storedItems[fromIndex]),
       sizeof(DrawParams) * NEW_ELEMENTS);

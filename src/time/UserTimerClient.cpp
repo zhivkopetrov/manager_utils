@@ -8,7 +8,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/TimerMgrBase.h"
+#include "manager_utils/managers/TimerMgr.h"
 
 #include "utils/Log.h"
 
@@ -17,7 +17,7 @@ void UserTimerClient::startTimer(const int64_t interval, const int32_t timerId,
                                  void* funcData, const TimerType timerType,
                                  const TimerGroup timerGroup) {
   if (interval >= 20) {
-    gTimerMgrBase->startUserTimer(interval, timerId, func, freeFunc, funcData,
+    gTimerMgr->startUserTimer(interval, timerId, func, freeFunc, funcData,
                                   timerType, timerGroup);
   } else {
     LOGERR(
@@ -29,27 +29,27 @@ void UserTimerClient::startTimer(const int64_t interval, const int32_t timerId,
 }
 
 void UserTimerClient::stopTimer(const int32_t timerId) {
-  gTimerMgrBase->stopTimer(timerId);
+  gTimerMgr->stopTimer(timerId);
 }
 
 bool UserTimerClient::isActiveTimerId(const int32_t timerId) {
-  return gTimerMgrBase->isActiveTimerId(timerId);
+  return gTimerMgr->isActiveTimerId(timerId);
 }
 
 void UserTimerClient::restartTimerInterval(const int32_t timerId) {
-  gTimerMgrBase->restartUserTimerInterval(timerId);
+  gTimerMgr->restartUserTimerInterval(timerId);
 }
 
 void UserTimerClient::addTimeToTimer(const int32_t timerId,
                                      const int64_t intervalToAdd) {
-  gTimerMgrBase->addTimeToUserTimer(timerId, intervalToAdd);
+  gTimerMgr->addTimeToUserTimer(timerId, intervalToAdd);
 }
 
 void UserTimerClient::removeTimeFromTimer(const int32_t timerId,
                                           const int64_t intervalToRemove) {
-  gTimerMgrBase->removeTimeFromUserTimer(timerId, intervalToRemove);
+  gTimerMgr->removeTimeFromUserTimer(timerId, intervalToRemove);
 }
 
 int64_t getTimerRemainingInterval(const int32_t timerId) {
-  return gTimerMgrBase->getTimerRemainingInterval(timerId);
+  return gTimerMgr->getTimerRemainingInterval(timerId);
 }

@@ -9,7 +9,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/SoundMgrBase.h"
+#include "manager_utils/managers/SoundMgr.h"
 #include "utils/Log.h"
 
 // move constructor
@@ -44,9 +44,9 @@ void Sound::destroy() {
   }
 
   // sanity check
-  if (nullptr != gSoundMgrBase) {
+  if (nullptr != gSoundMgr) {
     // check for auto-closing of music
-    gSoundMgrBase->trySelfStopChunk(_rsrcId, _soundLevel);
+    gSoundMgr->trySelfStopChunk(_rsrcId, _soundLevel);
   }
 
   // invoke base destroy
@@ -62,12 +62,12 @@ void Sound::setVolume(const SoundLevel soundLevel) {
   } else  // it is valid SoundLevel value
   {
     _soundLevel = soundLevel;
-    gSoundMgrBase->setChunkVolume(_rsrcId, _soundLevel);
+    gSoundMgr->setChunkVolume(_rsrcId, _soundLevel);
   }
 }
 
 void Sound::play(const int32_t loops) {
-  gSoundMgrBase->playChunk(_rsrcId, loops, _endCb);
+  gSoundMgr->playChunk(_rsrcId, loops, _endCb);
 }
 
 void Sound::playWithPanning(const int32_t loops, const int32_t leftVolume,
@@ -91,17 +91,17 @@ void Sound::playWithPanning(const int32_t loops, const int32_t leftVolume,
     return;
   }
 
-  gSoundMgrBase->playChunkWithPanning(
+  gSoundMgr->playChunkWithPanning(
       _rsrcId, loops, static_cast<uint8_t>(leftVolume),
       static_cast<uint8_t>(rightVolume), _endCb);
 }
 
-void Sound::stop() { gSoundMgrBase->stopChunk(_rsrcId); }
+void Sound::stop() { gSoundMgr->stopChunk(_rsrcId); }
 
-bool Sound::isPlaying() const { return gSoundMgrBase->isChunkPlaying(_rsrcId); }
+bool Sound::isPlaying() const { return gSoundMgr->isChunkPlaying(_rsrcId); }
 
-bool Sound::isPaused() const { return gSoundMgrBase->isChunkPaused(_rsrcId); }
+bool Sound::isPaused() const { return gSoundMgr->isChunkPaused(_rsrcId); }
 
-void Sound::pause() { gSoundMgrBase->pauseChunk(_rsrcId); }
+void Sound::pause() { gSoundMgr->pauseChunk(_rsrcId); }
 
-void Sound::resume() { gSoundMgrBase->resumeChunk(_rsrcId); }
+void Sound::resume() { gSoundMgr->resumeChunk(_rsrcId); }

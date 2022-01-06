@@ -1,5 +1,5 @@
 // Corresponding header
-#include "manager_utils/managers_base/DrawMgrBase.h"
+#include "manager_utils/managers/DrawMgr.h"
 
 // C system headers
 
@@ -15,17 +15,17 @@
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
-DrawMgrBase *gDrawMgrBase = nullptr;
+DrawMgr *gDrawMgr = nullptr;
 
-DrawMgrBase::DrawMgrBase(const DrawMgrBaseConfig &cfg)
+DrawMgr::DrawMgr(const DrawMgrConfig &cfg)
     : _renderer(nullptr), _window(nullptr), _maxFrames(0), _config(cfg) {
 }
 
-DrawMgrBase::~DrawMgrBase() {
+DrawMgr::~DrawMgr() {
   TRACE_ENTRY_EXIT;
 }
 
-int32_t DrawMgrBase::init() {
+int32_t DrawMgr::init() {
   TRACE_ENTRY_EXIT;
 
   _window = new MonitorWindow(_config.monitorWidth, _config.monitorHeight);
@@ -55,11 +55,11 @@ int32_t DrawMgrBase::init() {
   return SUCCESS;
 }
 
-int32_t DrawMgrBase::recover() {
+int32_t DrawMgr::recover() {
   return SUCCESS;
 }
 
-void DrawMgrBase::deinit() {
+void DrawMgr::deinit() {
   TRACE_ENTRY_EXIT;
 
   if (nullptr != _renderer) {
@@ -73,74 +73,74 @@ void DrawMgrBase::deinit() {
   }
 }
 
-const char* DrawMgrBase::getName() {
-  return "DrawMgrBase";
+const char* DrawMgr::getName() {
+  return "DrawMgr";
 }
 
-void DrawMgrBase::shutdownRenderer() {
+void DrawMgr::shutdownRenderer() {
   _renderer->shutdownRenderer_UT();
 }
 
-void DrawMgrBase::startRenderingLoop() {
+void DrawMgr::startRenderingLoop() {
   _renderer->executeRenderCommands_RT();
 }
 
-void DrawMgrBase::process() {
+void DrawMgr::process() {
 }
 
-void DrawMgrBase::handleEvent([[maybe_unused]]const InputEvent &e) {
+void DrawMgr::handleEvent([[maybe_unused]]const InputEvent &e) {
 }
 
-void DrawMgrBase::setSDLContainers(SDLContainers *containers) {
+void DrawMgr::setSDLContainers(SDLContainers *containers) {
   _renderer->setSDLContainers(containers);
 }
 
-void DrawMgrBase::clearScreen() {
+void DrawMgr::clearScreen() {
   _renderer->clearScreen_UT();
 }
 
-void DrawMgrBase::finishFrame(const bool overrideRendererLockCheck) {
+void DrawMgr::finishFrame(const bool overrideRendererLockCheck) {
   _renderer->finishFrame_UT(overrideRendererLockCheck);
 }
 
-void DrawMgrBase::addDrawCmd(DrawParams *drawParams) {
+void DrawMgr::addDrawCmd(DrawParams *drawParams) {
   _renderer->addDrawCmd_UT(drawParams);
 }
 
-void DrawMgrBase::addRendererCmd(const RendererCmd rendererCmd,
+void DrawMgr::addRendererCmd(const RendererCmd rendererCmd,
                                  const uint8_t *data, const uint64_t bytes) {
   _renderer->addRendererCmd_UT(rendererCmd, data, bytes);
 }
 
-void DrawMgrBase::addRendererData(const uint8_t *data, const uint64_t bytes) {
+void DrawMgr::addRendererData(const uint8_t *data, const uint64_t bytes) {
   _renderer->addRendererData_UT(data, bytes);
 }
 
-void DrawMgrBase::swapBackBuffers() {
+void DrawMgr::swapBackBuffers() {
   _renderer->swapBackBuffers_UT();
 }
 
-uint32_t DrawMgrBase::getTotalWidgetCount() const {
+uint32_t DrawMgr::getTotalWidgetCount() const {
   return _renderer->getTotalWidgetCount_UT();
 }
 
-int32_t DrawMgrBase::unlockRenderer() {
+int32_t DrawMgr::unlockRenderer() {
   return _renderer->unlockRenderer_UT();
 }
 
-int32_t DrawMgrBase::lockRenderer() {
+int32_t DrawMgr::lockRenderer() {
   return _renderer->lockRenderer_UT();
 }
 
-void DrawMgrBase::moveGlobalX(const int32_t x) {
+void DrawMgr::moveGlobalX(const int32_t x) {
   _renderer->moveGlobalX_UT(x);
 }
 
-void DrawMgrBase::moveGlobalY(const int32_t y) {
+void DrawMgr::moveGlobalY(const int32_t y) {
   _renderer->moveGlobalY_UT(y);
 }
 
-void DrawMgrBase::resetAbsoluteGlobalMovement() {
+void DrawMgr::resetAbsoluteGlobalMovement() {
   _renderer->resetAbsoluteGlobalMovement_UT();
 }
 

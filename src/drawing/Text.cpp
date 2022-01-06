@@ -10,8 +10,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/DrawMgrBase.h"
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "utils/LimitValues.hpp"
 #include "utils/Log.h"
 
@@ -97,7 +96,7 @@ void Text::create(const uint64_t fontId,
 
   copyTextContent(text);
 
-  gRsrcMgrBase->loadText(_fontId, _textContent, _color,
+  gRsrcMgr->loadText(_fontId, _textContent, _color,
                          _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
@@ -131,9 +130,9 @@ void Text::destroy() {
   _isDestroyed = true;
 
   // sanity check, because manager could already been destroyed
-  if (nullptr != gRsrcMgrBase) {
+  if (nullptr != gRsrcMgr) {
     // unload text from graphical text vector
-    gRsrcMgrBase->unloadText(_drawParams.textId);
+    gRsrcMgr->unloadText(_drawParams.textId);
   }
 
   if (nullptr != _textContent) {
@@ -167,8 +166,8 @@ void Text::setText(const char* text) {
 
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
-  gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, _imageWidth, _imageHeight);
+  gRsrcMgr->reloadText(_fontId, _textContent, _color,
+                       _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -192,8 +191,8 @@ void Text::setColor(const Color& color) {
   _color = color;
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
-  gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, _imageWidth, _imageHeight);
+  gRsrcMgr->reloadText(_fontId, _textContent, _color,
+                       _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -219,8 +218,8 @@ void Text::setTextAndColor(const char* text, const Color& color) {
   _color = color;
   // setting new text required freeing old resources, allocating new ones
   // and creating new surface/textures
-  gRsrcMgrBase->reloadText(_fontId, _textContent, _color,
-                           _drawParams.textId, _imageWidth, _imageHeight);
+  gRsrcMgr->reloadText(_fontId, _textContent, _color,
+                       _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).

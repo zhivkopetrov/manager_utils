@@ -1,5 +1,5 @@
 // Corresponding header
-#include "manager_utils/managers_base/SoundMgrBase.h"
+#include "manager_utils/managers/SoundMgr.h"
 
 // C system headers
 
@@ -11,7 +11,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/sound/SoundWidgetEndCb.hpp"
 #include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/sound/SoundMixer.h"
@@ -20,12 +20,12 @@
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
-SoundMgrBase* gSoundMgrBase = nullptr;
+SoundMgr* gSoundMgr = nullptr;
 
 static std::vector<int32_t> finishedChannels;
 static std::mutex gSoundMutex;
 
-SoundMgrBase::SoundMgrBase()
+SoundMgr::SoundMgr()
     : _panningMap(nullptr),
       _usedChannels(nullptr),
       _usedChannelsEndCb(nullptr),
@@ -33,13 +33,13 @@ SoundMgrBase::SoundMgrBase()
       _loadedMusicRsrcId(0),
       _systemSoundLevel(SoundLevel::NONE) {}
 
-SoundMgrBase::~SoundMgrBase() {
+SoundMgr::~SoundMgr() {
   TRACE_ENTRY_EXIT;
 
   deinit();
 }
 
-int32_t SoundMgrBase::init() {
+int32_t SoundMgr::init() {
   TRACE_ENTRY_EXIT;
 
   if (SUCCESS !=
@@ -89,9 +89,9 @@ int32_t SoundMgrBase::init() {
   return SUCCESS;
 }
 
-int32_t SoundMgrBase::recover() { return SUCCESS; }
+int32_t SoundMgr::recover() { return SUCCESS; }
 
-void SoundMgrBase::deinit() {
+void SoundMgr::deinit() {
   TRACE_ENTRY_EXIT;
 
   for (int32_t i = 0; i < SUPPORTED_SOUND_CHANNELS; ++i) {
@@ -127,9 +127,9 @@ void SoundMgrBase::deinit() {
   }
 }
 
-const char* SoundMgrBase::getName() { return "SoundMgrBase"; }
+const char* SoundMgr::getName() { return "SoundMgr"; }
 
-void SoundMgrBase::process() {
+void SoundMgr::process() {
   std::vector<int> finishedChannelsCopy;
 
   gSoundMutex.lock();
@@ -141,10 +141,10 @@ void SoundMgrBase::process() {
   }
 }
 
-void SoundMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
+void SoundMgr::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
-void SoundMgrBase::setGlobalVolume(const SoundLevel soundLevel) {
+void SoundMgr::setGlobalVolume(const SoundLevel soundLevel) {
   _systemSoundLevel = soundLevel;
 
   SoundMixer::setAllChannelsVolume(getEnumValue(_systemSoundLevel));
@@ -157,7 +157,7 @@ void SoundMgrBase::setGlobalVolume(const SoundLevel soundLevel) {
   }
 }
 
-void SoundMgrBase::increaseGlobalVolume() {
+void SoundMgr::increaseGlobalVolume() {
   ++_systemSoundLevel;
 
   SoundMixer::setAllChannelsVolume(getEnumValue(_systemSoundLevel));
@@ -170,7 +170,7 @@ void SoundMgrBase::increaseGlobalVolume() {
   }
 }
 
-void SoundMgrBase::changeOSVolume(const int32_t soundLevel) {
+void SoundMgr::changeOSVolume(const int32_t soundLevel) {
   if ((0 > soundLevel) || (100 < soundLevel)) {
     LOGERR(
         "Error, invalid soundLevel: %d provided! ::changeOSVolume() "
@@ -193,7 +193,7 @@ void SoundMgrBase::changeOSVolume(const int32_t soundLevel) {
   }
 }
 
-int32_t SoundMgrBase::loadMusic(const uint64_t rsrcId) {
+int32_t SoundMgr::loadMusic(const uint64_t rsrcId) {
   // check if music is already loaded
   if (nullptr != _music) {
     LOGERR(
@@ -205,10 +205,10 @@ int32_t SoundMgrBase::loadMusic(const uint64_t rsrcId) {
 
   _loadedMusicRsrcId = rsrcId;
 
-  gRsrcMgrBase->getMusicSound(rsrcId, _music);
+  gRsrcMgr->getMusicSound(rsrcId, _music);
 
   if (nullptr == _music) {
-    LOGERR("gRsrcMgrBase->getMusicSound() failed for rsrcId: %#16lX", rsrcId);
+    LOGERR("gRsrcMgr->getMusicSound() failed for rsrcId: %#16lX", rsrcId);
   } else {
     // music sound needs to be changed with system sound level on load,
     // because SoundMixer::setAllChannelsVolume() does not affect
@@ -219,7 +219,7 @@ int32_t SoundMgrBase::loadMusic(const uint64_t rsrcId) {
   return SUCCESS;
 }
 
-void SoundMgrBase::trySelfUnloadMusic(const uint64_t rsrcId,
+void SoundMgr::trySelfUnloadMusic(const uint64_t rsrcId,
                                       const SoundLevel soundLevel) {
   // check if there is music loaded in the first place
   // second check if the music that requests closing is the same as the
@@ -227,8 +227,8 @@ void SoundMgrBase::trySelfUnloadMusic(const uint64_t rsrcId,
   if (nullptr != _music && _loadedMusicRsrcId == rsrcId) {
     const SoundData* soundData = nullptr;
 
-    if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
-      LOGERR("gRsrcMgrBase->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+    if (SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
+      LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %#16lX", rsrcId);
     } else {
       // only request change if value was change during run-time
       if (soundLevel != soundData->soundLevel) {
@@ -258,7 +258,7 @@ void SoundMgrBase::trySelfUnloadMusic(const uint64_t rsrcId,
   }
 }
 
-void SoundMgrBase::setMusicVolume(const SoundLevel soundLevel) {
+void SoundMgr::setMusicVolume(const SoundLevel soundLevel) {
   // check if music is loaded
   if (nullptr == _music) {
     LOGERR(
@@ -277,7 +277,7 @@ void SoundMgrBase::setMusicVolume(const SoundLevel soundLevel) {
   SoundMixer::setMusicVolume(getEnumValue(soundLevel));
 }
 
-SoundLevel SoundMgrBase::getMusicVolume() const {
+SoundLevel SoundMgr::getMusicVolume() const {
   // check if music is loaded
   if (nullptr == _music) {
     LOGERR(
@@ -289,7 +289,7 @@ SoundLevel SoundMgrBase::getMusicVolume() const {
   return toEnum<SoundLevel>(SoundMixer::getMusicVolume());
 }
 
-void SoundMgrBase::playLoadedMusic(const int32_t loops,
+void SoundMgr::playLoadedMusic(const int32_t loops,
                                    SoundWidgetEndCb* endCb) {
   // check if music is loaded
   if (nullptr == _music) {
@@ -310,7 +310,7 @@ void SoundMgrBase::playLoadedMusic(const int32_t loops,
   }
 }
 
-void SoundMgrBase::stopLoadedMusic() {
+void SoundMgr::stopLoadedMusic() {
   // check if music is loaded in the first place
   if (nullptr == _music) {
     return;
@@ -334,19 +334,19 @@ void SoundMgrBase::stopLoadedMusic() {
   }
 }
 
-bool SoundMgrBase::isMusicPlaying() const {
+bool SoundMgr::isMusicPlaying() const {
   return SoundMixer::isMusicPlaying();
 }
 
-bool SoundMgrBase::isMusicPaused() const { return SoundMixer::isMusicPaused(); }
+bool SoundMgr::isMusicPaused() const { return SoundMixer::isMusicPaused(); }
 
-void SoundMgrBase::pauseMusic() { SoundMixer::pauseMusic(); }
+void SoundMgr::pauseMusic() { SoundMixer::pauseMusic(); }
 
-void SoundMgrBase::resumeMusic() { SoundMixer::resumeMusic(); }
+void SoundMgr::resumeMusic() { SoundMixer::resumeMusic(); }
 
-void SoundMgrBase::rewindMusic() { SoundMixer::rewindMusic(); }
+void SoundMgr::rewindMusic() { SoundMixer::rewindMusic(); }
 
-void SoundMgrBase::setChunkVolume(const uint64_t rsrcId,
+void SoundMgr::setChunkVolume(const uint64_t rsrcId,
                                   const SoundLevel soundLevel) {
   if (SoundLevel::UNKNOWN == soundLevel) {
     LOGERR(
@@ -357,20 +357,20 @@ void SoundMgrBase::setChunkVolume(const uint64_t rsrcId,
 
   Mix_Chunk* chunk = nullptr;
 
-  gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+  gRsrcMgr->getChunkSound(rsrcId, chunk);
 
   if (nullptr == chunk) {
-    LOGERR("Error in gRsrcMgrBase->getChunkSound() for chunk: %#16lX", rsrcId);
+    LOGERR("Error in gRsrcMgr->getChunkSound() for chunk: %#16lX", rsrcId);
   } else  // it is valid chunk
   {
     SoundMixer::setChunkVolume(chunk, getEnumValue(soundLevel));
   }
 }
 
-SoundLevel SoundMgrBase::getChunkVolume(const uint64_t rsrcId) const {
+SoundLevel SoundMgr::getChunkVolume(const uint64_t rsrcId) const {
   Mix_Chunk* chunk = nullptr;
 
-  gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+  gRsrcMgr->getChunkSound(rsrcId, chunk);
 
   if (nullptr == chunk) {
     LOGERR(
@@ -384,11 +384,11 @@ SoundLevel SoundMgrBase::getChunkVolume(const uint64_t rsrcId) const {
   return toEnum<SoundLevel>(SoundMixer::getChunkVolume(chunk));
 }
 
-void SoundMgrBase::playChunk(const uint64_t rsrcId, const int32_t loops,
+void SoundMgr::playChunk(const uint64_t rsrcId, const int32_t loops,
                              SoundWidgetEndCb* endCb) {
   Mix_Chunk* chunk = nullptr;
 
-  gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+  gRsrcMgr->getChunkSound(rsrcId, chunk);
 
   if (nullptr == chunk) {
     LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
@@ -417,14 +417,14 @@ void SoundMgrBase::playChunk(const uint64_t rsrcId, const int32_t loops,
   _usedChannelsEndCb[channelId] = endCb;
 }
 
-void SoundMgrBase::playChunkWithPanning(const uint64_t rsrcId,
+void SoundMgr::playChunkWithPanning(const uint64_t rsrcId,
                                         const int32_t loops,
                                         const uint8_t leftVolume,
                                         const uint8_t rightVolume,
                                         SoundWidgetEndCb* endCb) {
   Mix_Chunk* chunk = nullptr;
 
-  gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+  gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
     LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
            "Chunk could not be played!", rsrcId);
@@ -457,7 +457,7 @@ void SoundMgrBase::playChunkWithPanning(const uint64_t rsrcId,
   }
 }
 
-void SoundMgrBase::stopChunk(const uint64_t rsrcId) {
+void SoundMgr::stopChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
@@ -471,7 +471,7 @@ void SoundMgrBase::stopChunk(const uint64_t rsrcId) {
   SoundMixer::stopChannel(channelId);
 }
 
-void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
+void SoundMgr::trySelfStopChunk(const uint64_t rsrcId,
                                     const SoundLevel soundLevel) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
@@ -479,8 +479,8 @@ void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
   }
 
   const SoundData* soundData = nullptr;
-  if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
-    LOGERR("gRsrcMgrBase->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+  if (SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
+    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %#16lX", rsrcId);
     return;
   }
 
@@ -488,7 +488,7 @@ void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
   if (soundLevel != soundData->soundLevel) {
     Mix_Chunk* chunk = nullptr;
 
-    gRsrcMgrBase->getChunkSound(rsrcId, chunk);
+    gRsrcMgr->getChunkSound(rsrcId, chunk);
 
     if (nullptr == chunk) {
       LOGERR("Error in getChunkSound() for rsrcId: %#16lX", rsrcId);
@@ -509,7 +509,7 @@ void SoundMgrBase::trySelfStopChunk(const uint64_t rsrcId,
   SoundMixer::stopChannel(channelId);
 }
 
-bool SoundMgrBase::isChunkPlaying(const uint64_t rsrcId) const {
+bool SoundMgr::isChunkPlaying(const uint64_t rsrcId) const {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   // not associated channel found -> chunk is not playing
@@ -520,7 +520,7 @@ bool SoundMgrBase::isChunkPlaying(const uint64_t rsrcId) const {
   return isChannelPlaying(channelId);
 }
 
-bool SoundMgrBase::isChunkPaused(const uint64_t rsrcId) const {
+bool SoundMgr::isChunkPaused(const uint64_t rsrcId) const {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
@@ -536,7 +536,7 @@ bool SoundMgrBase::isChunkPaused(const uint64_t rsrcId) const {
   return isChannelPaused(channelId);
 }
 
-void SoundMgrBase::pauseChunk(const uint64_t rsrcId) {
+void SoundMgr::pauseChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
@@ -551,7 +551,7 @@ void SoundMgrBase::pauseChunk(const uint64_t rsrcId) {
   pauseChannel(channelId);
 }
 
-void SoundMgrBase::resumeChunk(const uint64_t rsrcId) {
+void SoundMgr::resumeChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
@@ -566,7 +566,7 @@ void SoundMgrBase::resumeChunk(const uint64_t rsrcId) {
   resumeChannel(channelId);
 }
 
-bool SoundMgrBase::isChannelPlaying(const int32_t channel) const {
+bool SoundMgr::isChannelPlaying(const int32_t channel) const {
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
         "Warning, invalid channel provided: %d. Max number of"
@@ -579,7 +579,7 @@ bool SoundMgrBase::isChannelPlaying(const int32_t channel) const {
   return SoundMixer::isChannelPlaying(channel);
 }
 
-bool SoundMgrBase::isChannelPaused(const int32_t channel) const {
+bool SoundMgr::isChannelPaused(const int32_t channel) const {
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
         "Warning, invalid channel provided: %d. Max number of"
@@ -592,7 +592,7 @@ bool SoundMgrBase::isChannelPaused(const int32_t channel) const {
   return SoundMixer::isChannelPaused(channel);
 }
 
-void SoundMgrBase::resumeChannel(const int32_t channel) {
+void SoundMgr::resumeChannel(const int32_t channel) {
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
         "Warning, invalid channel provided: %d. Max number of"
@@ -605,7 +605,7 @@ void SoundMgrBase::resumeChannel(const int32_t channel) {
   SoundMixer::resumeChannel(channel);
 }
 
-void SoundMgrBase::pauseChannel(const int32_t channel) {
+void SoundMgr::pauseChannel(const int32_t channel) {
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
     LOGERR(
         "Warning, invalid channel provided: %d. Max number of"
@@ -618,7 +618,7 @@ void SoundMgrBase::pauseChannel(const int32_t channel) {
   SoundMixer::pauseChannel(channel);
 }
 
-int32_t SoundMgrBase::setChannelPanning(const int32_t channel,
+int32_t SoundMgr::setChannelPanning(const int32_t channel,
                                         const uint8_t leftVolume,
                                         const uint8_t rightVolume) {
   int32_t err = SUCCESS;
@@ -653,7 +653,7 @@ int32_t SoundMgrBase::setChannelPanning(const int32_t channel,
   return err;
 }
 
-int32_t SoundMgrBase::resetChannelPanning(const int32_t channel) {
+int32_t SoundMgr::resetChannelPanning(const int32_t channel) {
   int32_t err = SUCCESS;
 
   if (0 > channel || SUPPORTED_SOUND_CHANNELS <= channel) {
@@ -683,7 +683,7 @@ int32_t SoundMgrBase::resetChannelPanning(const int32_t channel) {
   return err;
 }
 
-int32_t SoundMgrBase::findAssociatedChannel(const uint64_t rsrcId) const {
+int32_t SoundMgr::findAssociatedChannel(const uint64_t rsrcId) const {
   // keep in mind that (if not used correctly by the developer) there
   // might be more than one associated channel for a provided rsrcId
   for (int32_t i = 0; i < SUPPORTED_SOUND_CHANNELS; ++i) {
@@ -697,7 +697,7 @@ int32_t SoundMgrBase::findAssociatedChannel(const uint64_t rsrcId) const {
   return INVALID_CHANNEL_ID;
 }
 
-int32_t SoundMgrBase::getNextFreeChannel() const {
+int32_t SoundMgr::getNextFreeChannel() const {
   int32_t channelId = INVALID_CHANNEL_ID;
 
   // NOTE: the channelId 0 is reserved for Music
@@ -712,7 +712,7 @@ int32_t SoundMgrBase::getNextFreeChannel() const {
   return channelId;
 }
 
-void SoundMgrBase::resetChannel(const int32_t channel) {
+void SoundMgr::resetChannel(const int32_t channel) {
   // check if channel was using panning
   if (_panningMap[channel]) {
     // if so -> request panning reset
@@ -732,7 +732,7 @@ void SoundMgrBase::resetChannel(const int32_t channel) {
   _usedChannels[channel] = 0;
 }
 
-void SoundMgrBase::onChannelFinished(const int32_t channel) {
+void SoundMgr::onChannelFinished(const int32_t channel) {
   std::lock_guard<std::mutex> lock(gSoundMutex);
   finishedChannels.emplace_back(channel);
 }

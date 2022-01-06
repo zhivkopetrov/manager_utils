@@ -8,7 +8,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/sound/SoundWidgetEndCb.hpp"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
@@ -67,7 +67,7 @@ void SoundWidget::create(const uint64_t rsrcId, SoundWidgetEndCb* endCb) {
   _isDestroyed = false;
 
   const SoundData* soundData = nullptr;
-  if (SUCCESS != gRsrcMgrBase->getSoundData(rsrcId, soundData)) {
+  if (SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
     LOGERR(
         "Error, getSoundData() failed for rsrcId: %#16lX, "
         "will not create SoundWidget",

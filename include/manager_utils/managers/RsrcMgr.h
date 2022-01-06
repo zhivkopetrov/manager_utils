@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_RSRCMGRBASE_H_
-#define MANAGER_UTILS_RSRCMGRBASE_H_
+#ifndef MANAGER_UTILS_RSRCMGR_H_
+#define MANAGER_UTILS_RSRCMGR_H_
 
 // C system headers
 
@@ -10,24 +10,24 @@
 #include "sdl_utils/containers/SDLContainers.h"
 
 // Own components headers
-#include "manager_utils/managers_base/MgrBase.h"
+#include "manager_utils/managers/MgrBase.h"
 
 // Forward declarations
 class InputEvent;
 
-class RsrcMgrBase : public MgrBase, public SDLContainers {
+class RsrcMgr : public MgrBase, public SDLContainers {
  public:
-  RsrcMgrBase(const SDLContainersConfig &cfg);
+  RsrcMgr(const SDLContainersConfig &cfg);
 
-  virtual ~RsrcMgrBase();
+  virtual ~RsrcMgr();
 
   // forbid the copy and move constructors
-  RsrcMgrBase(const RsrcMgrBase& other) = delete;
-  RsrcMgrBase(RsrcMgrBase&& other) = delete;
+  RsrcMgr(const RsrcMgr& other) = delete;
+  RsrcMgr(RsrcMgr&& other) = delete;
 
   // forbid the copy and move assignment operators
-  RsrcMgrBase& operator=(const RsrcMgrBase& other) = delete;
-  RsrcMgrBase& operator=(RsrcMgrBase&& other) = delete;
+  RsrcMgr& operator=(const RsrcMgr& other) = delete;
+  RsrcMgr& operator=(RsrcMgr&& other) = delete;
 
   //================= START MgrBase related functions ====================
 
@@ -91,13 +91,13 @@ class RsrcMgrBase : public MgrBase, public SDLContainers {
    **/
   void onLoadTextureMultipleCompleted(const int32_t batchId) override;
 
-  /** @brief used to acquire the occupied GPU VRAM from the RsrcMgrBase
+  /** @brief used to acquire the occupied GPU VRAM from the RsrcMgr
    *
    *  @return uint64_t - occupied VRAM in bytes
    * */
   uint64_t getGPUMemoryUsage() const;
 };
 
-extern RsrcMgrBase* gRsrcMgrBase;
+extern RsrcMgr* gRsrcMgr;
 
-#endif /* MANAGER_UTILS_RSRCMGRBASE_H_ */
+#endif /* MANAGER_UTILS_RSRCMGR_H_ */

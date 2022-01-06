@@ -35,14 +35,14 @@ add_library(
         ${_INC_DIR}/drawing/animation/defines/CommonAnimationStructs.h
         ${_INC_DIR}/input/ButtonBase.h
         ${_INC_DIR}/input/Scroller.h
-        ${_INC_DIR}/managers_base/config/ManagerHandlerConfig.hpp
-        ${_INC_DIR}/managers_base/config/DrawMgrBaseConfig.hpp
-        ${_INC_DIR}/managers_base/ManagerHandler.h
-        ${_INC_DIR}/managers_base/MgrBase.h
-        ${_INC_DIR}/managers_base/DrawMgrBase.h
-        ${_INC_DIR}/managers_base/RsrcMgrBase.h
-        ${_INC_DIR}/managers_base/SoundMgrBase.h
-        ${_INC_DIR}/managers_base/TimerMgrBase.h
+        ${_INC_DIR}/managers/config/ManagerHandlerConfig.hpp
+        ${_INC_DIR}/managers/config/DrawMgrConfig.hpp
+        ${_INC_DIR}/managers/ManagerHandler.h
+        ${_INC_DIR}/managers/MgrBase.h
+        ${_INC_DIR}/managers/DrawMgr.h
+        ${_INC_DIR}/managers/RsrcMgr.h
+        ${_INC_DIR}/managers/SoundMgr.h
+        ${_INC_DIR}/managers/TimerMgr.h
         ${_INC_DIR}/sound/Music.h
         ${_INC_DIR}/sound/Sound.h
         ${_INC_DIR}/sound/SoundWidget.h
@@ -68,11 +68,11 @@ add_library(
         ${_SRC_DIR}/drawing/animation/defines/CommonAnimationStructs.cpp
         ${_SRC_DIR}/input/ButtonBase.cpp
         ${_SRC_DIR}/input/Scroller.cpp
-        ${_SRC_DIR}/managers_base/ManagerHandler.cpp
-        ${_SRC_DIR}/managers_base/DrawMgrBase.cpp
-        ${_SRC_DIR}/managers_base/RsrcMgrBase.cpp
-        ${_SRC_DIR}/managers_base/SoundMgrBase.cpp
-        ${_SRC_DIR}/managers_base/TimerMgrBase.cpp
+        ${_SRC_DIR}/managers/ManagerHandler.cpp
+        ${_SRC_DIR}/managers/DrawMgr.cpp
+        ${_SRC_DIR}/managers/RsrcMgr.cpp
+        ${_SRC_DIR}/managers/SoundMgr.cpp
+        ${_SRC_DIR}/managers/TimerMgr.cpp
         ${_SRC_DIR}/sound/Music.cpp
         ${_SRC_DIR}/sound/Sound.cpp
         ${_SRC_DIR}/sound/SoundWidget.cpp

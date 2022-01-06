@@ -9,7 +9,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/DrawMgrBase.h"
+#include "manager_utils/managers/DrawMgr.h"
 #include "sdl_utils/drawing/GeometryUtils.h"
 #include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
@@ -82,7 +82,7 @@ void Widget::draw() {
     LOGERR(
         "Error, widget with rsrcId: %#16lX not created!", _drawParams.rsrcId);
   } else if (_isVisible) {
-    gDrawMgrBase->addDrawCmd(&_drawParams);
+    gDrawMgr->addDrawCmd(&_drawParams);
   }
 }
 
@@ -143,8 +143,8 @@ void Widget::activateAlphaModulation() {
     populatedBytes += sizeof(_drawParams.textId);
   }
 
-  gDrawMgrBase->addRendererCmd(RendererCmd::CHANGE_TEXTURE_BLENDMODE, data,
-                               populatedBytes);
+  gDrawMgr->addRendererCmd(RendererCmd::CHANGE_TEXTURE_BLENDMODE, data,
+                           populatedBytes);
 }
 
 void Widget::deactivateAlphaModulation() {
@@ -186,8 +186,8 @@ void Widget::deactivateAlphaModulation() {
     populatedBytes += sizeof(_drawParams.textId);
   }
 
-  gDrawMgrBase->addRendererCmd(RendererCmd::CHANGE_TEXTURE_BLENDMODE, data,
-                               populatedBytes);
+  gDrawMgr->addRendererCmd(RendererCmd::CHANGE_TEXTURE_BLENDMODE, data,
+                           populatedBytes);
 }
 
 void Widget::activateScaling() {
@@ -670,8 +670,8 @@ void Widget::setOpacity(const int32_t opacity) {
          sizeof(_drawParams.textId));
   populatedBytes += sizeof(_drawParams.textId);
 
-  gDrawMgrBase->addRendererCmd(RendererCmd::CHANGE_TEXTURE_OPACITY, data,
-                               populatedBytes);
+  gDrawMgr->addRendererCmd(RendererCmd::CHANGE_TEXTURE_OPACITY, data,
+                           populatedBytes);
 }
 
 void Widget::rotate(const double angle) {

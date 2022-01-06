@@ -1,5 +1,5 @@
 //Corresponding header
-#include "manager_utils/managers_base/ManagerHandler.h"
+#include "manager_utils/managers/ManagerHandler.h"
 
 //C system headers
 
@@ -8,10 +8,10 @@
 //Other libraries headers
 
 //Own components headers
-#include "manager_utils/managers_base/config/ManagerHandlerConfig.hpp"
-#include "manager_utils/managers_base/DrawMgrBase.h"
-#include "manager_utils/managers_base/RsrcMgrBase.h"
-#include "manager_utils/managers_base/TimerMgrBase.h"
+#include "manager_utils/managers/config/ManagerHandlerConfig.hpp"
+#include "manager_utils/managers/DrawMgr.h"
+#include "manager_utils/managers/RsrcMgr.h"
+#include "manager_utils/managers/TimerMgr.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
@@ -32,7 +32,7 @@ int32_t ManagerHandler::init(const ManagerHandlerConfig &cfg) {
   }
 
   //IMPORTANT: set renderer for SDLContainers
-  gRsrcMgrBase->setRenderer(gDrawMgrBase->getRenderer());
+  gRsrcMgr->setRenderer(gDrawMgr->getRenderer());
 
   for (int32_t i = 1; i < Managers::TOTAL_MGRS_COUNT; ++i) {
     if (SUCCESS != _managers[i]->init()) {
@@ -74,29 +74,29 @@ void ManagerHandler::process() {
 int32_t ManagerHandler::allocateManagers(const ManagerHandlerConfig &cfg) {
   //gDrawMgr should be initialized first, because it contains the renderer
   //Other managers may want to load graphical resources
-  gDrawMgrBase = new DrawMgrBase(cfg.drawMgrBaseCfg);
-  if (!gDrawMgrBase) {
-    LOGERR("Error! Bad alloc for DrawMgrBase class -> Terminating...");
+  gDrawMgr = new DrawMgr(cfg.drawMgrBaseCfg);
+  if (!gDrawMgr) {
+    LOGERR("Error! Bad alloc for DrawMgr class -> Terminating...");
     return FAILURE;
   }
 
-  gRsrcMgrBase = new RsrcMgrBase(cfg.sdlContainersCfg);
-  if (!gRsrcMgrBase) {
-    LOGERR("Error! Bad alloc for RsrcMgrBase class -> Terminating...");
+  gRsrcMgr = new RsrcMgr(cfg.sdlContainersCfg);
+  if (!gRsrcMgr) {
+    LOGERR("Error! Bad alloc for RsrcMgr class -> Terminating...");
     return FAILURE;
   }
 
-  gTimerMgrBase = new TimerMgrBase;
-  if (!gTimerMgrBase) {
-    LOGERR("Error! Bad alloc for TimerMgrBase class -> Terminating...");
+  gTimerMgr = new TimerMgr;
+  if (!gTimerMgr) {
+    LOGERR("Error! Bad alloc for TimerMgr class -> Terminating...");
     return FAILURE;
   }
 
   //put global managers into container so they can be easily iterated
   //and used polymorphically
-  _managers[Managers::DRAW_MGR_IDX] = gDrawMgrBase;
-  _managers[Managers::RSRC_MGR_IDX] = gRsrcMgrBase;
-  _managers[Managers::TIMER_MGR_IDX] = gTimerMgrBase;
+  _managers[Managers::DRAW_MGR_IDX] = gDrawMgr;
+  _managers[Managers::RSRC_MGR_IDX] = gRsrcMgr;
+  _managers[Managers::TIMER_MGR_IDX] = gTimerMgr;
 
   return SUCCESS;
 }
@@ -107,18 +107,15 @@ void ManagerHandler::nullifyGlobalManager(const int32_t managerId) {
    * */
   switch (managerId) {
   case Managers::DRAW_MGR_IDX:
-    gDrawMgrBase = nullptr;
-    gDrawMgrBase = nullptr;
+    gDrawMgr = nullptr;
     break;
 
   case Managers::RSRC_MGR_IDX:
-    gRsrcMgrBase = nullptr;
-    gRsrcMgrBase = nullptr;
+    gRsrcMgr = nullptr;
     break;
 
   case Managers::TIMER_MGR_IDX:
-    gTimerMgrBase = nullptr;
-    gTimerMgrBase = nullptr;
+    gTimerMgr = nullptr;
     break;
 
   default:

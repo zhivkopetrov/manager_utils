@@ -9,13 +9,13 @@
 
 //Own components headers
 #include "sdl_utils/containers/config/SDLContainersConfig.hpp"
-#include "manager_utils/managers_base/config/DrawMgrBaseConfig.hpp"
+#include "manager_utils/managers/config/DrawMgrConfig.hpp"
 
 //Forward declarations
 
 struct ManagerHandlerConfig {
   SDLContainersConfig sdlContainersCfg;
-  DrawMgrBaseConfig drawMgrBaseCfg;
+  DrawMgrConfig drawMgrBaseCfg;
 };
 
 #endif /* MANAGER_UTILS_MANAGERHANDLERCFG_HPP_ */

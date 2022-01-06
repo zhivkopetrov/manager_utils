@@ -1,5 +1,5 @@
 // Corresponding header
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 
 // C system headers
 
@@ -13,13 +13,13 @@
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
-RsrcMgrBase* gRsrcMgrBase = nullptr;
+RsrcMgr* gRsrcMgr = nullptr;
 
-RsrcMgrBase::RsrcMgrBase(const SDLContainersConfig &cfg) : SDLContainers(cfg) {}
+RsrcMgr::RsrcMgr(const SDLContainersConfig &cfg) : SDLContainers(cfg) {}
 
-RsrcMgrBase::~RsrcMgrBase() { TRACE_ENTRY_EXIT; }
+RsrcMgr::~RsrcMgr() { TRACE_ENTRY_EXIT; }
 
-int32_t RsrcMgrBase::init() {
+int32_t RsrcMgr::init() {
   TRACE_ENTRY_EXIT;
 
   if (SUCCESS != SDLContainers::init()) {
@@ -30,22 +30,22 @@ int32_t RsrcMgrBase::init() {
   return SUCCESS;
 }
 
-int32_t RsrcMgrBase::recover() { return SUCCESS; }
+int32_t RsrcMgr::recover() { return SUCCESS; }
 
-void RsrcMgrBase::deinit() { SDLContainers::deinit(); }
+void RsrcMgr::deinit() { SDLContainers::deinit(); }
 
-const char* RsrcMgrBase::getName() { return "RsrcMgrBase"; }
+const char* RsrcMgr::getName() { return "RsrcMgr"; }
 
-void RsrcMgrBase::process() {}
+void RsrcMgr::process() {}
 
-void RsrcMgrBase::handleEvent([[maybe_unused]]const InputEvent& e) {
+void RsrcMgr::handleEvent([[maybe_unused]]const InputEvent& e) {
 }
 
-void RsrcMgrBase::onLoadTextureMultipleCompleted(
+void RsrcMgr::onLoadTextureMultipleCompleted(
     [[maybe_unused]]const int32_t batchId) {
 }
 
-uint64_t RsrcMgrBase::getGPUMemoryUsage() const {
+uint64_t RsrcMgr::getGPUMemoryUsage() const {
   return ResourceContainer::getGPUMemoryUsage() +
          TextContainer::getGPUMemoryUsage() +
          SpriteBufferContainer::getGPUMemoryUsage();

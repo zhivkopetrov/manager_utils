@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_DRAWMGRBASE_H_
-#define MANAGER_UTILS_DRAWMGRBASE_H_
+#ifndef MANAGER_UTILS_DRAWMGR_H_
+#define MANAGER_UTILS_DRAWMGR_H_
 
 // C system headers
 
@@ -8,8 +8,8 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/MgrBase.h"
-#include "manager_utils/managers_base/config/DrawMgrBaseConfig.hpp"
+#include "manager_utils/managers/MgrBase.h"
+#include "manager_utils/managers/config/DrawMgrConfig.hpp"
 #include "sdl_utils/drawing/defines/RendererDefines.h"
 
 // Forward declarations
@@ -18,24 +18,24 @@ class InputEvent;
 class Renderer;
 class MonitorWindow;
 struct DrawParams;
-struct DrawMgrBaseConfig;
+struct DrawMgrConfig;
 
-class DrawMgrBase : public MgrBase {
+class DrawMgr : public MgrBase {
  public:
-  explicit DrawMgrBase(const DrawMgrBaseConfig &cfg);
+  explicit DrawMgr(const DrawMgrConfig &cfg);
 
-  virtual ~DrawMgrBase();
+  virtual ~DrawMgr();
 
   // forbid the default constructor
-  DrawMgrBase() = delete;
+  DrawMgr() = delete;
 
   // forbid the copy and move constructors
-  DrawMgrBase(const DrawMgrBase& other) = delete;
-  DrawMgrBase(DrawMgrBase&& other) = delete;
+  DrawMgr(const DrawMgr& other) = delete;
+  DrawMgr(DrawMgr&& other) = delete;
 
   // forbid the copy and move assignment operators
-  DrawMgrBase& operator=(const DrawMgrBase& other) = delete;
-  DrawMgrBase& operator=(DrawMgrBase&& other) = delete;
+  DrawMgr& operator=(const DrawMgr& other) = delete;
+  DrawMgr& operator=(DrawMgr&& other) = delete;
 
   //================= START MgrBase related functions ====================
 
@@ -245,9 +245,9 @@ class DrawMgrBase : public MgrBase {
   // Hold maximum frame rate cap
   uint32_t _maxFrames;
 
-  DrawMgrBaseConfig _config;
+  DrawMgrConfig _config;
 };
 
-extern DrawMgrBase* gDrawMgrBase;
+extern DrawMgr* gDrawMgr;
 
-#endif /* MANAGER_UTILS_DRAWMGRBASE_H_ */
+#endif /* MANAGER_UTILS_DRAWMGR_H_ */

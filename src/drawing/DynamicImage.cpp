@@ -8,7 +8,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/RsrcMgrBase.h"
+#include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/drawing/Sprite.h"
 #include "utils/data_type/EnumClassUtils.hpp"
 #include "utils/ErrorCode.h"
@@ -49,14 +49,14 @@ void DynamicImage::create(const uint64_t rsrcId) {
     return;
   }
 
-  gRsrcMgrBase->loadResourceOnDemandSingle(rsrcId);
+  gRsrcMgr->loadResourceOnDemandSingle(rsrcId);
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgrBase->getRsrcData(rsrcId, rsrcData)) {
+  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
         "Error, getRsrcData failed for rsrcId: %#16lX, "
         "will not create Image",
         rsrcId);
-    gRsrcMgrBase->unloadResourceOnDemandSingle(rsrcId);
+    gRsrcMgr->unloadResourceOnDemandSingle(rsrcId);
     return;
   }
 
@@ -102,8 +102,8 @@ void DynamicImage::destroy() {
 
   // make a sanity check, because gRsrcMgrBase might already be destroyed in
   // case of application shutdown and chain of destructor calls
-  if (gRsrcMgrBase) {
-    gRsrcMgrBase->unloadResourceOnDemandSingle(_drawParams.rsrcId);
+  if (gRsrcMgr) {
+    gRsrcMgr->unloadResourceOnDemandSingle(_drawParams.rsrcId);
   }
 
   _isDestroyed = true;

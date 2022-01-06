@@ -8,7 +8,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/TimerMgrBase.h"
+#include "manager_utils/managers/TimerMgr.h"
 #include "utils/debug/FunctionTracer.hpp"
 #include "utils/debug/StackTrace.hpp"
 #include "utils/LimitValues.hpp"
@@ -83,8 +83,8 @@ TimerClient::~TimerClient() {
     // search through non-empty slots
     if (INIT_INT32_VALUE != _timerIdList[i]) {
       // sanity check
-      if (nullptr != gTimerMgrBase) {
-        gTimerMgrBase->stopTimerAndDetachTimerClient(_timerIdList[i]);
+      if (nullptr != gTimerMgr) {
+        gTimerMgr->stopTimerAndDetachTimerClient(_timerIdList[i]);
       }
     }
   }
@@ -103,7 +103,7 @@ void TimerClient::startTimer(const int64_t interval, const int32_t timerId,
   TRACE_ENTRY_EXIT;
 
   // if timer already exists -> do not start it
-  if (gTimerMgrBase->isActiveTimerId(timerId)) {
+  if (gTimerMgr->isActiveTimerId(timerId)) {
     LOGERR(
         "Warning, timer with ID: %d already exist. "
         "Will not start new timer",
@@ -159,7 +159,7 @@ void TimerClient::startTimer(const int64_t interval, const int32_t timerId,
   _timerIdList[freeIndex] = timerId;
   ++_currTimerCount;
 
-  gTimerMgrBase->startTimerClientTimer(this,         // TimerClient instance
+  gTimerMgr->startTimerClientTimer(this,         // TimerClient instance
                                        interval,     // interval
                                        timerId,      // remaining interval
                                        timerType,    // timer type
@@ -169,11 +169,11 @@ void TimerClient::startTimer(const int64_t interval, const int32_t timerId,
 void TimerClient::stopTimer(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
-  gTimerMgrBase->stopTimer(timerId);
+  gTimerMgr->stopTimer(timerId);
 }
 
 bool TimerClient::isActiveTimerId(const int32_t timerId) const {
-  return gTimerMgrBase->isActiveTimerId(timerId);
+  return gTimerMgr->isActiveTimerId(timerId);
 }
 
 void TimerClient::restartTimerInterval(const int32_t timerId) {
@@ -199,7 +199,7 @@ void TimerClient::restartTimerInterval(const int32_t timerId) {
     return;
   }
 
-  gTimerMgrBase->restartTimerClientTimerInterval(timerId);
+  gTimerMgr->restartTimerClientTimerInterval(timerId);
 }
 
 void TimerClient::addTimeToTimer(const int32_t timerId,
@@ -226,7 +226,7 @@ void TimerClient::addTimeToTimer(const int32_t timerId,
     return;
   }
 
-  gTimerMgrBase->addTimeToTimerClientTimer(timerId, intervalToAdd);
+  gTimerMgr->addTimeToTimerClientTimer(timerId, intervalToAdd);
 }
 
 void TimerClient::removeTimeFromTimer(const int32_t timerId,
@@ -253,11 +253,11 @@ void TimerClient::removeTimeFromTimer(const int32_t timerId,
     return;
   }
 
-  gTimerMgrBase->removeTimeFromTimerClientTimer(timerId, intervalToRemove);
+  gTimerMgr->removeTimeFromTimerClientTimer(timerId, intervalToRemove);
 }
 
 int64_t TimerClient::getTimerRemainingInterval(const int32_t timerId) const {
-  return gTimerMgrBase->getTimerRemainingInterval(timerId);
+  return gTimerMgr->getTimerRemainingInterval(timerId);
 }
 
 int32_t TimerClient::resizeTimerList() {

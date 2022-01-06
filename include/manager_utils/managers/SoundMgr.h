@@ -1,5 +1,5 @@
-#ifndef MANAGER_UTILS_SOUNDMGRBASE_H_
-#define MANAGER_UTILS_SOUNDMGRBASE_H_
+#ifndef MANAGER_UTILS_SOUNDMGR_H_
+#define MANAGER_UTILS_SOUNDMGR_H_
 
 // C system headers
 
@@ -9,7 +9,7 @@
 // Other libraries headers
 
 // Own components headers
-#include "manager_utils/managers_base/MgrBase.h"
+#include "manager_utils/managers/MgrBase.h"
 #include "resource_utils/defines/SoundDefines.h"
 
 // Forward declarations
@@ -17,18 +17,18 @@ class InputEvent;
 class SoundWidgetEndCb;
 typedef struct _Mix_Music Mix_Music;
 
-class SoundMgrBase : public MgrBase {
+class SoundMgr : public MgrBase {
  public:
-  SoundMgrBase();
-  virtual ~SoundMgrBase();
+  SoundMgr();
+  virtual ~SoundMgr();
 
   // forbid the copy and move constructors
-  SoundMgrBase(const SoundMgrBase& other) = delete;
-  SoundMgrBase(SoundMgrBase&& other) = delete;
+  SoundMgr(const SoundMgr& other) = delete;
+  SoundMgr(SoundMgr&& other) = delete;
 
   // forbid the copy and move assignment operators
-  SoundMgrBase& operator=(const SoundMgrBase& other) = delete;
-  SoundMgrBase& operator=(SoundMgrBase&& other) = delete;
+  SoundMgr& operator=(const SoundMgr& other) = delete;
+  SoundMgr& operator=(SoundMgr&& other) = delete;
 
   //================= START MgrBase related functions ====================
 
@@ -445,6 +445,6 @@ class SoundMgrBase : public MgrBase {
   SoundLevel _systemSoundLevel;
 };
 
-extern SoundMgrBase* gSoundMgrBase;
+extern SoundMgr* gSoundMgr;
 
-#endif /* MANAGER_UTILS_SOUNDMGRBASE_H_ */
+#endif /* MANAGER_UTILS_SOUNDMGR_H_ */
