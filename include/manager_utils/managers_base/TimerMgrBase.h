@@ -14,7 +14,6 @@
 #include "manager_utils/managers_base/MgrBase.h"
 #include "manager_utils/time/defines/TimerClientDefines.h"
 #include "utils/time/Time.h"
-#include "utils/time/TimerDefines.h"
 
 // Forward declarations
 class InputEvent;
