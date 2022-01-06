@@ -2,14 +2,6 @@
 
 cmake_minimum_required(VERSION 3.10.2)
 
-if(TARGET manager_utils)
-  return()
-endif()
-
-if(NOT CMAKE_HELPERS_INCLUDED)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_helpers/helpers.cmake)
-endif()
-
 project(manager_utils)
    
 set(_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/manager_utils)       
@@ -81,7 +73,7 @@ add_library(
         ${_SRC_DIR}/time/UserTimerClient.cpp
 )
 
-set_target_cpp_standard(${PROJECT_NAME} 17)
+set_target_cpp_standard(${PROJECT_NAME} 20)
 enable_target_warnings(${PROJECT_NAME})
 set_target_visibility(${PROJECT_NAME})
 
@@ -97,15 +89,9 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-if(NOT TARGET sdl_utils)
-    add_subdirectory(sdl_utils)
-endif()
-
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        utils
-        resource_utils
         sdl_utils
 )
 
