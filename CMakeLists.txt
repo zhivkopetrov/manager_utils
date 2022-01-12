@@ -14,7 +14,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_helpers/helpers.cmake)
 find_package(sdl_utils REQUIRED)
 
 set(_INC_FOLDER_NAME include)
-set(_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${_INC_FOLDER_NAME}/manager_utils)       
+set(_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${_INC_FOLDER_NAME}/${PROJECT_NAME})       
 set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_library(
