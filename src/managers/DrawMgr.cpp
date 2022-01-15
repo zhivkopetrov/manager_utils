@@ -103,7 +103,7 @@ void DrawMgr::finishFrame(const bool overrideRendererLockCheck) {
   _renderer->finishFrame_UT(overrideRendererLockCheck);
 }
 
-void DrawMgr::addDrawCmd(DrawParams *drawParams) {
+void DrawMgr::addDrawCmd(const DrawParams& drawParams) const {
   _renderer->addDrawCmd_UT(drawParams);
 }
 

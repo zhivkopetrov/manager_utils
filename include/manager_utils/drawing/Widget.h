@@ -31,7 +31,7 @@ class Widget {
 
   /** @brief apply (draw) the widget to the currently active back buffer
    * */
-  void draw();
+  void draw() const;
 
   /** @brief set flip type (mirror widget)
    *

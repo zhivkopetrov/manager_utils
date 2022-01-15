@@ -128,9 +128,9 @@ class DrawMgr final : public MgrBase {
 
   /** @brief transfer draw specific data from Widgets to renderer
    *
-   *  @param drawParams - draw specific data for a single Widget
+   *  @param const drawParams& - draw specific data for a single Widget
    * */
-  void addDrawCmd(DrawParams* drawParams);
+  void addDrawCmd(const DrawParams& drawParams) const;
 
   /* @brief used to store draw specific rendering commands populated by
    *                                              the main(update) thread

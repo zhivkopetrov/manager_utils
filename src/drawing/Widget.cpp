@@ -77,12 +77,12 @@ Widget &Widget::operator=(Widget &&movedOther) {
   return *this;
 }
 
-void Widget::draw() {
+void Widget::draw() const {
   if (!_isCreated) {
     LOGERR(
         "Error, widget with rsrcId: %#16lX not created!", _drawParams.rsrcId);
   } else if (_isVisible) {
-    gDrawMgr->addDrawCmd(&_drawParams);
+    gDrawMgr->addDrawCmd(_drawParams);
   }
 }
 
