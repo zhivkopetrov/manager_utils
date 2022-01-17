@@ -99,13 +99,13 @@ class AnimationBase : public TimerClient {
 
   /** @brief used to make draw calls
    * */
-  void draw();
+  void draw() const;
 
   /** @brief used to make draw calls on top of SpriteBuffer
    *
    *  @param SpriteBuffer & - sprite buffer instance
    * */
-  void drawOnSpriteBuffer(SpriteBuffer& spriteBuffer);
+  void drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) const;
 
   /**
    * @brief function to allow the animation fading in and out effect

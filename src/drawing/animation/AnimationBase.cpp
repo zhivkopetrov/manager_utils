@@ -12,6 +12,7 @@
 
 // Own components headers
 #include "manager_utils/drawing/SpriteBuffer.h"
+#include "utils/LimitValues.h"
 
 // default constructor
 AnimationBase::AnimationBase()
@@ -99,7 +100,7 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
     return FAILURE;
   }
 
-  if (0 == _cfg.timerId) {
+  if (INIT_INT32_VALUE == _cfg.timerId) {
     LOGERR(
         "Error, timerId not provided for animation with rsrcId: "
         "%#16lX",
@@ -150,13 +151,13 @@ bool AnimationBase::isAnimationActive() const {
   return isActive;
 }
 
-void AnimationBase::draw() {
+void AnimationBase::draw() const {
   if (_isVisible) {
     _img->draw();
   }
 }
 
-void AnimationBase::drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) {
+void AnimationBase::drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) const {
   if (_isVisible) {
     spriteBuffer.addWidget(*_img);
   }
