@@ -334,7 +334,7 @@ void SpriteBuffer::addCustomClearTarget(const Widget &widget) {
   _customClearTarget = widget.getDrawParams();
 }
 
-void SpriteBuffer::setSpriteBufferResetColor(const Color &clearColor) {
+void SpriteBuffer::setResetColor(const Color &clearColor) {
   _clearColor = clearColor;
 
   if (!_isAlphaModulationEnabled && _clearColor == Colors::FULL_TRANSPARENT) {

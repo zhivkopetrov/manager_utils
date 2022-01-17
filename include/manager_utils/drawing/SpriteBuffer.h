@@ -256,7 +256,7 @@ class SpriteBuffer : public Widget {
    *
    *  @param const Color & - renderer clear colour
    * */
-  void setSpriteBufferResetColor(const Color& clearColor);
+  void setResetColor(const Color& clearColor);
 
   /** @brief used to move all stored SpriteBuffer items (widgets)
    *         with relative offset
