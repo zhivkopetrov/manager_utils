@@ -15,7 +15,7 @@
 
 struct ManagerHandlerConfig {
   SDLContainersConfig sdlContainersCfg;
-  DrawMgrConfig drawMgrBaseCfg;
+  DrawMgrConfig drawMgrCfg;
 };
 
 #endif /* MANAGER_UTILS_MANAGERHANDLERCFG_H_ */

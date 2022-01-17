@@ -7,6 +7,7 @@
 
 // Other libraries headers
 #include "sdl_utils/drawing/defines/RendererDefines.h"
+#include "sdl_utils/drawing/MonitorWindow.h"
 
 // Own components headers
 #include "manager_utils/managers/MgrBase.h"
@@ -21,7 +22,7 @@ struct DrawParams;
 struct DrawMgrConfig;
 
 class DrawMgr final : public MgrBase {
- public:
+public:
   explicit DrawMgr(const DrawMgrConfig &cfg);
 
   virtual ~DrawMgr();
@@ -30,12 +31,12 @@ class DrawMgr final : public MgrBase {
   DrawMgr() = delete;
 
   // forbid the copy and move constructors
-  DrawMgr(const DrawMgr& other) = delete;
-  DrawMgr(DrawMgr&& other) = delete;
+  DrawMgr(const DrawMgr &other) = delete;
+  DrawMgr(DrawMgr &&other) = delete;
 
   // forbid the copy and move assignment operators
-  DrawMgr& operator=(const DrawMgr& other) = delete;
-  DrawMgr& operator=(DrawMgr&& other) = delete;
+  DrawMgr& operator=(const DrawMgr &other) = delete;
+  DrawMgr& operator=(DrawMgr &&other) = delete;
 
   //================= START MgrBase related functions ====================
 
@@ -71,7 +72,7 @@ class DrawMgr final : public MgrBase {
    *
    *  @param const InputEvent & - user input event
    * */
-  void handleEvent(const InputEvent& e) override;
+  void handleEvent(const InputEvent &e) override;
 
   /** @brief returns the name of the current manager
    *
@@ -101,7 +102,7 @@ class DrawMgr final : public MgrBase {
    *               there is no way the SDLCointainers object is already
    *               constructed
    * */
-  void setSDLContainers(SDLContainers* containers);
+  void setSDLContainers(SDLContainers *containers);
 
   /** @brief Every frame should start with this function call
    * */
@@ -130,7 +131,7 @@ class DrawMgr final : public MgrBase {
    *
    *  @param const drawParams& - draw specific data for a single Widget
    * */
-  void addDrawCmd(const DrawParams& drawParams) const;
+  void addDrawCmd(const DrawParams &drawParams) const;
 
   /* @brief used to store draw specific rendering commands populated by
    *                                              the main(update) thread
@@ -139,8 +140,9 @@ class DrawMgr final : public MgrBase {
    * @param const uint8_t *   - inData buffer
    * @param const uint64_t    - bytes count to write
    * */
-  void addRendererCmd(const RendererCmd rendererCmd,
-                      const uint8_t* data = nullptr, const uint64_t bytes = 0);
+  void addRendererCmd(const RendererCmd rendererCmd, const uint8_t *data =
+      nullptr,
+                      const uint64_t bytes = 0);
 
   /* @brief used to store draw specific data populated by
    *                                              the main(update) thread
@@ -163,7 +165,7 @@ class DrawMgr final : public MgrBase {
    *                                              _storedWidgets.data()),
    *                             sizeof(DrawParams) * SIZE)
    * */
-  void addRendererData(const uint8_t* data, const uint64_t bytes);
+  void addRendererData(const uint8_t *data, const uint64_t bytes);
 
   /** @brief used to swap the command back buffers
    *                       (swap the update and rendering thread targets)
@@ -209,19 +211,25 @@ class DrawMgr final : public MgrBase {
    *
    *  @return uint32_t - max frames
    * */
-  uint32_t getMaxFrameRate() const { return _maxFrames; }
+  uint32_t getMaxFrameRate() const {
+    return _maxFrames;
+  }
 
   /** @brief used to acquire screen width
    *
    *  @return int32_t - screen width
    * */
-  int32_t getMonitorWidth() const { return _config.monitorHeight; }
+  int32_t getMonitorWidth() const {
+    return _config.monitorWindowConfig.width;
+  }
 
   /** @brief used to acquire screen height
    *
    *  @return int32_t - screen height
    * */
-  int32_t getMonitorHeight() const { return _config.monitorHeight; }
+  int32_t getMonitorHeight() const {
+    return _config.monitorWindowConfig.height;
+  }
 
   void moveGlobalX(const int32_t x);
 
@@ -229,18 +237,18 @@ class DrawMgr final : public MgrBase {
 
   void resetAbsoluteGlobalMovement();
 
-  Renderer *getRenderer() {
+  Renderer* getRenderer() {
     return _renderer;
   }
 
- private:
+private:
   // Hide renderer implementation under user defined renderer class.
   // On later stages renderer internal implementation could be switched
   // to OPEN_GL one
-  Renderer* _renderer;
+  Renderer *_renderer;
 
   // The window we'll be rendering to
-  MonitorWindow* _window;
+  MonitorWindow _window;
 
   // Hold maximum frame rate cap
   uint32_t _maxFrames;
@@ -248,6 +256,6 @@ class DrawMgr final : public MgrBase {
   DrawMgrConfig _config;
 };
 
-extern DrawMgr* gDrawMgr;
+extern DrawMgr *gDrawMgr;
 
 #endif /* MANAGER_UTILS_DRAWMGR_H_ */

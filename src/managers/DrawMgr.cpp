@@ -7,7 +7,6 @@
 
 // Other libraries headers
 #include "sdl_utils/input/InputEvent.h"
-#include "sdl_utils/drawing/MonitorWindow.h"
 #include "sdl_utils/drawing/Renderer.h"
 #include "utils/debug/FunctionTracer.h"
 #include "utils/ErrorCode.h"
@@ -18,7 +17,7 @@
 DrawMgr *gDrawMgr = nullptr;
 
 DrawMgr::DrawMgr(const DrawMgrConfig &cfg)
-    : _renderer(nullptr), _window(nullptr), _maxFrames(0), _config(cfg) {
+    : _renderer(nullptr), _maxFrames(0), _config(cfg) {
 }
 
 DrawMgr::~DrawMgr() {
@@ -28,24 +27,17 @@ DrawMgr::~DrawMgr() {
 int32_t DrawMgr::init() {
   TRACE_ENTRY_EXIT;
 
-  _window = new MonitorWindow(_config.monitorWidth, _config.monitorHeight);
-  if (nullptr == _window) {
-    LOGERR("Error, bad alloc for _window");
-    return FAILURE;
-  }
-
   _renderer = new Renderer;
   if (nullptr == _renderer) {
     LOGERR("Error, bad alloc for _renderer");
     return FAILURE;
   }
 
-  if (SUCCESS !=
-      _window->init(_config.windowDisplayMode, _config.windowBorderMode)) {
+  if (SUCCESS != _window.init(_config.monitorWindowConfig)) {
     LOGERR("_window.init() failed");
     return FAILURE;
   }
-  _config.rendererConfig.window = _window->getWindow();
+  _config.rendererConfig.window = _window.getNativeWindow();
 
   if (SUCCESS != _renderer->init(_config.rendererConfig)) {
     LOGERR("_renderer.init() failed");
@@ -67,10 +59,7 @@ void DrawMgr::deinit() {
     _renderer = nullptr;
   }
 
-  if (nullptr != _window) {
-    delete _window;
-    _window = nullptr;
-  }
+  _window.deinit();
 }
 
 const char* DrawMgr::getName() {

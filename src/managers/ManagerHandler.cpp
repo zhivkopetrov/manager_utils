@@ -74,7 +74,7 @@ void ManagerHandler::process() {
 int32_t ManagerHandler::allocateManagers(const ManagerHandlerConfig &cfg) {
   //gDrawMgr should be initialized first, because it contains the renderer
   //Other managers may want to load graphical resources
-  gDrawMgr = new DrawMgr(cfg.drawMgrBaseCfg);
+  gDrawMgr = new DrawMgr(cfg.drawMgrCfg);
   if (!gDrawMgr) {
     LOGERR("Error! Bad alloc for DrawMgr class -> Terminating...");
     return FAILURE;
