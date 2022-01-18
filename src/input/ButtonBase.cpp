@@ -120,7 +120,7 @@ void ButtonBase::destroyTexture() {
   _buttonTexture.destroy();
 }
 
-void ButtonBase::draw() {
+void ButtonBase::draw() const {
   _buttonTexture.draw();
 }
 

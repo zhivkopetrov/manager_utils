@@ -125,7 +125,7 @@ class ButtonBase : public TouchEntity {
    * */
   void destroyTexture();
 
-  void draw();
+  void draw() const;
 
   /** @brief used to set _buttonTexture position.
    *
