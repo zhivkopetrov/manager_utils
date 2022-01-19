@@ -273,8 +273,7 @@ void RotationAnimation::reset() {
     stopTimer(_cfg.timerId);
   }
 
-  double resetAngle = 0.0;
-
+  double resetAngle = ZERO_ANGLE;
   if (AnimDir::FORWARD == _currAnimDir) {
     resetAngle = ZERO_ANGLE;
   } else  // AnimDir::BACKWARD == _currAnimDir

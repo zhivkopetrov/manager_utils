@@ -360,6 +360,17 @@ public:
    * */
   void rotate(const double angle);
 
+  /** @brief used to get the coordinates of the point around which
+   *                                           rotation will be performed
+   *
+   *  @return const RotationCenterType - rotation center coordinates around
+   *           options TOP_LEFT, ORIG_CENTER, SCALED_CENTER
+   *
+   *  @return Point - rotation center
+   * */
+  Point getPredefinedRotationCenter(
+      const RotationCenterType rotCenterType) const;
+
   /** @brief used acquire Widget opacity value
    *
    *  @return int32_t - current Widget opacity

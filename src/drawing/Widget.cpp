@@ -717,6 +717,36 @@ void Widget::rotate(const double angle) {
   }
 }
 
+Point Widget::getPredefinedRotationCenter(
+      const RotationCenterType rotCenterType) const {
+  Point rotCenter;
+  switch (rotCenterType) {
+  case RotationCenterType::TOP_LEFT:
+    rotCenter = Point::ZERO;
+    break;
+  case RotationCenterType::ORIG_CENTER:
+    rotCenter.x = _drawParams.frameRect.w / 2;
+    rotCenter.y = _drawParams.frameRect.h / 2;
+    break;
+  case RotationCenterType::SCALED_CENTER:
+    if (_drawParams.hasScaling) {
+      rotCenter.x = _drawParams.scaledWidth / 2;
+      rotCenter.y = _drawParams.scaledHeight / 2;
+    } else {
+      LOGERR("Error, RotationCenterType::SCALED_CENTER requested for widget "
+          "with rsrcId: %#16lX, which does not have scaling enabled",
+          _drawParams.rsrcId);
+    }
+    break;
+
+  default:
+    LOGERR("Error, received unsupported RotationCenterType: %hhu",
+        getEnumValue(rotCenterType));
+    break;
+  }
+  return rotCenter;
+}
+
 int32_t Widget::getScaledWidth() const {
   if (_drawParams.hasScaling) {
     return _drawParams.scaledWidth;
