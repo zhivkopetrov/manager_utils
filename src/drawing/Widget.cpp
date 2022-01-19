@@ -8,6 +8,7 @@
 
 // Other libraries headers
 #include "sdl_utils/drawing/GeometryUtils.h"
+#include "utils/data_type/EnumClassUtils.h"
 #include "utils/data_type/FloatingPointUtils.h"
 #include "utils/Log.h"
 
@@ -599,6 +600,34 @@ void Widget::setFrameRect(const Rectangle &rect) {
     } else {
       applyCrop();
     }
+  }
+}
+
+void Widget::setPredefinedRotationCenter(
+    const RotationCenterType rotCenterType) {
+  switch (rotCenterType) {
+  case RotationCenterType::TOP_LEFT:
+    _drawParams.rotCenter = Point::ZERO;
+    break;
+  case RotationCenterType::ORIG_CENTER:
+    _drawParams.rotCenter.x = _drawParams.frameRect.w / 2;
+    _drawParams.rotCenter.y = _drawParams.frameRect.h / 2;
+    break;
+  case RotationCenterType::SCALED_CENTER:
+    if (!_drawParams.hasScaling) {
+      LOGERR("Error, RotationCenterType::SCALED_CENTER requested for widget "
+          "with rsrcId: %#16lX, which does not have scaling enabled",
+          _drawParams.rsrcId);
+      return;
+    }
+    _drawParams.rotCenter.x = _drawParams.scaledWidth / 2;
+    _drawParams.rotCenter.y = _drawParams.scaledHeight / 2;
+    break;
+
+  default:
+    LOGERR("Error, received unsupported RotationCenterType: %hhu",
+        getEnumValue(rotCenterType));
+    break;
   }
 }
 

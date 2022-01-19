@@ -103,7 +103,7 @@ void SpriteBuffer::create(const int32_t coordinateX,
   _drawParams.angle = rotationAngle;
 
   if (Point::UNDEFINED != rotationCenter) {
-    _drawParams.centerPos = rotationCenter;
+    _drawParams.rotCenter = rotationCenter;
   }
 
   /** Explicitly call setFrameRect() method in order to invoke any
