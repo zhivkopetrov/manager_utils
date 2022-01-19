@@ -12,8 +12,9 @@
 
 AnimBaseConfig::AnimBaseConfig()
  : externalImage(nullptr),
-   rsrcId(0),
    startPos(Point::UNDEFINED),
+   startAngle(0.0),
+   rsrcId(0),
    timerInterval(0),
    timerId(INIT_INT32_VALUE),
    animDirection(AnimDir::UNKNOWN),
@@ -23,8 +24,9 @@ AnimBaseConfig::AnimBaseConfig()
 
 void AnimBaseConfig::reset() {
   externalImage = nullptr;
-  rsrcId = 0;
   startPos = Point::UNDEFINED;
+  startAngle = 0.0;
+  rsrcId = 0;
   timerInterval = 0;
   timerId = 0;
   animDirection = AnimDir::UNKNOWN;

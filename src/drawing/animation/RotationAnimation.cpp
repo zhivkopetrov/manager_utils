@@ -90,10 +90,13 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
     _rotAngleStep = rotationAngleStep;
     _totalRotAngle = totalRotationAngle;
 
+    LOGC("image.angle: %f", _img->getRotation());
+    LOGC("_currRotAngle: %f", _currRotAngle);
+
     /** _currAnimDir start always as AnimDir::FORWARD, because:
      *
      *  In case of cfg.animDirection::FORWARD - rotation starts from
-     *  ZERO_ANGLE to totalRonAngle (while adding positive values
+     *  ZERO_ANGLE to totalRotAngle (while adding positive values
      *                   in the first iteration/before swap of directions/)
      *
      *  In case of cfg.animDirection::BACKWARDS - rotation starts from
@@ -106,15 +109,15 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
       _img->setRotationCenter(rotationCenter);
     }
 
-    if (ZERO_ANGLE > _rotAngleStep) {
-      LOGERR(
-          "Error configuration not complete. Reason: negative "
-          "rotationAngleStep provided: %f. Consider using a positive"
-          "rotationAngleStep value with AnimDir::BACKWARD.",
-          _rotAngleStep);
-
-      err = FAILURE;
-    }
+//    if (ZERO_ANGLE > _rotAngleStep) {
+//      LOGERR(
+//          "Error configuration not complete. Reason: negative "
+//          "rotationAngleStep provided: %f. Consider using a positive"
+//          "rotationAngleStep value with AnimDir::BACKWARD.",
+//          _rotAngleStep);
+//
+//      err = FAILURE;
+//    }
   }
 
   if (SUCCESS == err) {
@@ -273,12 +276,9 @@ void RotationAnimation::reset() {
     stopTimer(_cfg.timerId);
   }
 
-  double resetAngle = ZERO_ANGLE;
-  if (AnimDir::FORWARD == _currAnimDir) {
-    resetAngle = ZERO_ANGLE;
-  } else  // AnimDir::BACKWARD == _currAnimDir
-  {
-    resetAngle = -_totalRotAngle;
+  double resetAngle = _cfg.startAngle;
+  if (AnimDir::BACKWARD == _currAnimDir) {
+    resetAngle -= _totalRotAngle;
   }
 
   _img->setRotation(resetAngle);
@@ -430,19 +430,16 @@ void RotationAnimation::executeFiniteForward() {
         _endCb->onAnimationEnd();
       }
 
-      /** Manually reset the animation so if someone try to stop it from
-       * outside the onAnimationEnd() will not be executed twice
-       * */
-      reset();
+      if (isActiveTimerId(_cfg.timerId)) {
+        stopTimer(_cfg.timerId);
+      }
     }
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     /* Check for total rotation angle bypassed */
     if (ZERO_ANGLE <= _currRotAngle) {
-      /** Manually reset the animation so if someone try to stop it from
-       * outside the onAnimationEnd() will not be executed twice
-       * */
-      reset();
+      if (isActiveTimerId(_cfg.timerId)) {
+        stopTimer(_cfg.timerId);
+      }
 
       // If there is an callback attached -> execute it
       if (nullptr != _endCb) {
@@ -467,10 +464,9 @@ void RotationAnimation::executeFiniteBackward() {
   if (AnimDir::FORWARD == _cfg.animDirection) {
     /* Check for complete animation end */
     if (ZERO_ANGLE >= _currRotAngle) {
-      /** Manually reset the animation so if someone try to stop it from
-       * outside the onAnimationEnd() will not be executed twice
-       * */
-      reset();
+      if (isActiveTimerId(_cfg.timerId)) {
+        stopTimer(_cfg.timerId);
+      }
 
       // If there is an callback attached -> execute it
       if (nullptr != _endCb) {
@@ -481,10 +477,9 @@ void RotationAnimation::executeFiniteBackward() {
   {
     /* Check for complete animation end */
     if (_currRotAngle <= -_totalRotAngle) {
-      /** Manually reset the animation so if someone try to stop it from
-       * outside the onAnimationEnd() will not be executed twice
-       * */
-      reset();
+      if (isActiveTimerId(_cfg.timerId)) {
+        stopTimer(_cfg.timerId);
+      }
 
       // If there is an callback attached -> execute it
       if (nullptr != _endCb) {

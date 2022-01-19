@@ -66,10 +66,9 @@ class RotationAnimation : public AnimationBase {
    *  @param const PosAnimType      - ONE_DIRECTIONAL or BI_DIRECTIONAL
    *                                 animation type
    *  @param const AnimType         - FINITE or INFINITE animation type
-   *  @param const uint16_t         - number of animation repeats
-   *                                 if(AnimType::FINITE is used)
+   *  @param const double           - total rotation angle until animation stops
    *
-   *  @return int32_t              - error code
+   *  @return int32_t               - error code
    * */
   int32_t configure(const AnimBaseConfig& cfg, const double rotationAngleStep,
                     AnimationEndCb* endCb = nullptr,

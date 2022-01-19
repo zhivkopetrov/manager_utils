@@ -10,6 +10,7 @@
 #include "sdl_utils/drawing/GeometryUtils.h"
 #include "utils/data_type/EnumClassUtils.h"
 #include "utils/data_type/FloatingPointUtils.h"
+#include "utils/debug/StackTrace.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -80,6 +81,8 @@ Widget &Widget::operator=(Widget &&movedOther) {
 
 void Widget::draw() const {
   if (!_isCreated) {
+    printStacktrace();
+    std::terminate();
     LOGERR(
         "Error, widget with rsrcId: %#16lX not created!", _drawParams.rsrcId);
   } else if (_isVisible) {
@@ -704,6 +707,13 @@ void Widget::setOpacity(const int32_t opacity) {
 }
 
 void Widget::rotate(const double angle) {
+  if (0xDAFD2B465C5A3D83 == _drawParams.rsrcId) {
+    LOGC("rotate with angle: %f requested", angle);
+    LOGC("_drawParams.angle before the rotation %f", _drawParams.angle - angle);
+    LOGC("_drawParams.angle after the rotation %f", _drawParams.angle);
+    printStacktrace();
+  }
+
   _drawParams.angle += angle;
 
   if (FULL_ROTATION_ANGLE < _drawParams.angle) {

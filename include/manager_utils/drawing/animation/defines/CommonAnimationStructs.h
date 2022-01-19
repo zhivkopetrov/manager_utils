@@ -21,8 +21,9 @@ struct AnimBaseConfig {
   void reset();
 
   Image *externalImage;
-  uint64_t rsrcId;
   Point startPos;
+  double startAngle;
+  uint64_t rsrcId;
   int64_t timerInterval;
   int32_t timerId;
   AnimDir animDirection;
