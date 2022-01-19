@@ -5,6 +5,7 @@
 
 // C++ system headers
 #include <utility>
+#include <cmath>
 
 // Other libraries headers
 #include "utils/data_type/FloatingPointUtils.h"
@@ -74,7 +75,7 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
                                      const AnimType animType,
                                      const double totalRotationAngle) {
   int32_t err = SUCCESS;
-
+  RotationAnimation::resetConfigInternal();
   if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
@@ -87,11 +88,6 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
   if (SUCCESS == err) {
     _posAnimDir = posAnimDir;
     _animType = animType;
-    _rotAngleStep = rotationAngleStep;
-    _totalRotAngle = totalRotationAngle;
-
-    LOGC("image.angle: %f", _img->getRotation());
-    LOGC("_currRotAngle: %f", _currRotAngle);
 
     /** _currAnimDir start always as AnimDir::FORWARD, because:
      *
@@ -105,19 +101,20 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
      * */
     _currAnimDir = AnimDir::FORWARD;
 
+    _rotAngleStep = rotationAngleStep;
+    _totalRotAngle = totalRotationAngle;
+
     if (Point::UNDEFINED != rotationCenter) {
       _img->setRotationCenter(rotationCenter);
     }
 
-//    if (ZERO_ANGLE > _rotAngleStep) {
-//      LOGERR(
-//          "Error configuration not complete. Reason: negative "
-//          "rotationAngleStep provided: %f. Consider using a positive"
-//          "rotationAngleStep value with AnimDir::BACKWARD.",
-//          _rotAngleStep);
-//
-//      err = FAILURE;
-//    }
+    if (!FloatingPointUtils::hasSameSign(_rotAngleStep, _totalRotAngle)) {
+      LOGERR(
+          "Error configuration not complete. Reason: provided rotation angle "
+          "(%f) and provided totalRotAngle: (%f) must have the same sign",
+          _rotAngleStep, _totalRotAngle);
+      err = FAILURE;
+    }
   }
 
   if (SUCCESS == err) {
@@ -152,18 +149,6 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
           "rotationAngleStep detected: %f\nConsider using an angle "
           "> %f and angle < %f degrees.",
           _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
-
-      err = FAILURE;
-    }
-  }
-
-  if (SUCCESS == err) {
-    if (ZERO_ANGLE > totalRotationAngle) {
-      LOGERR(
-          "Error configuration not complete. Reason: negative "
-          "totalRotationAngle provided: %f. Consider using a positive"
-          "totalRotationAngle value with AnimDir::BACKWARD.",
-          _totalRotAngle);
 
       err = FAILURE;
     }
@@ -424,7 +409,7 @@ void RotationAnimation::executeFiniteForward() {
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     /* Check for total rotation angle bypassed */
-    if (_currRotAngle >= _totalRotAngle) {
+    if (std::fabs(_currRotAngle) >= std::fabs(_totalRotAngle)) {
       // If there is an callback attached -> execute it
       if (nullptr != _endCb) {
         _endCb->onAnimationEnd();
@@ -503,7 +488,7 @@ void RotationAnimation::executeInfiniteForward() {
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     /* Check for total rotation angle bypassed */
-    if (_currRotAngle >= _totalRotAngle) {
+    if (std::fabs(_currRotAngle) >= std::fabs(_totalRotAngle)) {
       /** Manually set the animation internals, but do not stop the timer.
        * Simply change the direction and continue the animation.
        *

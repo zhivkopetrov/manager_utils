@@ -67,8 +67,6 @@ AnimationBase& AnimationBase::operator=(AnimationBase&& movedOther) {
 
 int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
                                          AnimationEndCb* endCb) {
-  resetConfigInternal();
-
   _cfg = cfg;
 
   _endCb = endCb;
@@ -120,9 +118,9 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
 }
 
 void AnimationBase::resetConfigInternal() {
-  if (nullptr != _img) {
-    _img->destroy();
-    if (AnimImageType::INTERNAL == _cfg.animImageType) {
+  if (AnimImageType::INTERNAL == _cfg.animImageType) {
+    if (nullptr != _img) {
+      _img->destroy();
       delete _img;
       _img = nullptr;
     }

@@ -85,7 +85,7 @@ int32_t PositionAnimation::configure(const AnimBaseConfig& cfg,
                                      const AnimType animType,
                                      const uint16_t numberOfRepeats) {
   int32_t err = SUCCESS;
-
+  PositionAnimation::resetConfigInternal();
   if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR(
         "Error, AnimationBase::configureInternal() failed for rsrcId: "
