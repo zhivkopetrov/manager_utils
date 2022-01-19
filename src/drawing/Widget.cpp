@@ -457,7 +457,7 @@ void Widget::setScale(const double scale) {
 void Widget::setScaleCentered(const double scale, const Point &startPos) {
   if (!_drawParams.hasScaling) {
     LOGERR("Error! Scaling not enabled for widget with rsrcId: %#16lX",
-        _drawParams.rsrcId)
+        _drawParams.rsrcId);
     return;
   }
 

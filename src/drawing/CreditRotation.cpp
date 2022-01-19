@@ -248,9 +248,8 @@ void CreditRotation::setPosition(const Point& pos) {
 
 uint64_t CreditRotation::getEndValue() const {
   if (_currentValue != _final) {
-    LOGERR(
-        "This CreditRotation is still in progress. The value will be \
-                    able to be fetched, once the rotating finishes!")
+    LOGERR("This CreditRotation is still in progress. The value will be "
+           "able to be fetched, once the rotating finishes!");
     return 0;
   }
 
