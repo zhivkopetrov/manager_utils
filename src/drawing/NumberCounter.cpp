@@ -1,5 +1,5 @@
 // Corresponding .h file
-#include "manager_utils/drawing/CreditRotation.h"
+#include "manager_utils/drawing/NumberCounter.h"
 
 // C system headers
 
@@ -7,6 +7,7 @@
 #include <string>
 
 // Other libraries headers
+#include "utils/data_type/EnumClassUtils.h"
 #include "utils/common/Position.h"
 #include "utils/LimitValues.h"
 #include "utils/ErrorCode.h"
@@ -14,7 +15,7 @@
 
 // Own components headers
 
-CreditRotation::CreditRotation()
+NumberCounter::NumberCounter()
     : _timerPeriod(INIT_UINT8_VALUE),
       _currentValue(INIT_UINT64_VALUE),
       _increaseTimerId(0),
@@ -24,7 +25,7 @@ CreditRotation::CreditRotation()
       _final(INIT_UINT64_VALUE),
       _useBackground(false) {}
 
-int32_t CreditRotation::init(const uint64_t startValue, const uint64_t fontId,
+int32_t NumberCounter::init(const uint64_t startValue, const uint64_t fontId,
                              const int32_t incTimerId, const int32_t decTimerId,
                              const Rectangle& rect,
                              const uint64_t backgroundRsrcId) {
@@ -52,20 +53,13 @@ int32_t CreditRotation::init(const uint64_t startValue, const uint64_t fontId,
   return SUCCESS;
 }
 
-int32_t CreditRotation::recover(const uint64_t amount) {
-  _currentValue = amount;
-  setAmountText();
-
-  return SUCCESS;
-}
-
-void CreditRotation::setAmountText() {
+void NumberCounter::setAmountText() {
   // calculate position for balance field
   _balanceText.setText(std::to_string(_currentValue).c_str());
   setTextPosition();
 }
 
-void CreditRotation::draw() {
+void NumberCounter::draw() {
   // if balance field use own background draw it
   if (_useBackground) {
     _balanceBackground.draw();
@@ -73,15 +67,14 @@ void CreditRotation::draw() {
   _balanceText.draw();
 }
 
-void CreditRotation::update(const uint64_t newValue,
-                            enum Speed::Possibilities speed) {
+void NumberCounter::update(const uint64_t newValue, NumberCounterSpeed speed) {
   // new value is equal to old
   if (newValue == _currentValue) {
     return;
   }
 
   // set speed for update
-  _timerPeriod = speed;
+  _timerPeriod = getEnumValue(speed);
 
   _final = newValue;
 
@@ -95,10 +88,10 @@ void CreditRotation::update(const uint64_t newValue,
   }
 }
 
-void CreditRotation::increaseWith(const uint64_t amount,
-                                  enum Speed::Possibilities speed) {
+void NumberCounter::increaseWith(const uint64_t amount,
+                                 NumberCounterSpeed speed) {
   // set speed for update
-  _timerPeriod = speed;
+  _timerPeriod = getEnumValue(speed);
 
   _final = _currentValue + amount;
 
@@ -112,10 +105,10 @@ void CreditRotation::increaseWith(const uint64_t amount,
   }
 }
 
-void CreditRotation::decreaseWith(const uint64_t amount,
-                                  enum Speed::Possibilities speed) {
+void NumberCounter::decreaseWith(const uint64_t amount,
+                                 NumberCounterSpeed speed) {
   // set speed for update
-  _timerPeriod = speed;
+  _timerPeriod = getEnumValue(speed);
 
   // don't decrease with amount larger then current amount
   if (amount > _currentValue) {
@@ -134,12 +127,12 @@ void CreditRotation::decreaseWith(const uint64_t amount,
   }
 }
 
-void CreditRotation::calculateStep() {
+void NumberCounter::calculateStep() {
   // difference between current and final value
   const int64_t diff = _currentValue - _final;
 
   // step is 4% from difference
-  _step = static_cast<uint64_t>(std::abs(diff / 25));
+  _step = static_cast<uint64_t>(diff / 25);
 
   // min step is 1
   _step = _step ? _step : 1;
@@ -162,7 +155,7 @@ void CreditRotation::calculateStep() {
   }
 }
 
-void CreditRotation::setTextPosition() {
+void NumberCounter::setTextPosition() {
   int32_t currentWidth = 0;
   int32_t currentHeight = 0;
 
@@ -179,7 +172,7 @@ void CreditRotation::setTextPosition() {
       Position::getCentral(_area, currentWidth, currentHeight));
 }
 
-void CreditRotation::increase() {
+void NumberCounter::increase() {
   // while current value is less then _firstGear don't change step value
   // after then slow down it twice for every iteration
   // min value for step is 1
@@ -199,7 +192,7 @@ void CreditRotation::increase() {
   setAmountText();
 }
 
-void CreditRotation::decrease() {
+void NumberCounter::decrease() {
   // while current value is bigger then _firstGear don't change step value
   // after then slow down it twice for every iteration
   // min value for step is 1
@@ -219,7 +212,7 @@ void CreditRotation::decrease() {
   setAmountText();
 }
 
-void CreditRotation::fastStop() {
+void NumberCounter::fastStop() {
   if (isActiveTimerId(_decreaseTimerId)) {
     stopTimer(_decreaseTimerId);
   }
@@ -236,19 +229,19 @@ void CreditRotation::fastStop() {
   }
 }
 
-bool CreditRotation::isRotating() const {
+bool NumberCounter::isRotating() const {
   return isActiveTimerId(_increaseTimerId) || isActiveTimerId(_decreaseTimerId);
 }
 
-void CreditRotation::setPosition(const Point& pos) {
+void NumberCounter::setPosition(const Point& pos) {
   _area.x = pos.x;
   _area.y = pos.y;
   setTextPosition();
 }
 
-uint64_t CreditRotation::getEndValue() const {
+uint64_t NumberCounter::getEndValue() const {
   if (_currentValue != _final) {
-    LOGERR("This CreditRotation is still in progress. The value will be "
+    LOGERR("This NumberCounter is still in progress. The value will be "
            "able to be fetched, once the rotating finishes!");
     return 0;
   }
@@ -256,15 +249,15 @@ uint64_t CreditRotation::getEndValue() const {
   return _final;
 }
 
-void CreditRotation::activateTextScaling() {
+void NumberCounter::activateTextScaling() {
   _balanceText.activateScaling();
 }
 
-void CreditRotation::setTextMaxScalingWidth(const int32_t maxWidth) {
+void NumberCounter::setTextMaxScalingWidth(const int32_t maxWidth) {
   _balanceText.setMaxScalingWidth(maxWidth);
 }
 
-void CreditRotation::onTimeout(const int32_t timerId) {
+void NumberCounter::onTimeout(const int32_t timerId) {
   if (timerId == _increaseTimerId) {
     // if visible amount is equal to real amount stop change it
     if (_currentValue == _final) {
@@ -275,7 +268,6 @@ void CreditRotation::onTimeout(const int32_t timerId) {
       increase();
     }
   }
-
   else if (timerId == _decreaseTimerId) {
     // if visible amount is equal to real amount stop change it
     if (_currentValue == _final) {
@@ -285,5 +277,7 @@ void CreditRotation::onTimeout(const int32_t timerId) {
     else {
       decrease();
     }
+  } else {
+    LOGERR("Error, received unsupported timerId: %d", timerId);
   }
 }

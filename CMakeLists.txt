@@ -20,7 +20,7 @@ set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_library(
     ${PROJECT_NAME} 
     STATIC
-        ${_INC_DIR}/drawing/CreditRotation.h
+        ${_INC_DIR}/drawing/NumberCounter.h
         ${_INC_DIR}/drawing/DynamicImage.h
         ${_INC_DIR}/drawing/Image.h
         ${_INC_DIR}/drawing/Sprite.h
@@ -55,7 +55,7 @@ add_library(
         ${_INC_DIR}/time/UserTimerClient.h
         ${_INC_DIR}/time/defines/TimerClientDefines.h
     
-        ${_SRC_DIR}/drawing/CreditRotation.cpp
+        ${_SRC_DIR}/drawing/NumberCounter.cpp
         ${_SRC_DIR}/drawing/DynamicImage.cpp
         ${_SRC_DIR}/drawing/Image.cpp
         ${_SRC_DIR}/drawing/Sprite.cpp
