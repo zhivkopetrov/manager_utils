@@ -11,7 +11,7 @@
 #include "utils/Log.h"
 
 // Own components headers
-#include "manager_utils/drawing/SpriteBuffer.h"
+#include "manager_utils/drawing/Fbo.h"
 #include "utils/LimitValues.h"
 
 // default constructor
@@ -155,9 +155,9 @@ void AnimationBase::draw() const {
   }
 }
 
-void AnimationBase::drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) const {
+void AnimationBase::drawOnFbo(Fbo& fbo) const {
   if (_isVisible) {
-    spriteBuffer.addWidget(*_img);
+    fbo.addWidget(*_img);
   }
 }
 

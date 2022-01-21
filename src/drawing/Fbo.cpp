@@ -1,5 +1,5 @@
 // Corresponding header
-#include "manager_utils/drawing/SpriteBuffer.h"
+#include "manager_utils/drawing/Fbo.h"
 
 // C system headers
 
@@ -15,7 +15,7 @@
 #include "manager_utils/managers/RsrcMgr.h"
 
 // default constructor
-SpriteBuffer::SpriteBuffer()
+Fbo::Fbo()
     : _clearColor(Colors::BLACK),
       _itemsOffsetX(0),
       _itemsOffsetY(0),
@@ -26,8 +26,8 @@ SpriteBuffer::SpriteBuffer()
 }
 
 // default destructor
-SpriteBuffer::~SpriteBuffer() {
-  // attempt to destroy the SpriteBuffer only
+Fbo::~Fbo() {
+  // attempt to destroy the Fbo only
   // if it was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {
     destroy();
@@ -35,7 +35,7 @@ SpriteBuffer::~SpriteBuffer() {
 }
 
 // move constructor
-SpriteBuffer::SpriteBuffer(SpriteBuffer &&movedOther)
+Fbo::Fbo(Fbo &&movedOther)
     : Widget(std::move(movedOther)), _clearColor(Colors::BLACK) {
   _drawParams.widgetType = WidgetType::SPRITE_BUFFER;
 
@@ -54,7 +54,7 @@ SpriteBuffer::SpriteBuffer(SpriteBuffer &&movedOther)
 }
 
 // move assignment operator
-SpriteBuffer &SpriteBuffer::operator=(SpriteBuffer &&movedOther) {
+Fbo &Fbo::operator=(Fbo &&movedOther) {
   // check for self-assignment
   if (this != &movedOther) {
     _drawParams.widgetType = WidgetType::SPRITE_BUFFER;
@@ -79,14 +79,14 @@ SpriteBuffer &SpriteBuffer::operator=(SpriteBuffer &&movedOther) {
   return *this;
 }
 
-void SpriteBuffer::create(const int32_t coordinateX,
+void Fbo::create(const int32_t coordinateX,
                           const int32_t coordinateY,
                           const int32_t spriteBufferWidth,
                           const int32_t spriteBufferHeight,
                           const double rotationAngle,
                           const Point &rotationCenter) {
   if (_isCreated) {
-    LOGERR("Warning, trying to create a SpriteBuffer with ID: %d, "
+    LOGERR("Warning, trying to create a Fbo with ID: %d, "
         "that was already created!", _drawParams.spriteBufferId);
     return;
   }
@@ -111,20 +111,20 @@ void SpriteBuffer::create(const int32_t coordinateX,
    * */
   setFrameRect(Rectangle(0, 0, spriteBufferWidth, spriteBufferHeight));
 
-  gRsrcMgr->createSpriteBuffer(spriteBufferWidth, spriteBufferHeight,
+  gRsrcMgr->createFbo(spriteBufferWidth, spriteBufferHeight,
                                _drawParams.spriteBufferId);
 }
 
-void SpriteBuffer::create(const Rectangle& dimensions,
+void Fbo::create(const Rectangle& dimensions,
                           const double rotationAngle,
                           const Point& rotationCenter) {
-  SpriteBuffer::create(dimensions.x, dimensions.y, dimensions.w, dimensions.h,
+  Fbo::create(dimensions.x, dimensions.y, dimensions.w, dimensions.h,
                        rotationAngle, rotationCenter);
 }
 
-void SpriteBuffer::destroy() {
+void Fbo::destroy() {
   if (_isDestroyed) {
-    LOGERR("Warning, trying to destroy a SpriteBuffer "
+    LOGERR("Warning, trying to destroy a Fbo "
         "that was already destroyed!");
     return;
   }
@@ -136,7 +136,7 @@ void SpriteBuffer::destroy() {
 
   // sanity check, because manager could already been destroyed
   if (nullptr != gRsrcMgr) {
-    gRsrcMgr->destroySpriteBuffer(_drawParams.spriteBufferId);
+    gRsrcMgr->destroyFbo(_drawParams.spriteBufferId);
   }
 
   Widget::reset();
@@ -145,10 +145,10 @@ void SpriteBuffer::destroy() {
   _isDestroyed = true;
 }
 
-void SpriteBuffer::unlock() {
+void Fbo::unlock() {
   if (!_isCreated) {
     LOGERR(
-        "Error, SpriteBuffer::unlock() failed, because SpriteBuffer is "
+        "Error, Fbo::unlock() failed, because Fbo is "
         "not yet created. Consider using ::create() method first");
 
     return;
@@ -156,7 +156,7 @@ void SpriteBuffer::unlock() {
 
   if (!_isLocked) {
     LOGERR(
-        "Error, trying to unlock a SpriteBuffer with ID: %d"
+        "Error, trying to unlock a Fbo with ID: %d"
         "that is already unlocked", _drawParams.spriteBufferId);
     return;
   }
@@ -165,10 +165,10 @@ void SpriteBuffer::unlock() {
 
   if (SUCCESS != gDrawMgr->unlockRenderer()) {
     LOGERR(
-        "Error, SpriteBuffer with ID: %d can not be unlocked, because some "
+        "Error, Fbo with ID: %d can not be unlocked, because some "
         "other entity is currently in possession of the main renderer lock. "
-        "Usually this is another SpriteBuffer. Be sure to lock your "
-        "SpriteBuffers when you are done with your work on them.",
+        "Usually this is another Fbo. Be sure to lock your "
+        "Fbos when you are done with your work on them.",
         _drawParams.spriteBufferId);
     return;
   }
@@ -179,16 +179,16 @@ void SpriteBuffer::unlock() {
       sizeof(_drawParams.spriteBufferId));
 }
 
-void SpriteBuffer::lock() {
+void Fbo::lock() {
   if (!_isCreated) {
     LOGERR(
-        "Error, SpriteBuffer::lock() failed, because SpriteBuffer is "
+        "Error, Fbo::lock() failed, because Fbo is "
         "not yet created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
-    LOGERR("Error, trying to lock a SpriteBuffer with ID: %d "
+    LOGERR("Error, trying to lock a Fbo with ID: %d "
         "that is already locked", _drawParams.spriteBufferId);
     return;
   }
@@ -202,18 +202,18 @@ void SpriteBuffer::lock() {
   }
 }
 
-void SpriteBuffer::reset() {
+void Fbo::reset() {
   if (!_isCreated) {
     LOGERR(
-        "Error, SpriteBuffer::reset() failed, because SpriteBuffer is "
+        "Error, Fbo::reset() failed, because Fbo is "
         "not yet created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
     LOGERR(
-        "Error, SpriteBuffer with ID: %d ::reset() failed, because "
-        "SpriteBuffer is still locked. Consider using the sequence "
+        "Error, Fbo with ID: %d ::reset() failed, because "
+        "Fbo is still locked. Consider using the sequence "
         "::unlock(), ::reset(), ::lock()", _drawParams.spriteBufferId);
     return;
   }
@@ -234,28 +234,28 @@ void SpriteBuffer::reset() {
   }
 }
 
-void SpriteBuffer::addWidget(const Widget &widget) {
+void Fbo::addWidget(const Widget &widget) {
   if (!widget.isCreated()) {
     LOGERR("Widget is not created, therefore -> "
-        "it could not be added to SpriteBuffer");
+        "it could not be added to Fbo");
     return;
   }
 
   _storedItems.emplace_back(widget.getDrawParams());
 }
 
-void SpriteBuffer::update() {
+void Fbo::update() {
   if (!_isCreated) {
     LOGERR(
-        "Error, SpriteBuffe::update() failed, because SpriteBuffer is not yet "
+        "Error, SpriteBuffe::update() failed, because Fbo is not yet "
         "created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
     LOGERR(
-        "Error, SpriteBuffer with ID: %d ::update() failed, because "
-        "SpriteBuffer is still locked. Consider using the sequence "
+        "Error, Fbo with ID: %d ::update() failed, because "
+        "Fbo is still locked. Consider using the sequence "
         "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
 
     return;
@@ -264,7 +264,7 @@ void SpriteBuffer::update() {
   const uint32_t SIZE = static_cast<uint32_t>(_storedItems.size());
 
   // transform relative sprite buffer coordinates to
-  // relative ones for the monitor, on which the SpriteBuffer is attached to
+  // relative ones for the monitor, on which the Fbo is attached to
   transformToMonitorRelativeCoordinates(SIZE);
 
   // add size of used widgets
@@ -278,20 +278,20 @@ void SpriteBuffer::update() {
       sizeof(DrawParams) * SIZE);
 }
 
-void SpriteBuffer::updateRanged(const int32_t fromIndex,
+void Fbo::updateRanged(const int32_t fromIndex,
                                 const int32_t toIndex) {
   if (!_isCreated) {
     LOGERR(
-        "Error, SpriteBuffer::updateRanged() failed, because "
-        "SpriteBuffer is not yet created. Consider using ::create() "
+        "Error, Fbo::updateRanged() failed, because "
+        "Fbo is not yet created. Consider using ::create() "
         "method first");
     return;
   }
 
   if (_isLocked) {
     LOGERR(
-        "Error, SpriteBuffer with ID: %d ::updateRanged() failed, because "
-        "SpriteBuffer is still locked. Consider using the sequence "
+        "Error, Fbo with ID: %d ::updateRanged() failed, because "
+        "Fbo is still locked. Consider using the sequence "
         "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
     return;
   }
@@ -301,13 +301,13 @@ void SpriteBuffer::updateRanged(const int32_t fromIndex,
   if ((0 > fromIndex) || (fromIndex > toIndex) || (toIndex >= SIZE)) {
     LOGERR(
         "Error, Illegal ranges provided. fromIndex: %d, toIndex: %d, "
-        "storedItems.size(): %u for SpriteBuffer with ID: %d",
+        "storedItems.size(): %u for Fbo with ID: %d",
         fromIndex, toIndex, SIZE, _drawParams.spriteBufferId);
     return;
   }
 
   // transform relative sprite buffer coordinates to
-  // relative ones for the monitor, on which the SpriteBuffer is attached to
+  // relative ones for the monitor, on which the Fbo is attached to
   transformToMonitorRelativeCoordinatesRanged(fromIndex, fromIndex);
 
   const uint32_t NEW_ELEMENTS = toIndex - fromIndex + 1;
@@ -323,10 +323,10 @@ void SpriteBuffer::updateRanged(const int32_t fromIndex,
       sizeof(DrawParams) * NEW_ELEMENTS);
 }
 
-void SpriteBuffer::addCustomClearTarget(const Widget &widget) {
+void Fbo::addCustomClearTarget(const Widget &widget) {
   if (!widget.isCreated()) {
     LOGERR("Widget is not created, therefore -> "
-        "it could not be added to SpriteBuffer");
+        "it could not be added to Fbo");
     return;
   }
 
@@ -334,19 +334,19 @@ void SpriteBuffer::addCustomClearTarget(const Widget &widget) {
   _customClearTarget = widget.getDrawParams();
 }
 
-void SpriteBuffer::setResetColor(const Color &clearColor) {
+void Fbo::setResetColor(const Color &clearColor) {
   _clearColor = clearColor;
 
   if (!_isAlphaModulationEnabled && _clearColor == Colors::FULL_TRANSPARENT) {
     LOGERR(
-        "Warning, SpriteBuffer::setSpriteBufferResetColor() invoked "
+        "Warning, Fbo::setFboResetColor() invoked "
         "with ID: %d with Colors::FULL_TRANSPARENT while alpha modulation "
         "is not enabled. This will result in not proper reset color when "
-        "SpriteBuffer::reset() is invoked.", _drawParams.spriteBufferId);
+        "Fbo::reset() is invoked.", _drawParams.spriteBufferId);
   }
 }
 
-void SpriteBuffer::transformToMonitorRelativeCoordinates(
+void Fbo::transformToMonitorRelativeCoordinates(
     const uint32_t storedItemsSize) {
   const int32_t SPRITE_BUFFER_POS_X = _drawParams.pos.x - _itemsOffsetX;
   const int32_t SPRITE_BUFFER_POS_Y = _drawParams.pos.y - _itemsOffsetY;
@@ -362,7 +362,7 @@ void SpriteBuffer::transformToMonitorRelativeCoordinates(
   }
 }
 
-void SpriteBuffer::transformToMonitorRelativeCoordinatesRanged(
+void Fbo::transformToMonitorRelativeCoordinatesRanged(
     const int32_t fromIndex, const int32_t toIndex) {
   const int32_t SPRITE_BUFFER_POS_X = _drawParams.pos.x - _itemsOffsetX;
   const int32_t SPRITE_BUFFER_POS_Y = _drawParams.pos.y - _itemsOffsetY;
@@ -378,7 +378,7 @@ void SpriteBuffer::transformToMonitorRelativeCoordinatesRanged(
   }
 }
 
-void SpriteBuffer::resetInternals() {
+void Fbo::resetInternals() {
   _storedItems.clear();
   _customClearTarget.reset();
 

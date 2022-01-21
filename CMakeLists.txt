@@ -24,7 +24,7 @@ add_library(
         ${_INC_DIR}/drawing/DynamicImage.h
         ${_INC_DIR}/drawing/Image.h
         ${_INC_DIR}/drawing/Sprite.h
-        ${_INC_DIR}/drawing/SpriteBuffer.h
+        ${_INC_DIR}/drawing/Fbo.h
         ${_INC_DIR}/drawing/Text.h
         ${_INC_DIR}/drawing/Widget.h
         ${_INC_DIR}/drawing/animation/AnimationBase.h
@@ -59,7 +59,7 @@ add_library(
         ${_SRC_DIR}/drawing/DynamicImage.cpp
         ${_SRC_DIR}/drawing/Image.cpp
         ${_SRC_DIR}/drawing/Sprite.cpp
-        ${_SRC_DIR}/drawing/SpriteBuffer.cpp
+        ${_SRC_DIR}/drawing/Fbo.cpp
         ${_SRC_DIR}/drawing/Text.cpp
         ${_SRC_DIR}/drawing/Widget.cpp
         ${_SRC_DIR}/drawing/animation/AnimationBase.cpp

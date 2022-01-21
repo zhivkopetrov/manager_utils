@@ -32,7 +32,7 @@
 
 // Forward Declarations
 class AnimationEndCb;
-class SpriteBuffer;
+class Fbo;
 
 class AnimationBase : public TimerClient {
  public:
@@ -101,11 +101,11 @@ class AnimationBase : public TimerClient {
    * */
   void draw() const;
 
-  /** @brief used to make draw calls on top of SpriteBuffer
+  /** @brief used to make draw calls on top of Fbo
    *
-   *  @param SpriteBuffer & - sprite buffer instance
+   *  @param Fbo & - frame buffer object instance
    * */
-  void drawOnSpriteBuffer(SpriteBuffer& spriteBuffer) const;
+  void drawOnFbo(Fbo& fbo) const;
 
   /**
    * @brief function to allow the animation fading in and out effect

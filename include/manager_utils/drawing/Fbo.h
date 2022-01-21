@@ -1,26 +1,26 @@
-#ifndef MANAGER_UTILS_SPRITEBUFFER_H_
-#define MANAGER_UTILS_SPRITEBUFFER_H_
+#ifndef MANAGER_UTILS_FBO_H_
+#define MANAGER_UTILS_FBO_H_
 
 /*
- * SpriteBuffer.h
+ * Fbo.h
  *
- *  Brief: The SpriteBuffer is used for run time generation
+ *  Brief: The Fbo is used for run time generation
  *         of SDL_Surface/SDL_Texture with 1 or (usually) more widgets.
  *
- *         SpriteBuffer is used for optimisation purposes when the developer
+ *         Fbo is used for optimisation purposes when the developer
  *         know that several graphical widgets that share a common logical
  *         rectangle boundaries will be constantly drawn, but not updated.
  *
  *         For not to every time make those N draw calls for your N widgets
- *         on every draw frame, instead the developer creates a SpriteBuffer
+ *         on every draw frame, instead the developer creates a Fbo
  *         by "drawing all those N widgets with ::addWidget() method" once.
  *
  *         From that point on your make only a single draw call on the
- *         SpriteBuffer.
+ *         Fbo.
  *
  *         After some time when something actually changes for one (or several)
  *         of those N widgets you simply: update your widgets, reset your old
- *         SpriteBuffer, update it and then continue to draw it again.
+ *         Fbo, update it and then continue to draw it again.
  *
  *
  *
@@ -40,37 +40,35 @@
  *         Image img2;
  *         Text  text;
  *
- *         SpriteBuffer spriteBuffer;
+ *         Fbo fbo;
  *     }
  *
  *     int32_t init()
  *     {
  *         img1.create();
  *         img2.create();
- *         text.create( "Eclipse > CodeBlocks", some other params ... );
  *
- *         SpriteBuffer spriteBuffer;
- *         if(SUCCESS != spriteBuffer.create())
+ *         if(SUCCESS != fbo.create())
  *         {
- *              LOGERR("spriteBuffer.create() failed")
+ *              LOGERR("fbo.create() failed")
  *              return FAILURE;
  *         }
  *
- *         spriteBuffer.addWidget(img);
- *         spriteBuffer.addWidget(img2);
- *         spriteBuffer.addWidget(text);
+ *         fbo.addWidget(img);
+ *         fbo.addWidget(img2);
+ *         fbo.addWidget(text);
  *
  *         //lock and unlock are only needed for the ::update method()
- *         spriteBuffer.unlock();
- *         spriteBuffer.update();
- *         spriteBuffer.lock();
+ *         fbo.unlock();
+ *         fbo.update();
+ *         fbo.lock();
  *
  *         return SUCCESS;
  *     }
  *
  *     void draw()
  *     {
- *         g.drawWidget(spriteBuffer);
+ *         fbo.draw();
  *     }
  *
  *     void updateSomeLogic()
@@ -86,38 +84,38 @@
  *         //cleaner code but slower execution -> wrap ::reset() and ::update()
  *         //methods between ::unlock() and lock() functions
  *         {
- *             //reset your old SpriteBuffer
- *             spriteBuffer.unlock();
- *             spriteBuffer.reset();
- *             spriteBuffer.lock();
+ *             //reset your old Fbo
+ *             fbo.unlock();
+ *             fbo.reset();
+ *             fbo.lock();
  *
  *             //add your new Widgets
- *             spriteBuffer.addWidget(img);
- *             spriteBuffer.addWidget(img2);
- *             spriteBuffer.addWidget(text);
+ *             fbo.addWidget(img);
+ *             fbo.addWidget(img2);
+ *             fbo.addWidget(text);
  *
- *             spriteBuffer.unlock();
- *             spriteBuffer.update();
- *             spriteBuffer.lock();
+ *             fbo.unlock();
+ *             fbo.update();
+ *             fbo.lock();
  *         }
  *
  *
  *         //Option 2:
  *         //more error prone code but faster execution -> call ::unlock() at
- *         //the beginning, reset old SpriteBuffer, add new Widgets, update
- *         //(generate new SpriteBuffer) and then call ::lock() at the end
+ *         //the beginning, reset old Fbo, add new Widgets, update
+ *         //(generate new Fbo) and then call ::lock() at the end
  *         {
- *             //reset your old SpriteBuffer
- *             spriteBuffer.unlock();
- *             spriteBuffer.reset();
+ *             //reset your old FBO
+ *             fbo.unlock();
+ *             fbo.reset();
  *
  *             //add your new Widgets
- *             spriteBuffer.addWidget(img);
- *             spriteBuffer.addWidget(img2);
- *             spriteBuffer.addWidget(text);
+ *             fbo.addWidget(img);
+ *             fbo.addWidget(img2);
+ *             fbo.addWidget(text);
  *
- *             spriteBuffer.update();
- *             spriteBuffer.lock();
+ *             fbo.update();
+ *             fbo.lock();
  *         }
  *     }
  */
@@ -136,28 +134,28 @@
 
 // Forward declarations
 
-class SpriteBuffer : public Widget {
+class Fbo : public Widget {
  public:
-  SpriteBuffer();
-  ~SpriteBuffer();
+  Fbo();
+  ~Fbo();
 
   // move constructor needed for STL containers empalce_back/push_back
-  SpriteBuffer(SpriteBuffer&& movedOther);
+  Fbo(Fbo&& movedOther);
 
   // move assignment operator implementation
-  SpriteBuffer& operator=(SpriteBuffer&& movedOther);
+  Fbo& operator=(Fbo&& movedOther);
 
   // forbid the copy constructor and copy assignment operator
-  SpriteBuffer(const SpriteBuffer& other) = delete;
-  SpriteBuffer& operator=(const SpriteBuffer& other) = delete;
+  Fbo(const Fbo& other) = delete;
+  Fbo& operator=(const Fbo& other) = delete;
 
-  /** @brief used to create an empty SpriteBuffer with the given params.
+  /** @brief used to create an empty Fbo with the given params.
    *
-   *  @param const int32_t - X coordinate for the SpriteBuffer
-   *  @param const int32_t - Y coordinate for the SpriteBuffer
-   *  @param const int32_t - width for the SpriteBuffer (final texture)
-   *  @param const int32_t - height for the SpriteBuffer (final texture)
-   *                                          SpriteBuffer is attached to
+   *  @param const int32_t - X coordinate for the Fbo
+   *  @param const int32_t - Y coordinate for the Fbo
+   *  @param const int32_t - width for the Fbo (final texture)
+   *  @param const int32_t - height for the Fbo (final texture)
+   *                                          Fbo is attached to
    *  @param const double  - rotation angle (if such is used)
    *  @param const Point   - rotation center (if such is used)
    * */
@@ -171,22 +169,22 @@ class SpriteBuffer : public Widget {
               const double rotationAngle = ZERO_ANGLE,
               const Point& rotationCenter = Point::UNDEFINED);
 
-  /** @brief used to destroy the SpriteBuffer
+  /** @brief used to destroy the Fbo
    * */
   void destroy();
 
-  /** @brief used for unlocking the SpriteBuffer before invoking
+  /** @brief used for unlocking the Fbo before invoking
    *                                                    ::update() method
    * */
   void unlock();
 
-  /** @brief used for locking the SpriteBuffer after
+  /** @brief used for locking the Fbo after
    *                                  ::update() method has been executed
    * */
   void lock();
 
   /** @brief used to clear (wipe out) the content of the current
-   *         SpriteBuffer and clear the content
+   *         Fbo and clear the content
    *                                      of _storedItems std::vector
    *
    *         NOTE: each call to ::reset() method must be wrapped between
@@ -194,31 +192,31 @@ class SpriteBuffer : public Widget {
    * */
   void reset();
 
-  /** @brief used to upload new Graphical Widget in the SpriteBuffer.
-   *         The Widget can represent Image/Text/SpriteBuffer
+  /** @brief used to upload new Graphical Widget in the Fbo.
+   *         The Widget can represent Image/Text/Fbo
    *
    *  @param const Widget & - the Widget that is about to be uploaded
-   *                                                  to the SpriteBuffer
+   *                                                  to the Fbo
    *
    *         WARNING:  Be careful if you invoke addWidget() for another
-   *                   SpriteBuffer as a parameter, because SpriteBuffers,
+   *                   Fbo as a parameter, because Fbos,
    *                   deallocated memory for their surfaces/textures
    *                   when destroyed.
    *                   If you happen to call addWidget() for another
-   *                   SpriteBuffer be sure to not call the ::update()
-   *                   method if the destroyed SpriteBuffer DrawParams
+   *                   Fbo be sure to not call the ::update()
+   *                   method if the destroyed Fbo DrawParams
    *                   are still part of the _storedItem std::vector.
    *                   It is safe however to call ::reset() and then
    *                   continue with your business logic.
    *
    *         WARNING2: Widget param needs to be created before addWidget()
    *                   method is invoked. If it was not created - the
-   *                   upload to the SpriteBuffer will fail
+   *                   upload to the Fbo will fail
    *                                                  (will be skipped)
    * */
   void addWidget(const Widget& widget);
 
-  /** @brief used to override the existing SpriteBuffer final texture
+  /** @brief used to override the existing Fbo final texture
    *         with Surfaces/Textures from the _storedItems std::vector
    *
    *         NOTE: each call to ::update() method must be wrapped between
@@ -226,7 +224,7 @@ class SpriteBuffer : public Widget {
    *  */
   void update();
 
-  /** @brief used to override the existing SpriteBuffer final texture
+  /** @brief used to override the existing Fbo final texture
    *         with Surfaces/Textures from the _storedItems std::vector
    *
    *  @param const int32_t - begin stored item index
@@ -258,28 +256,28 @@ class SpriteBuffer : public Widget {
    * */
   void setResetColor(const Color& clearColor);
 
-  /** @brief used to move all stored SpriteBuffer items (widgets)
+  /** @brief used to move all stored Fbo items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative X offset
    * */
   void moveItemsRight(const int32_t x) { _itemsOffsetX += x; }
 
-  /** @brief used to move all stored SpriteBuffer items (widgets)
+  /** @brief used to move all stored Fbo items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative X offset
    * */
   void moveItemsLeft(const int32_t x) { _itemsOffsetX -= x; }
 
-  /** @brief used to move all stored SpriteBuffer items (widgets)
+  /** @brief used to move all stored Fbo items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative Y offset
    * */
   void moveItemsDown(const int32_t y) { _itemsOffsetY += y; }
 
-  /** @brief used to move all stored SpriteBuffer items (widgets)
+  /** @brief used to move all stored Fbo items (widgets)
    *         with relative offset
    *
    *  @param const int32_t - relative Y offset
@@ -290,7 +288,7 @@ class SpriteBuffer : public Widget {
 
  private:
   /** @brief used to transform relative sprite buffer coordinates to
-   *         relative ones for the monitor, on which the SpriteBuffer
+   *         relative ones for the monitor, on which the Fbo
    *         is attached to
    *
    *  @param const uint32_t - stored items size for the sprite buffer
@@ -298,7 +296,7 @@ class SpriteBuffer : public Widget {
   void transformToMonitorRelativeCoordinates(const uint32_t storedItemsSize);
 
   /** @brief used to transform relative sprite buffer coordinates to
-   *         relative ones for the monitor, on which the SpriteBuffer
+   *         relative ones for the monitor, on which the Fbo
    *         is attached to
    *
    *  @param const int32_t - begin stored item index
@@ -329,7 +327,7 @@ class SpriteBuffer : public Widget {
    * */
   Color _clearColor;
 
-  /* Stores relative offset for stored items(widgets) in the SpriteBuffer
+  /* Stores relative offset for stored items(widgets) in the Fbo
    * */
   int32_t _itemsOffsetX;
   int32_t _itemsOffsetY;
@@ -348,4 +346,4 @@ class SpriteBuffer : public Widget {
   bool _isDestroyed;
 };
 
-#endif /* MANAGER_UTILS_SPRITEBUFFER_H_ */
+#endif /* MANAGER_UTILS_FBO_H_ */

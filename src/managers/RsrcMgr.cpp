@@ -48,6 +48,6 @@ void RsrcMgr::onLoadTextureMultipleCompleted(
 uint64_t RsrcMgr::getGPUMemoryUsage() const {
   return ResourceContainer::getGPUMemoryUsage() +
          TextContainer::getGPUMemoryUsage() +
-         SpriteBufferContainer::getGPUMemoryUsage();
+         FboContainer::getGPUMemoryUsage();
 }
 
