@@ -38,8 +38,8 @@ struct NumberCounterConfig {
   uint64_t backgroundRsrcId = 0;
   uint64_t fontId = 0;
   uint64_t startValue = 0;
-  int32_t incTimerId = 0;
-  int32_t decTimerId = 0;
+  int32_t incrTimerId = 0;
+  int32_t decrTimerId = 0;
 };
 
 class NumberCounter: public TimerClientSpeedAdjustable {
@@ -48,7 +48,7 @@ public:
 
   int32_t init(const NumberCounterConfig& cfg);
 
-  void draw();
+  void draw() const;
 
   /** @brief Update data in balance/win field
    *

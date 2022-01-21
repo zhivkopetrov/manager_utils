@@ -24,8 +24,8 @@ NumberCounter::NumberCounter()
 
 int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
   // set timer IDs
-  _increaseTimerId = cfg.incTimerId;
-  _decreaseTimerId = cfg.decTimerId;
+  _increaseTimerId = cfg.incrTimerId;
+  _decreaseTimerId = cfg.decrTimerId;
 
   // set Rectangle data
   _boundaryRect = cfg.boundaryRect;
@@ -51,7 +51,7 @@ void NumberCounter::setAmountText() {
   setTextPosition();
 }
 
-void NumberCounter::draw() {
+void NumberCounter::draw() const {
   // if balance field use own background draw it
   if (_balanceBackground.isCreated()) {
     _balanceBackground.draw();
