@@ -35,12 +35,16 @@ int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
 
   // create balance field with text 0
   _balanceText.create(cfg.fontId, std::to_string(_currentValue).c_str(),
-      Colors::WHITE);
+      cfg.fontColor);
 
   setAmountText();
 
   if (0 != cfg.backgroundRsrcId) {
     _balanceBackground.create(cfg.backgroundRsrcId);
+
+    if (Point::UNDEFINED != cfg.backgroundRsrcPos) {
+      _balanceBackground.setPosition(cfg.backgroundRsrcPos);
+    }
   }
 
   return SUCCESS;
@@ -125,7 +129,7 @@ void NumberCounter::calculateStep() {
   const int64_t diff = _currentValue - _final;
 
   // step is 4% from difference
-  _step = static_cast<uint64_t>(diff / 25);
+  _step = static_cast<uint64_t>(std::abs(diff / 25));
 
   // min step is 1
   _step = _step ? _step : 1;

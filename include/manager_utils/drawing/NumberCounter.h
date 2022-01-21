@@ -16,6 +16,7 @@
 
 //values represent timer period
 enum class NumberCounterSpeed {
+  SLOW = 200,
   NORMAL = 125,
   FAST = 20,
   INSTANT = 0
@@ -23,20 +24,24 @@ enum class NumberCounterSpeed {
 
 /** @brief used to initialize the credit rotation entity
  *
- *   @param Rectangle & rect       - the number counter bounding rect
+ *   @param Rectangle   rect        - the number counter bounding rect
  *   @param uint64_t    backgroundRsrcId - unique resource ID for
  *                             background resources (if such is provided)
- *   @param uint64_t    fontId     - unique font resource ID
- *   @param uint64_t    startValue - initial value for number
- *   @param int32_t     incTimerId - timer ID for increase in credit
- *   @param int32_t     decTimerId - timer ID for decrease in credit
+ *   @param Point backgroundRsrcPos - start pos for background (if any)
+ *                   if Point::UNDEFINED is specified the param will be ignored
+ *   @param uint64_t    fontId      - unique font resource ID
+ *   @param uint64_t    startValue  - initial value for number
+ *   @param int32_t     incTimerId  - timer ID for increase in credit
+ *   @param int32_t     decTimerId  - timer ID for decrease in credit
  *
- *   @return int32_t             - error code
+ *   @return int32_t                - error code
  */
 struct NumberCounterConfig {
   Rectangle boundaryRect;
   uint64_t backgroundRsrcId = 0;
+  Point backgroundRsrcPos = Point::UNDEFINED;
   uint64_t fontId = 0;
+  Color fontColor = Colors::WHITE;
   uint64_t startValue = 0;
   int32_t incrTimerId = 0;
   int32_t decrTimerId = 0;
