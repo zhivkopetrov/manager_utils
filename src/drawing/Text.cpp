@@ -97,7 +97,7 @@ void Text::create(const uint64_t fontId,
   copyTextContent(text);
 
   gRsrcMgr->loadText(_fontId, _textContent, _color,
-                         _drawParams.textId, _imageWidth, _imageHeight);
+                     _drawParams.textId, _imageWidth, _imageHeight);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).

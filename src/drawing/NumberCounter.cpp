@@ -34,7 +34,8 @@ int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
   _currentValue = cfg.startValue;
 
   // create balance field with text 0
-  _balanceText.create(cfg.fontId, "00", Colors::WHITE);
+  _balanceText.create(cfg.fontId, std::to_string(_currentValue).c_str(),
+      Colors::WHITE);
 
   setAmountText();
 
@@ -234,8 +235,7 @@ void NumberCounter::setPosition(const Point &pos) {
 uint64_t NumberCounter::getEndValue() const {
   if (_currentValue != _final) {
     LOGERR(
-        "This NumberCounter is still in progress. The value will be "
-        "able to be fetched, once the rotating finishes!");
+        "This NumberCounter is still in progress. The value will be " "able to be fetched, once the rotating finishes!");
     return 0;
   }
 
@@ -273,5 +273,4 @@ void NumberCounter::onTimeout(const int32_t timerId) {
     LOGERR("Error, received unsupported timerId: %d", timerId);
   }
 }
-
 
