@@ -21,25 +21,32 @@ enum class NumberCounterSpeed {
   INSTANT = 0
 };
 
+/** @brief used to initialize the credit rotation entity
+ *
+ *   @param Rectangle & rect       - the number counter bounding rect
+ *   @param uint64_t    backgroundRsrcId - unique resource ID for
+ *                             background resources (if such is provided)
+ *   @param uint64_t    fontId     - unique font resource ID
+ *   @param uint64_t    startValue - initial value for number
+ *   @param int32_t     incTimerId - timer ID for increase in credit
+ *   @param int32_t     decTimerId - timer ID for decrease in credit
+ *
+ *   @return int32_t             - error code
+ */
+struct NumberCounterConfig {
+  Rectangle boundaryRect;
+  uint64_t backgroundRsrcId = 0;
+  uint64_t fontId = 0;
+  uint64_t startValue = 0;
+  int32_t incTimerId = 0;
+  int32_t decTimerId = 0;
+};
+
 class NumberCounter: public TimerClientSpeedAdjustable {
 public:
   NumberCounter();
 
-  /** @brief used to initialize the credit rotation entity
-   *
-   *   @param uint64_t    startValue - initial value for number
-   *   @param uint64_t    fontId     - unique font resource ID
-   *   @param int32_t     incTimerId - timer ID for increase in credit
-   *   @param int32_t     decTimerId - timer ID for decrease in credit
-   *   @param Rectangle & rect       - the number counter bounding rect
-   *   @param uint64_t    backgroundRsrcId - unique resource ID for
-   *                             background resources (if such is provided)
-   *
-   *   @return int32_t             - error code
-   */
-  int32_t init(const uint64_t startValue, const uint64_t fontId,
-               const int32_t incTimerId, const int32_t decTimerId,
-               const Rectangle &rect, const uint64_t backgroundRsrcId = 0);
+  int32_t init(const NumberCounterConfig& cfg);
 
   void draw();
 
@@ -106,7 +113,7 @@ public:
    * @brief an interface function to get the number counter rectangle
    */
   Rectangle getBoundaryRect() const {
-    return _area;
+    return _boundaryRect;
   }
 
   uint64_t getValue() const {
@@ -166,11 +173,8 @@ protected:
 private:
   virtual void onTimeout(const int32_t timerId) override;
 
-  // true - draw image for background
-  bool _useBackground;
-
   // rectangle for number area
-  Rectangle _area;
+  Rectangle _boundaryRect;
 
   // background for number area
   Image _balanceBackground;

@@ -16,38 +16,30 @@
 // Own components headers
 
 NumberCounter::NumberCounter()
-    : _timerPeriod(INIT_UINT8_VALUE),
-      _currentValue(INIT_UINT64_VALUE),
-      _increaseTimerId(0),
-      _decreaseTimerId(0),
-      _firstGear(INIT_UINT64_VALUE),
-      _step(INIT_UINT64_VALUE),
-      _final(INIT_UINT64_VALUE),
-      _useBackground(false) {}
+    : _timerPeriod(INIT_UINT8_VALUE), _currentValue(INIT_UINT64_VALUE),
+      _increaseTimerId(0), _decreaseTimerId(0), _firstGear(INIT_UINT64_VALUE),
+      _step(INIT_UINT64_VALUE), _final(INIT_UINT64_VALUE) {
 
-int32_t NumberCounter::init(const uint64_t startValue, const uint64_t fontId,
-                             const int32_t incTimerId, const int32_t decTimerId,
-                             const Rectangle& rect,
-                             const uint64_t backgroundRsrcId) {
+}
+
+int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
   // set timer IDs
-  _increaseTimerId = incTimerId;
-  _decreaseTimerId = decTimerId;
+  _increaseTimerId = cfg.incTimerId;
+  _decreaseTimerId = cfg.decTimerId;
 
   // set Rectangle data
-  _area = rect;
+  _boundaryRect = cfg.boundaryRect;
 
   // set start value
-  _currentValue = startValue;
+  _currentValue = cfg.startValue;
 
   // create balance field with text 0
-  _balanceText.create(fontId, "00", Colors::WHITE);
+  _balanceText.create(cfg.fontId, "00", Colors::WHITE);
 
   setAmountText();
 
-  _useBackground = backgroundRsrcId;
-
-  if (_useBackground) {
-    _balanceBackground.create(backgroundRsrcId);
+  if (0 != cfg.backgroundRsrcId) {
+    _balanceBackground.create(cfg.backgroundRsrcId);
   }
 
   return SUCCESS;
@@ -61,7 +53,7 @@ void NumberCounter::setAmountText() {
 
 void NumberCounter::draw() {
   // if balance field use own background draw it
-  if (_useBackground) {
+  if (_balanceBackground.isCreated()) {
     _balanceBackground.draw();
   }
   _balanceText.draw();
@@ -169,14 +161,14 @@ void NumberCounter::setTextPosition() {
 
   // set coordinate for text
   _balanceText.setPosition(
-      Position::getCentral(_area, currentWidth, currentHeight));
+      Position::getCentral(_boundaryRect, currentWidth, currentHeight));
 }
 
 void NumberCounter::increase() {
   // while current value is less then _firstGear don't change step value
   // after then slow down it twice for every iteration
   // min value for step is 1
-  if (!(_currentValue < _firstGear) && !(_step /= 2)) {
+  if (! (_currentValue < _firstGear) && ! (_step /= 2)) {
     _step = 1;
   }
 
@@ -185,7 +177,7 @@ void NumberCounter::increase() {
   // start timer if it is not started
   if (!isActiveTimerId(_increaseTimerId)) {
     startTimer(_timerPeriod, _increaseTimerId, TimerType::PULSE,
-               TimerGroup::INTERRUPTIBLE);
+        TimerGroup::INTERRUPTIBLE);
   }
 
   // update text panel
@@ -196,7 +188,7 @@ void NumberCounter::decrease() {
   // while current value is bigger then _firstGear don't change step value
   // after then slow down it twice for every iteration
   // min value for step is 1
-  if (!(_currentValue > _firstGear) && !(_step /= 2)) {
+  if (! (_currentValue > _firstGear) && ! (_step /= 2)) {
     _step = 1;
   }
 
@@ -205,7 +197,7 @@ void NumberCounter::decrease() {
   // start timer if it is not started
   if (!isActiveTimerId(_decreaseTimerId)) {
     startTimer(_timerPeriod, _decreaseTimerId, TimerType::PULSE,
-               TimerGroup::INTERRUPTIBLE);
+        TimerGroup::INTERRUPTIBLE);
   }
 
   // update text panel
@@ -233,16 +225,17 @@ bool NumberCounter::isRotating() const {
   return isActiveTimerId(_increaseTimerId) || isActiveTimerId(_decreaseTimerId);
 }
 
-void NumberCounter::setPosition(const Point& pos) {
-  _area.x = pos.x;
-  _area.y = pos.y;
+void NumberCounter::setPosition(const Point &pos) {
+  _boundaryRect.x = pos.x;
+  _boundaryRect.y = pos.y;
   setTextPosition();
 }
 
 uint64_t NumberCounter::getEndValue() const {
   if (_currentValue != _final) {
-    LOGERR("This NumberCounter is still in progress. The value will be "
-           "able to be fetched, once the rotating finishes!");
+    LOGERR(
+        "This NumberCounter is still in progress. The value will be "
+        "able to be fetched, once the rotating finishes!");
     return 0;
   }
 
@@ -267,8 +260,7 @@ void NumberCounter::onTimeout(const int32_t timerId) {
     else {
       increase();
     }
-  }
-  else if (timerId == _decreaseTimerId) {
+  } else if (timerId == _decreaseTimerId) {
     // if visible amount is equal to real amount stop change it
     if (_currentValue == _final) {
       stopTimer(_decreaseTimerId);
@@ -281,3 +273,5 @@ void NumberCounter::onTimeout(const int32_t timerId) {
     LOGERR("Error, received unsupported timerId: %d", timerId);
   }
 }
+
+
