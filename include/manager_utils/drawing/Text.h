@@ -87,6 +87,8 @@ class Text : public Widget {
   const char* getText() const { return _textContent; }
 
  private:
+  void resetInternals();
+
   /** @brief used to make a deep copy of the input text
    * */
   void copyTextContent(const char* text);

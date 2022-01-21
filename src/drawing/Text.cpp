@@ -9,6 +9,7 @@
 
 // Other libraries headers
 #include "utils/LimitValues.h"
+#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -38,10 +39,7 @@ Text::Text(Text&& movedOther)
   _isDestroyed = movedOther._isDestroyed;
 
   // ownership of resource should be taken from moved instance
-  movedOther._textContent = nullptr;
-  movedOther._fontId = INIT_UINT64_VALUE;
-  movedOther._color = Colors::BLACK;
-  movedOther._isDestroyed = false;
+  movedOther.resetInternals();
 }
 
 // move assignment operator
@@ -60,10 +58,7 @@ Text& Text::operator=(Text&& movedOther) {
     Widget::operator=(std::move(movedOther));
 
     // ownership of resource should be taken from moved instance
-    movedOther._textContent = nullptr;
-    movedOther._fontId = INIT_UINT64_VALUE;
-    movedOther._color = Colors::BLACK;
-    movedOther._isDestroyed = false;
+    movedOther.resetInternals();
   }
 
   return *this;
@@ -94,10 +89,15 @@ void Text::create(const uint64_t fontId,
   _drawParams.pos.x = pos.x;
   _drawParams.pos.y = pos.y;
 
-  copyTextContent(text);
+  const int32_t errCode = gRsrcMgr->loadText(_fontId, text, _color,
+                                _drawParams.textId, _imageWidth, _imageHeight);
+  if (SUCCESS != errCode) {
+    resetInternals();
+    return;
+  }
 
-  gRsrcMgr->loadText(_fontId, _textContent, _color,
-                     _drawParams.textId, _imageWidth, _imageHeight);
+  //copy text after successful creation
+  copyTextContent(text);
 
   /** Explicitly call setFrameRect() method in order to invoke any
    * crop modification (if such is enabled).
@@ -251,3 +251,11 @@ void Text::copyTextContent(const char* text) {
 
   _textContent = tempText;
 }
+
+void Text::resetInternals() {
+  _textContent = nullptr;
+  _fontId = INIT_UINT64_VALUE;
+  _color = Colors::BLACK;
+  _isDestroyed = false;
+}
+
