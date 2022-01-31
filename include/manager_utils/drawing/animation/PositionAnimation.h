@@ -171,7 +171,7 @@ class PositionAnimation : public AnimationBase {
    *  had a remainder for the X axis.
    *  Example: Animation need to move 503 pixels for 5 steps.
    *           This means 5 steps with 100 pixels each with remainderX for
-   *           3 pixels, which will be added to the 5th movement.
+   *           3 pixels, which will be gradually added on each step.
    *  */
   int32_t _remainderX;
 
@@ -179,7 +179,7 @@ class PositionAnimation : public AnimationBase {
    *  had a remainder for the Y axis.
    *  Example: Animation need to move 305 pixels for 3 steps.
    *           This means 5 steps with 101 pixels each with remainderY for
-   *           2 pixels, which will be added to the 5th movement.
+   *           2 pixels, , which will be gradually added on each step.
    *  */
   int32_t _remainderY;
 };

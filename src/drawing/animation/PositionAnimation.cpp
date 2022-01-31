@@ -5,6 +5,7 @@
 
 // C++ system headers
 #include <utility>
+#include <cmath>
 
 // Other libraries headers
 #include "utils/ErrorCode.h"
@@ -284,22 +285,22 @@ void PositionAnimation::executeFiniteForward() {
 
   // move to X axis
   _img->moveRight(_stepX);
+  if (_remainderX) {
+    const auto remainderStep = _remainderX / std::abs(_remainderX);
+    _img->moveRight(remainderStep);
+    _remainderX -= remainderStep;
+  }
 
   // move to Y axis
   _img->moveDown(_stepY);
+  if (_remainderY) {
+    const auto remainderStep = _remainderY / std::abs(_remainderY);
+    _img->moveDown(remainderStep);
+    _remainderY -= remainderStep;
+  }
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
-    // check for X axis remainder
-    if (_remainderX) {
-      _img->moveRight(_remainderX);
-    }
-
-    // check for Y axis remainder
-    if (_remainderY) {
-      _img->moveDown(_remainderY);
-    }
-
     if (PosAnimType::ONE_DIRECTIONAL == _posAnimDir) {
       /** Decrease remaining animation repetitions only if it's
        *                                       ONE_DIRECTIONAL animation
@@ -334,22 +335,22 @@ void PositionAnimation::executeFiniteBackward() {
 
   // move to X axis
   _img->moveLeft(_stepX);
+  if (_remainderX) {
+    const auto remainderStep = _remainderX / std::abs(_remainderX);
+    _img->moveLeft(remainderStep);
+    _remainderX -= remainderStep;
+  }
 
   // move to Y axis
   _img->moveUp(_stepY);
+  if (_remainderY) {
+    const auto remainderStep = _remainderY / std::abs(_remainderY);
+    _img->moveUp(remainderStep);
+    _remainderY -= remainderStep;
+  }
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
-    // check for X axis remainder
-    if (_remainderX) {
-      _img->moveLeft(_remainderX);
-    }
-
-    // check for Y axis remainder
-    if (_remainderY) {
-      _img->moveUp(_remainderY);
-    }
-
     if (PosAnimType::ONE_DIRECTIONAL == _posAnimDir) {
       /** Decrease remaining animation repetitions only if it's
        *                                       ONE_DIRECTIONAL animation
@@ -407,22 +408,22 @@ void PositionAnimation::executeInfiniteForward() {
 
   // move to X axis
   _img->moveRight(_stepX);
+  if (_remainderX) {
+    const auto remainderStep = _remainderX / std::abs(_remainderX);
+    _img->moveRight(remainderStep);
+    _remainderX -= remainderStep;
+  }
 
   // move to Y axis
   _img->moveDown(_stepY);
+  if (_remainderY) {
+    const auto remainderStep = _remainderY / std::abs(_remainderY);
+    _img->moveDown(remainderStep);
+    _remainderY -= remainderStep;
+  }
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
-    // check for X axis remainder
-    if (_remainderX) {
-      _img->moveRight(_remainderX);
-    }
-
-    // check for Y axis remainder
-    if (_remainderY) {
-      _img->moveDown(_remainderY);
-    }
-
     // swap direction to backwards
     _currAnimDir = AnimDir::BACKWARD;
     _numOfSteps = _origNumOfSteps;
@@ -434,22 +435,22 @@ void PositionAnimation::executeInfiniteBackward() {
 
   // move to X axis
   _img->moveLeft(_stepX);
+  if (_remainderX) {
+    const auto remainderStep = _remainderX / std::abs(_remainderX);
+    _img->moveLeft(remainderStep);
+    _remainderX -= remainderStep;
+  }
 
   // move to Y axis
   _img->moveUp(_stepY);
+  if (_remainderY) {
+    const auto remainderStep = _remainderY / std::abs(_remainderY);
+    _img->moveUp(remainderStep);
+    _remainderY -= remainderStep;
+  }
 
   // animation has reached it's end
   if (0 == _numOfSteps) {
-    // check for X axis remainder
-    if (_remainderX) {
-      _img->moveLeft(_remainderX);
-    }
-
-    // check for Y axis remainder
-    if (_remainderY) {
-      _img->moveUp(_remainderY);
-    }
-
     // If there is an callback attached -> execute it
     if (nullptr != _endCb) {
       _endCb->onAnimationCycle();
