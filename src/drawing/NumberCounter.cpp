@@ -8,7 +8,7 @@
 
 // Other libraries headers
 #include "utils/data_type/EnumClassUtils.h"
-#include "utils/common/Position.h"
+#include "utils/drawing/WidgetAligner.h"
 #include "utils/LimitValues.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
@@ -164,9 +164,9 @@ void NumberCounter::setTextPosition() {
     currentHeight = _balanceText.getImageHeight();
   }
 
-  // set coordinate for text
-  _balanceText.setPosition(
-      Position::getCentral(_boundaryRect, currentWidth, currentHeight));
+  const auto centeredPos = WidgetAligner::getPosition(currentWidth,
+      currentHeight, _boundaryRect, WidgetAlignment::CENTER_CENTER);
+  _balanceText.setPosition(centeredPos);
 }
 
 void NumberCounter::increase() {
