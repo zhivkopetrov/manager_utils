@@ -139,15 +139,8 @@ class Fbo : public Widget {
   Fbo();
   ~Fbo();
 
-  // move constructor needed for STL containers empalce_back/push_back
   Fbo(Fbo&& movedOther);
-
-  // move assignment operator implementation
   Fbo& operator=(Fbo&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Fbo(const Fbo& other) = delete;
-  Fbo& operator=(const Fbo& other) = delete;
 
   /** @brief used to create an empty Fbo with the given params.
    *

@@ -14,7 +14,6 @@
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.h"
 
-// default constructor
 PulseAnimation::PulseAnimation()
     : _currScale(MIN_SCALE_FACTOR),
       _scaleStep(MIN_SCALE_FACTOR),
@@ -29,7 +28,6 @@ PulseAnimation::PulseAnimation()
       _currAnimDir(AnimDir::UNKNOWN),
       _alignType(PulseAlignType::UNKNOWN) {}
 
-// move constructor
 PulseAnimation::PulseAnimation(PulseAnimation&& movedOther)
     : AnimationBase(
           std::move(movedOther))  // invoke AnimationBase move constructor
@@ -52,7 +50,6 @@ PulseAnimation::PulseAnimation(PulseAnimation&& movedOther)
   movedOther.resetConfigInternal();
 }
 
-// move assignment operator implementation
 PulseAnimation& PulseAnimation::operator=(PulseAnimation&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

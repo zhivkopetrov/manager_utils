@@ -14,7 +14,6 @@
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.h"
 
-// default constructor
 PositionAnimation::PositionAnimation()
     : _animType(AnimType::UNKNOWN),
       _posAnimDir(PosAnimType::UNKNOWN),
@@ -28,7 +27,6 @@ PositionAnimation::PositionAnimation()
       _remainderX(0),
       _remainderY(0) {}
 
-// move constructor
 PositionAnimation::PositionAnimation(PositionAnimation&& movedOther)
     : AnimationBase(
           std::move(movedOther))  // invoke AnimationBase move constructor
@@ -50,7 +48,6 @@ PositionAnimation::PositionAnimation(PositionAnimation&& movedOther)
   movedOther.resetConfigInternal();
 }
 
-// move assignment operator implementation
 PositionAnimation& PositionAnimation::operator=(
     PositionAnimation&& movedOther) {
   // check for self-assignment

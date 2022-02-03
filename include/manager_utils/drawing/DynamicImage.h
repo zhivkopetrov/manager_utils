@@ -16,15 +16,8 @@ class DynamicImage : public Image {
  public:
   ~DynamicImage();
 
-  // move constructor needed for STL containers emplace_back/push_back
   DynamicImage(DynamicImage&& movedOther);
-
-  // move assignment operator implementation
   DynamicImage& operator=(DynamicImage&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  DynamicImage(const DynamicImage& other) = delete;
-  DynamicImage& operator=(const DynamicImage& other) = delete;
 
   /** @brief used to create resource. This function must be called
    *         in order to operate will the resource. The Image itself only
@@ -55,17 +48,16 @@ class DynamicImage : public Image {
    *
    *          gRsrcMgr->loadResourceOnDemandMultiple(RSRC_IDS);
    *
-   *          This will do is dispatch the CPU specific work
-   *          to other worker threads that are already waiting on
-   *          a condition variable.
+   *          This will dispatch the CPU specific work to other worker threads
+   *          that are already waiting on a condition variable.
    *
    *          The main thread will consume their work and start to
    *          upload to the GPU simultaneously as the worker threads
-   *          are doing their CPU work!
+   *          are doing their CPU work.
    *
    *   NOTE3: If loadResourceOnDemandMultiple() is used it is up to the
    *          developer to call unloadResourceOnDemandMultiple() on the
-   *          same resourceIds;
+   *          same resourceIds after the work is finished;
    *
    *  @param const uint64_t - unique resource ID
    * */

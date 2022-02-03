@@ -39,15 +39,8 @@ class AnimationBase : public TimerClient {
   AnimationBase();
   virtual ~AnimationBase();
 
-  // move constructor needed for STL containers empalce_back/push_back
   AnimationBase(AnimationBase&& movedOther);
-
-  // move assignment operator implementation
   AnimationBase& operator=(AnimationBase&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  AnimationBase(const AnimationBase& other) = delete;
-  AnimationBase& operator=(const AnimationBase& other) = delete;
 
   /** @brief used to start the loaded/configured animation.
    * */

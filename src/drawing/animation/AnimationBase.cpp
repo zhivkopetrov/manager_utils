@@ -14,7 +14,6 @@
 #include "manager_utils/drawing/Fbo.h"
 #include "utils/LimitValues.h"
 
-// default constructor
 AnimationBase::AnimationBase()
     : _img(nullptr), _endCb(nullptr), _isVisible(true), _isCfgComplete(false) {}
 
@@ -27,7 +26,6 @@ AnimationBase::~AnimationBase() {
   }
 }
 
-// move constructor
 AnimationBase::AnimationBase(AnimationBase&& movedOther)
     : TimerClient(std::move(movedOther)),
       _endCb(nullptr),
@@ -44,7 +42,6 @@ AnimationBase::AnimationBase(AnimationBase&& movedOther)
   movedOther.resetConfigInternal();
 }
 
-// move assignment operator implementation
 AnimationBase& AnimationBase::operator=(AnimationBase&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

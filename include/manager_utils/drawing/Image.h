@@ -24,15 +24,8 @@ class Image : public Widget {
   Image();
   ~Image();
 
-  // move constructor needed for STL containers emplace_back/push_back
   Image(Image&& movedOther);
-
-  // move assignment operator implementation
   Image& operator=(Image&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Image(const Image& other) = delete;
-  Image& operator=(const Image& other) = delete;
 
   /** @brief used to create resource. This function must be called
    *         in order to operate will the resource. The Image itself only

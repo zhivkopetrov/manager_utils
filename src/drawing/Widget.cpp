@@ -19,7 +19,6 @@ namespace {
 constexpr auto MAX_SCALE_FACTOR_INTERNAL = MAX_SCALE_FACTOR + 0.01;
 }
 
-// default constructor
 Widget::Widget()
     : _isCreated(false),
       _isVisible(true),
@@ -33,7 +32,6 @@ Widget::Widget()
       _cropRectangle(Rectangle::ZERO),
       _origFrameRect(Rectangle::ZERO) {}
 
-// move constructor
 Widget::Widget(Widget &&movedOther) {
   // take ownership of resources
   _drawParams = movedOther._drawParams;
@@ -53,7 +51,6 @@ Widget::Widget(Widget &&movedOther) {
   movedOther.reset();
 }
 
-// move assignment operator implementation
 Widget &Widget::operator=(Widget &&movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

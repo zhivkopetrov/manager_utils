@@ -14,12 +14,10 @@
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/drawing/Sprite.h"
 
-// default constructor
 Image::Image() : _sprites(nullptr), _isDestroyed(false) {
   _drawParams.widgetType = WidgetType::IMAGE;
 }
 
-// move constructor
 Image::Image(Image&& movedOther) : Widget(std::move(movedOther)) {
   _drawParams.widgetType = WidgetType::IMAGE;
 
@@ -32,7 +30,6 @@ Image::Image(Image&& movedOther) : Widget(std::move(movedOther)) {
   movedOther._isDestroyed = false;
 }
 
-// move assignment operator
 Image& Image::operator=(Image&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

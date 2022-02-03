@@ -19,15 +19,8 @@ class Text : public Widget {
   Text();
   ~Text();
 
-  // move constructor needed for STL containers emplace_back/push_back
   Text(Text&& movedOther);
-
-  // move assignment operator implementation
   Text& operator=(Text&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Text(const Text& other) = delete;
-  Text& operator=(const Text& other) = delete;
 
   /** @brief used to create resource. This function must be called
    *         in order to operate will be resource. The Text itself only

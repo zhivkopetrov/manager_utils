@@ -23,17 +23,9 @@ enum class PulseAlignType : uint8_t {
 class PulseAnimation : public AnimationBase {
  public:
   PulseAnimation();
-  virtual ~PulseAnimation() = default;
 
-  // move constructor needed for STL containers empalce_back/push_back
   PulseAnimation(PulseAnimation&& movedOther);
-
-  // move assignment operator implementation
   PulseAnimation& operator=(PulseAnimation&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  PulseAnimation(const PulseAnimation& other) = delete;
-  PulseAnimation& operator=(const PulseAnimation& other) = delete;
 
   //============== START AnimationBase related functions =================
 

@@ -15,7 +15,6 @@
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationEndCb.h"
 
-// default constructor
 RotationAnimation::RotationAnimation()
     : _posAnimDir(PosAnimType::UNKNOWN),
       _animType(AnimType::UNKNOWN),
@@ -25,7 +24,6 @@ RotationAnimation::RotationAnimation()
       _totalRotAngle(ZERO_ANGLE),
       _animCycleWatchAngle(ZERO_ANGLE) {}
 
-// move constructor
 RotationAnimation::RotationAnimation(RotationAnimation&& movedOther)
     : AnimationBase(
           std::move(movedOther))  // invoke AnimationBase move constructor
@@ -43,7 +41,6 @@ RotationAnimation::RotationAnimation(RotationAnimation&& movedOther)
   movedOther.resetConfigInternal();
 }
 
-// move assignment operator implementation
 RotationAnimation& RotationAnimation::operator=(
     RotationAnimation&& movedOther) {
   // check for self-assignment

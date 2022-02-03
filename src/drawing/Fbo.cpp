@@ -14,7 +14,6 @@
 #include "manager_utils/managers/DrawMgr.h"
 #include "manager_utils/managers/RsrcMgr.h"
 
-// default constructor
 Fbo::Fbo()
     : _clearColor(Colors::BLACK),
       _itemsOffsetX(0),
@@ -25,7 +24,6 @@ Fbo::Fbo()
   _drawParams.widgetType = WidgetType::SPRITE_BUFFER;
 }
 
-// default destructor
 Fbo::~Fbo() {
   // attempt to destroy the Fbo only
   // if it was first created and not destroyed
@@ -34,7 +32,6 @@ Fbo::~Fbo() {
   }
 }
 
-// move constructor
 Fbo::Fbo(Fbo &&movedOther)
     : Widget(std::move(movedOther)), _clearColor(Colors::BLACK) {
   _drawParams.widgetType = WidgetType::SPRITE_BUFFER;

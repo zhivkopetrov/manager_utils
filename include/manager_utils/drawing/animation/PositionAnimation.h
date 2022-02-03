@@ -16,15 +16,8 @@ class PositionAnimation : public AnimationBase {
   PositionAnimation();
   virtual ~PositionAnimation() = default;
 
-  // move constructor needed for STL containers empalce_back/push_back
   PositionAnimation(PositionAnimation&& movedOther);
-
-  // move assignment operator implementation
   PositionAnimation& operator=(PositionAnimation&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  PositionAnimation(const PositionAnimation& other) = delete;
-  PositionAnimation& operator=(const PositionAnimation& other) = delete;
 
   //============== START AnimationBase related functions =================
 

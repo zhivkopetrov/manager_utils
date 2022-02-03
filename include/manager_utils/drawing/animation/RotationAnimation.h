@@ -16,17 +16,9 @@
 class RotationAnimation : public AnimationBase {
  public:
   RotationAnimation();
-  virtual ~RotationAnimation() = default;
 
-  // move constructor needed for STL containers empalce_back/push_back
   RotationAnimation(RotationAnimation&& movedOther);
-
-  // move assignment operator implementation
   RotationAnimation& operator=(RotationAnimation&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  RotationAnimation(const RotationAnimation& other) = delete;
-  RotationAnimation& operator=(const RotationAnimation& other) = delete;
 
   //============== START AnimationBase related functions =================
 

@@ -14,17 +14,9 @@
 class FrameAnimation : public AnimationBase {
  public:
   FrameAnimation();
-  virtual ~FrameAnimation() = default;
 
-  // move constructor needed for STL containers empalce_back/push_back
   FrameAnimation(FrameAnimation&& movedOther);
-
-  // move assignment operator implementation
   FrameAnimation& operator=(FrameAnimation&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  FrameAnimation(const FrameAnimation& other) = delete;
-  FrameAnimation& operator=(const FrameAnimation& other) = delete;
 
   //============== START AnimationBase related functions =================
 

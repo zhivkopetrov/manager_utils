@@ -7,6 +7,7 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/class/NonCopyable.h"
 
 // Own components headers
 #include "sdl_utils/drawing/DrawParams.h"
@@ -15,19 +16,12 @@
 
 /* Common class for graphical Textures.
  * All graphical textures must inherit from Widget */
-class Widget {
+class Widget : public NonCopyable {
 public:
   Widget();
 
-  // move constructor needed for STL containers empalce_back/push_back
   Widget(Widget &&movedOther);
-
-  // move assignment operator implementation
   Widget& operator=(Widget &&movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Widget(const Widget &other) = delete;
-  Widget& operator=(const Widget &other) = delete;
 
   /** @brief apply (draw) the widget to the currently active back buffer
    * */

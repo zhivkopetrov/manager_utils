@@ -14,11 +14,9 @@
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/drawing/Sprite.h"
 
-// move constructor
 DynamicImage::DynamicImage(DynamicImage&& movedOther)
     : Image(std::move(movedOther)) {}
 
-// move assignment operator
 DynamicImage& DynamicImage::operator=(DynamicImage&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

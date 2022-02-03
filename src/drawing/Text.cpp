@@ -15,7 +15,6 @@
 // Own components headers
 #include "manager_utils/managers/RsrcMgr.h"
 
-// default constructor
 Text::Text()
     : _textContent(nullptr),
       _fontId(INIT_UINT64_VALUE),
@@ -24,7 +23,6 @@ Text::Text()
   _drawParams.widgetType = WidgetType::TEXT;
 }
 
-// move constructor
 Text::Text(Text&& movedOther)
     : Widget(std::move(movedOther)),
       _color(Colors::BLACK) {
@@ -42,7 +40,6 @@ Text::Text(Text&& movedOther)
   movedOther.resetInternals();
 }
 
-// move assignment operator
 Text& Text::operator=(Text&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {
