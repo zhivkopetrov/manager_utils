@@ -7,24 +7,18 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/class/NonCopyable.h"
+#include "utils/class/NonMoveable.h"
 
 // Own components headers
 
 // Forward declarations
 class InputEvent;
 
-class MgrBase {
+class MgrBase : public NonCopyable, public NonMoveable {
  public:
   MgrBase() = default;
   virtual ~MgrBase() = default;
-
-  // forbid the copy and move constructors
-  MgrBase(const MgrBase& other) = delete;
-  MgrBase(MgrBase&& other) = delete;
-
-  // forbid the copy and move assignment operators
-  MgrBase& operator=(const MgrBase& other) = delete;
-  MgrBase& operator=(MgrBase&& other) = delete;
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.

@@ -31,15 +31,8 @@ class Music : public SoundWidget {
   Music() = default;
   virtual ~Music();
 
-  // move constructor needed for STL containers emplace_back/push_back
   Music(Music&& movedOther);
-
-  // move assignment operator implementation
   Music& operator=(Music&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Music(const Music& other) = delete;
-  Music& operator=(const Music& other) = delete;
 
   //================ START SoundWidget related functions =================
 

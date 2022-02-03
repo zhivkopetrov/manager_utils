@@ -8,6 +8,7 @@
 
 // Other libraries headers
 #include "sdl_utils/input/TouchEntity.h"
+#include "utils/class/NonCopyable.h"
 #include "utils/drawing/Point.h"
 #include "utils/drawing/Rectangle.h"
 
@@ -18,20 +19,12 @@ class InputEvent;
 
 enum class ScrollerType : uint8_t { UNKNOWN = 0, VERTICAL, HORIZONTAL, MIXED };
 
-class Scroller : public TouchEntity {
+class Scroller : public TouchEntity, public NonCopyable {
  public:
   Scroller();
-  virtual ~Scroller() = default;
 
-  // move constructor
   Scroller(Scroller&& movedOther);
-
-  // move assignment operator implementation
   Scroller& operator=(Scroller&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  Scroller(const Scroller& other) = delete;
-  Scroller& operator=(const Scroller& other) = delete;
 
   //=============== START TouchEntity related functions ==================
 
@@ -39,7 +32,7 @@ class Scroller : public TouchEntity {
    *                                       current frameRectangle or not
    *         NOTE: concrete implementation of TouchEntity function
    *
-   *  @returns bool     - isInside or not
+   *  @returns bool - isInside or not
    * */
   bool containsEvent(const InputEvent& e) final;
 

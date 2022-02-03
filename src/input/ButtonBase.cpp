@@ -11,13 +11,11 @@
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 
-// default constructor
 ButtonBase::ButtonBase()
     : _originalEventRect(Rectangle::UNDEFINED),
       _captureEventRect(Rectangle::UNDEFINED),
       _isCaptureEventRectSet(false) {}
 
-// move constructor
 ButtonBase::ButtonBase(ButtonBase&& movedOther) {
   // take ownership of resources
   _buttonTexture = std::move(movedOther._buttonTexture);
@@ -40,7 +38,6 @@ ButtonBase::ButtonBase(ButtonBase&& movedOther) {
   movedOther._isInputUnlocked = true;
 }
 
-// move assignment operator
 ButtonBase& ButtonBase::operator=(ButtonBase&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

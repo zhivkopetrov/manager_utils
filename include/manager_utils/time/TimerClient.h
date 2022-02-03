@@ -7,23 +7,17 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/class/NonCopyable.h"
 
 // Own components headers
 #include "manager_utils/time/defines/TimerClientDefines.h"
 
-class TimerClient {
+class TimerClient : public NonCopyable {
  public:
   TimerClient();
   virtual ~TimerClient();
 
-  // forbid the copy constructor and copy assignment operator
-  TimerClient(const TimerClient& movedOther) = delete;
-  TimerClient& operator=(TimerClient& movedOther) = delete;
-
-  // move constructor
   TimerClient(TimerClient&& movedOther);
-
-  // move assignment operator
   TimerClient& operator=(TimerClient&& movedOther);
 
   /** @brief Callback on Timer timeout

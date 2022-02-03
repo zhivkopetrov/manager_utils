@@ -7,6 +7,7 @@
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/class/NonCopyable.h"
 
 // Own components headers
 #include "resource_utils/defines/SoundDefines.h"
@@ -16,20 +17,13 @@ class SoundWidgetEndCb;
 
 /* Common class for Audio sounds .
  * All Sound related classes must inherit from SoundWidget */
-class SoundWidget {
+class SoundWidget : public NonCopyable {
  public:
   SoundWidget();
   virtual ~SoundWidget() = default;
 
-  // move constructor needed for STL containers empalce_back/push_back
   SoundWidget(SoundWidget&& movedOther);
-
-  // move assignment operator implementation
   SoundWidget& operator=(SoundWidget&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  SoundWidget(const SoundWidget& other) = delete;
-  SoundWidget& operator=(const SoundWidget& other) = delete;
 
   /** @brief used to create sound resource. This function must be called
    *         in order to operate will the resource. re

@@ -24,14 +24,6 @@ class TimerMgr final : public MgrBase {
   TimerMgr();
   virtual ~TimerMgr();
 
-  // forbid the copy and move constructors
-  TimerMgr(const TimerMgr& other) = delete;
-  TimerMgr(TimerMgr&& other) = delete;
-
-  // forbid the copy and move assignment operators
-  TimerMgr& operator=(const TimerMgr& other) = delete;
-  TimerMgr& operator=(TimerMgr&& other) = delete;
-
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.

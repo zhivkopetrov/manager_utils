@@ -35,6 +35,7 @@
 
 // Other libraries headers
 #include "sdl_utils/input/TouchEntity.h"
+#include "utils/class/NonCopyable.h"
 
 // Own components headers
 #include "manager_utils/drawing/Image.h"
@@ -42,19 +43,12 @@
 // Forward declarations
 class InputEvent;
 
-class ButtonBase : public TouchEntity {
+class ButtonBase : public TouchEntity, public NonCopyable {
  public:
   ButtonBase();
 
-  // move constructor needed for STL containers empalce_back/push_back
   ButtonBase(ButtonBase&& movedOther);
-
-  // move assignment operator implementation
   ButtonBase& operator=(ButtonBase&& movedOther);
-
-  // forbid the copy constructor and copy assignment operator
-  ButtonBase(const ButtonBase& other) = delete;
-  ButtonBase& operator=(const ButtonBase& other) = delete;
 
   virtual ~ButtonBase() = default;
 

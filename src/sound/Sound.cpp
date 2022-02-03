@@ -12,10 +12,8 @@
 // Own components headers
 #include "manager_utils/managers/SoundMgr.h"
 
-// move constructor
 Sound::Sound(Sound&& movedOther) : SoundWidget(std::move(movedOther)) {}
 
-// move assignment operator implementation
 Sound& Sound::operator=(Sound&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

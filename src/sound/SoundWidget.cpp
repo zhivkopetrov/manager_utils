@@ -13,7 +13,6 @@
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/sound/SoundWidgetEndCb.h"
 
-// default constructor
 SoundWidget::SoundWidget()
     : _endCb(nullptr),
       _rsrcId(0),
@@ -22,7 +21,6 @@ SoundWidget::SoundWidget()
       _isCreated(false),
       _isDestroyed(false) {}
 
-// move constructor
 SoundWidget::SoundWidget(SoundWidget&& movedOther) {
   // take ownership of resources
   _endCb = movedOther._endCb;
@@ -36,7 +34,6 @@ SoundWidget::SoundWidget(SoundWidget&& movedOther) {
   movedOther.reset();
 }
 
-// move assignment operator implementation
 SoundWidget& SoundWidget::operator=(SoundWidget&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

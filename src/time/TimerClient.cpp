@@ -21,11 +21,9 @@ constexpr auto RESIZE_STEP = 5;
 constexpr auto MAX_TIMERS = 30;
 }
 
-// default constructor
 TimerClient::TimerClient()
     : _timerIdList(nullptr), _currTimerCount(0), _maxTimersCount(0) {}
 
-// move constructor
 TimerClient::TimerClient(TimerClient&& movedOther) {
   // scan linear and search for a started timers
   for (int32_t i = 0; i < movedOther._maxTimersCount; ++i) {
@@ -48,7 +46,6 @@ TimerClient::TimerClient(TimerClient&& movedOther) {
   movedOther._maxTimersCount = 0;
 }
 
-// move assignment operator
 TimerClient& TimerClient::operator=(TimerClient&& movedOther) {
   if (this != &movedOther) {
     // scan linear and search for a started timers

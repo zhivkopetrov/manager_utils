@@ -17,17 +17,11 @@ class InputEvent;
 
 class RsrcMgr final : public MgrBase, public SDLContainers {
  public:
-  RsrcMgr(const SDLContainersConfig &cfg);
+  RsrcMgr() = delete;
+
+  explicit RsrcMgr(const SDLContainersConfig &cfg);
 
   virtual ~RsrcMgr();
-
-  // forbid the copy and move constructors
-  RsrcMgr(const RsrcMgr& other) = delete;
-  RsrcMgr(RsrcMgr&& other) = delete;
-
-  // forbid the copy and move assignment operators
-  RsrcMgr& operator=(const RsrcMgr& other) = delete;
-  RsrcMgr& operator=(RsrcMgr&& other) = delete;
 
   //================= START MgrBase related functions ====================
 

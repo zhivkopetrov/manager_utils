@@ -22,14 +22,6 @@ class SoundMgr final : public MgrBase {
   SoundMgr();
   virtual ~SoundMgr();
 
-  // forbid the copy and move constructors
-  SoundMgr(const SoundMgr& other) = delete;
-  SoundMgr(SoundMgr&& other) = delete;
-
-  // forbid the copy and move assignment operators
-  SoundMgr& operator=(const SoundMgr& other) = delete;
-  SoundMgr& operator=(SoundMgr&& other) = delete;
-
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.

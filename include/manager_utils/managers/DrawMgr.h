@@ -23,20 +23,11 @@ struct DrawMgrConfig;
 
 class DrawMgr final : public MgrBase {
 public:
-  explicit DrawMgr(const DrawMgrConfig &cfg);
-
-  virtual ~DrawMgr();
-
-  // forbid the default constructor
   DrawMgr() = delete;
 
-  // forbid the copy and move constructors
-  DrawMgr(const DrawMgr &other) = delete;
-  DrawMgr(DrawMgr &&other) = delete;
+  explicit DrawMgr(const DrawMgrConfig &cfg);
 
-  // forbid the copy and move assignment operators
-  DrawMgr& operator=(const DrawMgr &other) = delete;
-  DrawMgr& operator=(DrawMgr &&other) = delete;
+  ~DrawMgr();
 
   //================= START MgrBase related functions ====================
 

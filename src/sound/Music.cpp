@@ -20,10 +20,8 @@ Music::~Music() {
   }
 }
 
-// move constructor
 Music::Music(Music&& movedOther) : SoundWidget(std::move(movedOther)) {}
 
-// move assignment operator implementation
 Music& Music::operator=(Music&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {

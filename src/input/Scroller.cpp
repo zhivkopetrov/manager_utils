@@ -14,7 +14,6 @@
 // Own components headers
 #include "sdl_utils/input/InputEvent.h"
 
-// default constructor
 Scroller::Scroller()
     : _scrollerType(ScrollerType::UNKNOWN),
       _prevPos(Point::UNDEFINED),
@@ -23,7 +22,6 @@ Scroller::Scroller()
       _boundaryRect(Rectangle::ZERO) {
 }
 
-// move constructor
 Scroller::Scroller(Scroller&& movedOther)
     : TouchEntity(std::move(movedOther)),
       _prevPos(Point::UNDEFINED),
@@ -41,7 +39,6 @@ Scroller::Scroller(Scroller&& movedOther)
   movedOther.resetInternalVariables();
 }
 
-// move assignment operator
 Scroller& Scroller::operator=(Scroller&& movedOther) {
   // check for self-assignment
   if (this != &movedOther) {
