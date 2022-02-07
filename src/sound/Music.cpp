@@ -20,9 +20,11 @@ Music::~Music() {
   }
 }
 
-Music::Music(Music&& movedOther) : SoundWidget(std::move(movedOther)) {}
+Music::Music(Music &&movedOther)
+    : SoundWidget(std::move(movedOther)) {
+}
 
-Music& Music::operator=(Music&& movedOther) {
+Music& Music::operator=(Music &&movedOther) {
   // check for self-assignment
   if (this != &movedOther) {
     // implicitly invoke SoundWidget move assignment operator
@@ -34,10 +36,8 @@ Music& Music::operator=(Music&& movedOther) {
 
 void Music::destroy() {
   if (_isDestroyed) {
-    LOGERR(
-        "Warning, trying to destroy already destroyed Music with "
-        "_rsrcId: %#16lX",
-        _rsrcId);
+    LOGERR("Warning, trying to destroy already destroyed Music with "
+           "rsrcId: %#16lX", _rsrcId);
     return;
   }
 
@@ -53,35 +53,47 @@ void Music::destroy() {
 
 void Music::setVolume(const SoundLevel soundLevel) {
   if (SoundLevel::UNKNOWN == soundLevel) {
-    LOGERR(
-        "Error, UNKNOWN soundLevel value detected. "
-        "Will not change volume value.");
+    LOGERR("Error, UNKNOWN soundLevel value detected. "
+           "Will not change volume value.");
     return;
-  } else  // it is valid SoundLevel value
-  {
-    _soundLevel = soundLevel;
-    gSoundMgr->setMusicVolume(_soundLevel);
   }
+
+  _soundLevel = soundLevel;
+  gSoundMgr->setMusicVolume(_soundLevel);
 }
 
 void Music::play(const int32_t loops) {
   gSoundMgr->playLoadedMusic(loops, _endCb);
 }
 
-bool Music::isPlaying() const { return gSoundMgr->isMusicPlaying(); }
+bool Music::isPlaying() const {
+  return gSoundMgr->isMusicPlaying();
+}
 
-void Music::stop() { gSoundMgr->stopLoadedMusic(); }
+void Music::stop() {
+  gSoundMgr->stopLoadedMusic();
+}
 
-bool Music::isPaused() const { return gSoundMgr->isMusicPaused(); }
+bool Music::isPaused() const {
+  return gSoundMgr->isMusicPaused();
+}
 
-void Music::pause() { gSoundMgr->pauseMusic(); }
+void Music::pause() {
+  gSoundMgr->pauseMusic();
+}
 
-void Music::resume() { gSoundMgr->resumeMusic(); }
+void Music::resume() {
+  gSoundMgr->resumeMusic();
+}
 
-void Music::loadMusic() { gSoundMgr->loadMusic(_rsrcId); }
+void Music::loadMusic() {
+  gSoundMgr->loadMusic(_rsrcId);
+}
 
 void Music::unloadMusic() {
   gSoundMgr->trySelfUnloadMusic(_rsrcId, _soundLevel);
 }
 
-void Music::rewind() { gSoundMgr->rewindMusic(); }
+void Music::rewind() {
+  gSoundMgr->rewindMusic();
+}
