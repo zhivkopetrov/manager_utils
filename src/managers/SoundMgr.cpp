@@ -594,11 +594,9 @@ int32_t SoundMgr::setChannelPanning(const int32_t channel,
     return FAILURE;
   }
 
-  if (SUCCESS == err) {
-    // mark that the current channel has requested panning, so later on
-    // the panning could be automatically reseted
-    _panningMap[channel] = 1;
-  }
+  // mark that the current channel has requested panning, so later on
+  // the panning could be automatically reseted
+  _panningMap[channel] = 1;
 
   return SUCCESS;
 }
