@@ -154,6 +154,18 @@ void ButtonBase::setPrevFrame() {
   _buttonTexture.setPrevFrame();
 }
 
+void ButtonBase::setOpacity(const int32_t opacity) {
+  _buttonTexture.setOpacity(opacity);
+}
+
+void ButtonBase::activateAlphaModulation() {
+  _buttonTexture.activateAlphaModulation();
+}
+
+void ButtonBase::deactivateAlphaModulation() {
+  _buttonTexture.deactivateAlphaModulation();
+}
+
 void ButtonBase::moveDown(const int32_t y) {
   _originalEventRect.y += y;
   _buttonTexture.moveDown(y);

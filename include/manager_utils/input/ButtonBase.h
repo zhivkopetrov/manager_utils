@@ -168,6 +168,22 @@ class ButtonBase : public TouchEntity, public NonCopyable {
    * */
   void setPrevFrame();
 
+  /** @brief used to set the _buttonTexture opacity values from (0 - 255),
+   *                      respectively from ZERO_OPACITY to FULL OPACITY
+   *
+   *  @param const int32_t - new Widget opacity
+   * */
+  void setOpacity(const int32_t opacity);
+
+  /** @brief used to enabled alpha modulation (Widget transparency)
+   * */
+  void activateAlphaModulation();
+
+  /** @brief used to deactivate  alpha modulation (Widget transparency)
+   *         for the Widget
+   * */
+  void deactivateAlphaModulation();
+
   /** @brief used to move _buttonTexture vertically.
    *
    *  @param const int32_t - Y coordinate offset
