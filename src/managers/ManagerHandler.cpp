@@ -40,7 +40,7 @@ int32_t ManagerHandler::init(const ManagerHandlerConfig &cfg) {
       return FAILURE;
     }
 
-    LOGG("%s init() passed successfully for %ld ms", _managers[i]->getName(),
+    LOG("%s init() passed successfully for %ld ms", _managers[i]->getName(),
         initTime.getElapsed().toMilliseconds());
   }
 
