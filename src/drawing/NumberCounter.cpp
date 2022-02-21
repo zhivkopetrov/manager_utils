@@ -47,6 +47,8 @@ int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
     }
   }
 
+  _triggerCfg = cfg.triggerCfg;
+
   return SUCCESS;
 }
 
@@ -95,9 +97,7 @@ void NumberCounter::increaseWith(const uint64_t amount,
   // if speed equal to 0 - make change immediately
   if (!_timerPeriod) {
     fastStop();
-  }
-  // else calculate value of step
-  else {
+  } else {
     calculateStep();
   }
 }
@@ -117,9 +117,7 @@ void NumberCounter::decreaseWith(const uint64_t amount,
   // if speed equal to 0 - make change immediately
   if (!_timerPeriod) {
     fastStop();
-  }
-  // else calculate value of step
-  else {
+  } else {
     calculateStep();
   }
 }
@@ -128,7 +126,7 @@ void NumberCounter::calculateStep() {
   // difference between current and final value
   const int64_t diff = _currentValue - _final;
 
-  // step is 4% from difference
+  // step is a 4% difference
   _step = static_cast<uint64_t>(std::abs(diff / 25));
 
   // min step is 1
@@ -181,12 +179,22 @@ void NumberCounter::increase() {
 
   // start timer if it is not started
   if (!isActiveTimerId(_increaseTimerId)) {
-    startTimer(_timerPeriod, _increaseTimerId, TimerType::PULSE,
-        TimerGroup::INTERRUPTIBLE);
+    startTimer(_timerPeriod, _increaseTimerId, TimerType::PULSE);
   }
 
   // update text panel
   setAmountText();
+
+  if (!_triggerCfg.triggerCb ||
+      _wasTriggerCalled ||
+      !_triggerCfg.isIncreasingTrigger) {
+    return;
+  }
+
+  if (_currentValue >= _triggerCfg.value) {
+    _triggerCfg.triggerCb(_triggerCfg.value);
+    _wasTriggerCalled = true;
+  }
 }
 
 void NumberCounter::decrease() {
@@ -201,19 +209,32 @@ void NumberCounter::decrease() {
 
   // start timer if it is not started
   if (!isActiveTimerId(_decreaseTimerId)) {
-    startTimer(_timerPeriod, _decreaseTimerId, TimerType::PULSE,
-        TimerGroup::INTERRUPTIBLE);
+    startTimer(_timerPeriod, _decreaseTimerId, TimerType::PULSE);
   }
 
   // update text panel
   setAmountText();
+
+  if (!_triggerCfg.triggerCb ||
+      _wasTriggerCalled ||
+      _triggerCfg.isIncreasingTrigger) {
+    return;
+  }
+
+  if (_currentValue <= _triggerCfg.value) {
+    _triggerCfg.triggerCb(_triggerCfg.value);
+    _wasTriggerCalled = true;
+  }
 }
 
 void NumberCounter::fastStop() {
-  if (isActiveTimerId(_decreaseTimerId)) {
+  const bool wasDecreasing = isActiveTimerId(_decreaseTimerId);
+  if (wasDecreasing) {
     stopTimer(_decreaseTimerId);
   }
-  if (isActiveTimerId(_increaseTimerId)) {
+
+  const bool wasIncreasing = isActiveTimerId(_increaseTimerId);
+  if (wasIncreasing) {
     stopTimer(_increaseTimerId);
   }
 
@@ -223,6 +244,30 @@ void NumberCounter::fastStop() {
 
     // update text panel
     setAmountText();
+
+    if (!_triggerCfg.triggerCb || _wasTriggerCalled) {
+      return;
+    }
+
+    if (wasIncreasing) {
+      if (!_triggerCfg.isIncreasingTrigger) {
+        return;
+      }
+
+      if (_currentValue >= _triggerCfg.value) {
+        _triggerCfg.triggerCb(_triggerCfg.value);
+        _wasTriggerCalled = true;
+      }
+    } else { //wasDecreasing
+      if (_triggerCfg.isIncreasingTrigger) {
+        return;
+      }
+
+      if (_currentValue <= _triggerCfg.value) {
+        _triggerCfg.triggerCb(_triggerCfg.value);
+        _wasTriggerCalled = true;
+      }
+    }
   }
 }
 
@@ -238,8 +283,8 @@ void NumberCounter::setPosition(const Point &pos) {
 
 uint64_t NumberCounter::getEndValue() const {
   if (_currentValue != _final) {
-    LOGERR(
-        "This NumberCounter is still in progress. The value will be " "able to be fetched, once the rotating finishes!");
+    LOGERR("This NumberCounter is still in progress. The value will be able to "
+           "be fetched, once the rotating finishes!");
     return 0;
   }
 
@@ -254,23 +299,23 @@ void NumberCounter::setTextMaxScalingWidth(const int32_t maxWidth) {
   _balanceText.setMaxScalingWidth(maxWidth);
 }
 
+void NumberCounter::reactivateTrigger() {
+  _wasTriggerCalled = false;
+}
+
 void NumberCounter::onTimeout(const int32_t timerId) {
   if (timerId == _increaseTimerId) {
     // if visible amount is equal to real amount stop change it
     if (_currentValue == _final) {
       stopTimer(_increaseTimerId);
-    }
-    // else increase it again
-    else {
+    } else {
       increase();
     }
   } else if (timerId == _decreaseTimerId) {
     // if visible amount is equal to real amount stop change it
     if (_currentValue == _final) {
       stopTimer(_decreaseTimerId);
-    }
-    // else decrease it again
-    else {
+    } else {
       decrease();
     }
   } else {

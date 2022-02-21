@@ -4,6 +4,7 @@
 // C system headers
 
 // C++ system headers
+#include <functional>
 
 // Other libraries headers
 
@@ -22,19 +23,31 @@ enum class NumberCounterSpeed {
   INSTANT = 0
 };
 
+/** @brief used to a trigger event
+ *
+ *  @param std::function<void(uint64_t) - callback on trigger value reached
+ *  @param value                        - trigger value
+ *  @param isIncreasingTrigger          - should trigger be called on increasing
+ *                                        or decreasing step
+ * */
+struct NumberCounterTriggerConfig {
+  std::function<void(uint64_t)> triggerCb;
+  uint64_t value = 0;
+  bool isIncreasingTrigger = true;
+};
+
 /** @brief used to initialize the credit rotation entity
  *
- *   @param Rectangle   rect        - the number counter bounding rect
- *   @param uint64_t    backgroundRsrcId - unique resource ID for
- *                             background resources (if such is provided)
- *   @param Point backgroundRsrcPos - start pos for background (if any)
+ *   @param Rectangle   rect           - the number counter bounding rect
+ *   @param uint64_t  backgroundRsrcId - unique resource ID for background
+ *                                       resources (if such is provided)
+ *   @param Point backgroundRsrcPos    - start pos for background (if any)
  *                   if Point::UNDEFINED is specified the param will be ignored
- *   @param uint64_t    fontId      - unique font resource ID
- *   @param uint64_t    startValue  - initial value for number
- *   @param int32_t     incTimerId  - timer ID for increase in credit
- *   @param int32_t     decTimerId  - timer ID for decrease in credit
- *
- *   @return int32_t                - error code
+ *   @param uint64_t    fontId         - unique font resource ID
+ *   @param uint64_t    startValue     - initial value for number
+ *   @param int32_t     incTimerId     - timer ID for increase in credit
+ *   @param int32_t     decTimerId     - timer ID for decrease in credit
+ *   @param NumberCounterTriggerConfig - trigger config
  */
 struct NumberCounterConfig {
   Rectangle boundaryRect;
@@ -45,6 +58,7 @@ struct NumberCounterConfig {
   uint64_t startValue = 0;
   int32_t incrTimerId = 0;
   int32_t decrTimerId = 0;
+  NumberCounterTriggerConfig triggerCfg;
 };
 
 class NumberCounter: public TimerClientSpeedAdjustable {
@@ -125,6 +139,8 @@ public:
     return _currentValue;
   }
 
+  void reactivateTrigger();
+
 protected:
   /** @brief Update decreasing value
    *
@@ -176,13 +192,16 @@ protected:
   Text _balanceText;
 
 private:
-  virtual void onTimeout(const int32_t timerId) override;
+  void onTimeout(const int32_t timerId) override;
 
   // rectangle for number area
   Rectangle _boundaryRect;
 
   // background for number area
   Image _balanceBackground;
+
+  NumberCounterTriggerConfig _triggerCfg;
+  bool _wasTriggerCalled = false;
 };
 
 #endif  // MANAGER_UTILS_NUMBERCOUNTER_H_
