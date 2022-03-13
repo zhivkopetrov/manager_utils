@@ -69,7 +69,7 @@ TimerClient& TimerClient::operator=(TimerClient&& movedOther) {
   return *this;
 }
 
-TimerClient::~TimerClient() {
+TimerClient::~TimerClient() noexcept {
   TRACE_ENTRY_EXIT;
 
   // TimerClient is about to be destroyed -> stop all it's timers.

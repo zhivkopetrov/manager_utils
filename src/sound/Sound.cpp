@@ -22,7 +22,7 @@ Sound& Sound::operator=(Sound&& movedOther) {
   return *this;
 }
 
-Sound::~Sound() {
+Sound::~Sound() noexcept {
   // attempt to destroy SoundWidget only if it
   // was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {
