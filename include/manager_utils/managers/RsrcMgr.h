@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_RSRCMGR_H_
 #define MANAGER_UTILS_RSRCMGR_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -21,16 +19,16 @@ class RsrcMgr final : public MgrBase, public SDLContainers {
 
   explicit RsrcMgr(const SDLContainersConfig &cfg);
 
-  virtual ~RsrcMgr();
+  virtual ~RsrcMgr() noexcept;
 
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t init() override;
+  ErrorCode init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -39,9 +37,9 @@ class RsrcMgr final : public MgrBase, public SDLContainers {
    *                successful pass of init() function, even if system
    *                was shutdown correctly.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t recover() override;
+  ErrorCode recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */

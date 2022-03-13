@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/drawing/animation/defines/CommonAnimationStructs.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "utils/LimitValues.h"
@@ -12,7 +10,7 @@
 
 AnimBaseConfig::AnimBaseConfig()
  : externalImage(nullptr),
-   startPos(Point::UNDEFINED),
+   startPos(Points::UNDEFINED),
    startAngle(0.0),
    rsrcId(0),
    timerInterval(0),
@@ -24,7 +22,7 @@ AnimBaseConfig::AnimBaseConfig()
 
 void AnimBaseConfig::reset() {
   externalImage = nullptr;
-  startPos = Point::UNDEFINED;
+  startPos = Points::UNDEFINED;
   startAngle = 0.0;
   rsrcId = 0;
   timerInterval = 0;

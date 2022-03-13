@@ -29,9 +29,7 @@
  *               If it's not overridden the default implementation will be used.
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "sdl_utils/input/TouchEntity.h"
@@ -50,7 +48,7 @@ class ButtonBase : public TouchEntity, public NonCopyable {
   ButtonBase(ButtonBase&& movedOther);
   ButtonBase& operator=(ButtonBase&& movedOther);
 
-  virtual ~ButtonBase() = default;
+  virtual ~ButtonBase() noexcept = default;
 
   /** @brief used to handle user input event down the event hierarchy
    *

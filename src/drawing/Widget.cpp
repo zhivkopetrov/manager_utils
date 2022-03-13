@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/drawing/Widget.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstring>
 
 // Other libraries headers
@@ -29,8 +27,8 @@ Widget::Widget()
       _maxScalingHeight(0),
       _scaleXFactor(MIN_SCALE_FACTOR),
       _scaleYFactor(MIN_SCALE_FACTOR),
-      _cropRectangle(Rectangle::ZERO),
-      _origFrameRect(Rectangle::ZERO) {}
+      _cropRectangle(Rectangles::ZERO),
+      _origFrameRect(Rectangles::ZERO) {}
 
 Widget::Widget(Widget &&movedOther) {
   // take ownership of resources
@@ -98,8 +96,8 @@ void Widget::reset() {
   /** Widget Rectangle::ZERO is chosen over Rectangle::UNDEFINED,
    * because Rectangle::UNDEFINED is a valid draw rectangle.
    * */
-  _cropRectangle = Rectangle::ZERO;
-  _origFrameRect = Rectangle::ZERO;
+  _cropRectangle = Rectangles::ZERO;
+  _origFrameRect = Rectangles::ZERO;
 }
 
 void Widget::activateAlphaModulation() {
@@ -604,7 +602,7 @@ void Widget::setPredefinedRotationCenter(
     const RotationCenterType rotCenterType) {
   switch (rotCenterType) {
   case RotationCenterType::TOP_LEFT:
-    _drawParams.rotCenter = Point::ZERO;
+    _drawParams.rotCenter = Points::ZERO;
     break;
   case RotationCenterType::ORIG_CENTER:
     _drawParams.rotCenter.x = _drawParams.frameRect.w / 2;
@@ -719,7 +717,7 @@ Point Widget::getPredefinedRotationCenter(
   Point rotCenter;
   switch (rotCenterType) {
   case RotationCenterType::TOP_LEFT:
-    rotCenter = Point::ZERO;
+    rotCenter = Points::ZERO;
     break;
   case RotationCenterType::ORIG_CENTER:
     rotCenter.x = _drawParams.frameRect.w / 2;
@@ -827,13 +825,13 @@ void Widget::resetCrop() {
   _drawParams.hasCrop = false;
 
   // reset crop rectangle boundaries
-  _cropRectangle = Rectangle::ZERO;
+  _cropRectangle = Rectangles::ZERO;
 
   // restore initial state of variables
   _drawParams.frameRect = _origFrameRect;
 
   // reset Widgets crop rectangle
-  _drawParams.frameCropRect = Rectangle::ZERO;
+  _drawParams.frameCropRect = Rectangles::ZERO;
 }
 
 void Widget::applyCrop() {
@@ -849,7 +847,7 @@ void Widget::applyCrop() {
      *  checking will catch that it's an empty rectangle and not draw
      *  anything.
      */
-    _drawParams.frameCropRect = Rectangle::ZERO;
+    _drawParams.frameCropRect = Rectangles::ZERO;
 
     return;
   } else  // rectangles have a common intersection
@@ -987,11 +985,10 @@ void Widget::applyScaledCrop() {
      *  checking will catch that it's an empty rectangle and not draw
      *  anything.
      */
-    _drawParams.frameCropRect = Rectangle::ZERO;
+    _drawParams.frameCropRect = Rectangles::ZERO;
 
     return;
-  } else  // rectangles have a common intersection
-  {
+  } else { // rectangles have a common intersection
     /** Apply intersect rectangle dimensions to
      *  frame crop rectangle dimensions
      * */

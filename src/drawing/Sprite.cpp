@@ -1,26 +1,25 @@
 // Corresponding header
 #include "manager_utils/drawing/Sprite.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "utils/Log.h"
 
 // Own components headers
 
-Sprite::Sprite() : _currFrame(0), _maxFrames(0), _rsrcId(0) {}
+Sprite::Sprite()
+    : _currFrame(0), _maxFrames(0), _rsrcId(0) {
+}
 
-Sprite::~Sprite() { deinit(); }
+Sprite::~Sprite() noexcept {
+  deinit();
+}
 
 void Sprite::init(const uint64_t rsrcId,
-                  const std::vector<Rectangle>& spriteData) {
+                  const std::vector<Rectangle> &spriteData) {
   _maxFrames = static_cast<int32_t>(spriteData.size());
-
-  // the default copy constructor should do the job
   _spriteData = spriteData;
-
   _rsrcId = rsrcId;
 }
 
@@ -52,9 +51,8 @@ void Sprite::setPrevFrame() {
   }
 }
 
-void Sprite::addFrame(const Rectangle& frameRect) {
+void Sprite::addFrame(const Rectangle &frameRect) {
   ++_maxFrames;
   _spriteData.emplace_back(frameRect);
 }
-
 

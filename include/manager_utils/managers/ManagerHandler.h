@@ -1,13 +1,12 @@
 #ifndef MANAGER_UTILS_MANAGERHANDLER_H_
 #define MANAGER_UTILS_MANAGERHANDLER_H_
 
-//C system headers
-
-//C++ system headers
+//System headers
 #include <cstdint>
 #include <string>
 
 //Other libraries headers
+#include "utils/ErrorCode.h"
 
 //Own components headers
 
@@ -25,7 +24,7 @@ enum Indexes {
 
 class ManagerHandler {
 public:
-  int32_t init(const ManagerHandlerConfig &cfg);
+  ErrorCode init(const ManagerHandlerConfig &cfg);
 
   /** @brief used to deinitialize all engine managers.
    * */
@@ -40,7 +39,7 @@ public:
   //================== END engine interface functions ====================
 
 private:
-  int32_t allocateManagers(const ManagerHandlerConfig &cfg);
+  ErrorCode allocateManagers(const ManagerHandlerConfig &cfg);
 
   /** @brief used to reset the global manager pointer to nullptr at deinit
    *         so sanity checks could catch possible failures on system

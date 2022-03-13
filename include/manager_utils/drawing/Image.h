@@ -7,9 +7,7 @@
  *  A class used for drawing. It is used as wrapper of the drawing library
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 
@@ -22,7 +20,7 @@ class Sprite;
 class Image : public Widget {
  public:
   Image();
-  ~Image();
+  ~Image() noexcept;
 
   Image(Image&& movedOther);
   Image& operator=(Image&& movedOther);

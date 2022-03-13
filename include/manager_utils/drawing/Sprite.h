@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_SPRITE_H_
 #define MANAGER_UTILS_SPRITE_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 #include <vector>
 
@@ -15,7 +13,7 @@
 class Sprite {
  public:
   Sprite();
-  ~Sprite();
+  ~Sprite() noexcept;
 
   /** @brief used to load spriteData(precise frame Rectangle coordinates)
    *                                                    from resources.bin

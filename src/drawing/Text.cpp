@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/drawing/Text.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstring>
 #include <utility>
 
@@ -61,7 +59,7 @@ Text& Text::operator=(Text&& movedOther) {
   return *this;
 }
 
-Text::~Text() {
+Text::~Text() noexcept {
   // attempt to destroy text only if it's was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {
     destroy();
@@ -86,9 +84,9 @@ void Text::create(const uint64_t fontId,
   _drawParams.pos.x = pos.x;
   _drawParams.pos.y = pos.y;
 
-  const int32_t errCode = gRsrcMgr->loadText(_fontId, text, _color,
+  const auto errCode = gRsrcMgr->loadText(_fontId, text, _color,
                                 _drawParams.textId, _imageWidth, _imageHeight);
-  if (SUCCESS != errCode) {
+  if (ErrorCode::SUCCESS != errCode) {
     resetInternals();
     return;
   }

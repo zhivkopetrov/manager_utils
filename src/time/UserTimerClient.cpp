@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/time/UserTimerClient.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "utils/Log.h"

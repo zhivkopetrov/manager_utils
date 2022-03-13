@@ -1,12 +1,11 @@
 #ifndef MANAGER_UTILS_ROTATIONANIMATION_H_
 #define MANAGER_UTILS_ROTATIONANIMATION_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationBase.h"
@@ -60,11 +59,11 @@ class RotationAnimation : public AnimationBase {
    *  @param const AnimType         - FINITE or INFINITE animation type
    *  @param const double           - total rotation angle until animation stops
    *
-   *  @return int32_t               - error code
+   *  @return ErrorCode             - error code
    * */
-  int32_t configure(const AnimBaseConfig& cfg, const double rotationAngleStep,
+  ErrorCode configure(const AnimBaseConfig& cfg, const double rotationAngleStep,
                     AnimationEndCb* endCb = nullptr,
-                    const Point& rotationCenter = Point::UNDEFINED,
+                    const Point& rotationCenter = Points::UNDEFINED,
                     const PosAnimType posAnimDir = PosAnimType::BI_DIRECTIONAL,
                     const AnimType animType = AnimType::FINITE,
                     const double totalRotationAngle = FULL_ROTATION_ANGLE);

@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/managers/DrawMgr.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "sdl_utils/input/InputEvent.h"
@@ -20,35 +18,35 @@ DrawMgr::DrawMgr(const DrawMgrConfig &cfg)
     : _renderer(nullptr), _maxFrames(0), _config(cfg) {
 }
 
-DrawMgr::~DrawMgr() {
+DrawMgr::~DrawMgr() noexcept {
   TRACE_ENTRY_EXIT;
 }
 
-int32_t DrawMgr::init() {
+ErrorCode DrawMgr::init() {
   TRACE_ENTRY_EXIT;
 
   _renderer = new Renderer;
   if (nullptr == _renderer) {
     LOGERR("Error, bad alloc for _renderer");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
-  if (SUCCESS != _window.init(_config.monitorWindowConfig)) {
+  if (ErrorCode::SUCCESS != _window.init(_config.monitorWindowConfig)) {
     LOGERR("_window.init() failed");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
   _config.rendererConfig.window = _window.getNativeWindow();
 
-  if (SUCCESS != _renderer->init(_config.rendererConfig)) {
+  if (ErrorCode::SUCCESS != _renderer->init(_config.rendererConfig)) {
     LOGERR("_renderer.init() failed");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
-int32_t DrawMgr::recover() {
-  return SUCCESS;
+ErrorCode DrawMgr::recover() {
+  return ErrorCode::SUCCESS;
 }
 
 void DrawMgr::deinit() {
@@ -113,11 +111,11 @@ uint32_t DrawMgr::getTotalWidgetCount() const {
   return _renderer->getTotalWidgetCount_UT();
 }
 
-int32_t DrawMgr::unlockRenderer() {
+ErrorCode DrawMgr::unlockRenderer() {
   return _renderer->unlockRenderer_UT();
 }
 
-int32_t DrawMgr::lockRenderer() {
+ErrorCode DrawMgr::lockRenderer() {
   return _renderer->lockRenderer_UT();
 }
 

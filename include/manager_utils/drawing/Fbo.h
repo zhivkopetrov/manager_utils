@@ -120,9 +120,7 @@
  *     }
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 #include <vector>
 
@@ -137,7 +135,7 @@
 class Fbo : public Widget {
  public:
   Fbo();
-  ~Fbo();
+  ~Fbo() noexcept;
 
   Fbo(Fbo&& movedOther);
   Fbo& operator=(Fbo&& movedOther);
@@ -155,12 +153,12 @@ class Fbo : public Widget {
   void create(const int32_t coordinateX, const int32_t coordinateY,
               const int32_t spriteBufferWidth, const int32_t spriteBufferHeight,
               const double rotationAngle = ZERO_ANGLE,
-              const Point& rotationCenter = Point::UNDEFINED);
+              const Point& rotationCenter = Points::UNDEFINED);
 
   /* override of 6 param create method */
   void create(const Rectangle& dimensions,
               const double rotationAngle = ZERO_ANGLE,
-              const Point& rotationCenter = Point::UNDEFINED);
+              const Point& rotationCenter = Points::UNDEFINED);
 
   /** @brief used to destroy the Fbo
    * */

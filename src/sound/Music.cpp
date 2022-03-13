@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/sound/Music.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers
@@ -12,7 +10,7 @@
 // Own components headers
 #include "manager_utils/managers/SoundMgr.h"
 
-Music::~Music() {
+Music::~Music() noexcept {
   // attempt to destroy SoundWidget only if it
   // was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {

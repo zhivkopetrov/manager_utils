@@ -50,7 +50,7 @@ Image& Image::operator=(Image&& movedOther) {
   return *this;
 }
 
-Image::~Image() {
+Image::~Image() noexcept {
   // attempt to destroy Image only if it's was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {
     Image::destroy();
@@ -59,20 +59,15 @@ Image::~Image() {
 
 void Image::create(const uint64_t rsrcId) {
   if (_isCreated) {
-    LOGERR(
-        "Error, Image with rsrcId: %#16lX already created,"
-        " will not create twice",
-        rsrcId);
+    LOGERR("Error, Image with rsrcId: %#16lX already created,"
+           " will not create twice", rsrcId);
     return;
   }
 
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
-    LOGERR(
-        "Error, getRsrcData failed for rsrcId: %#16lX, "
-        "will not create Image",
-        rsrcId);
-
+  if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
+    LOGERR("Error, getRsrcData failed for rsrcId: %#16lX, "
+           "will not create Image", rsrcId);
     return;
   }
 
@@ -109,10 +104,8 @@ void Image::create(const uint64_t rsrcId) {
 
 void Image::destroy() {
   if (_isDestroyed) {
-    LOGERR(
-        "Warning, trying to destroy already destroyed Image with rsrcId: "
-        "%#16lX",
-        _drawParams.rsrcId);
+    LOGERR("Warning, trying to destroy already destroyed Image with rsrcId: "
+           "%#16lX", _drawParams.rsrcId);
     return;
   }
 
@@ -131,29 +124,21 @@ void Image::destroy() {
 
 void Image::setTexture(const uint64_t rsrcId) {
   if (!_isCreated) {
-    LOGERR(
-        "Error, setTexture() method failed with param rsrcId: %#16lX. "
-        " Reason: Image was not initially created.",
-        rsrcId);
+    LOGERR("Error, setTexture() method failed with param rsrcId: %#16lX. "
+           " Reason: Image was not initially created.", rsrcId);
     return;
   }
 
   if (_drawParams.rsrcId == rsrcId) {
-    LOGERR(
-        "Error, setTexture() called with same rsrcId as the "
-        "original rsrcId: %#16lX held by the Image.",
-        rsrcId);
-
+    LOGERR("Error, setTexture() called with same rsrcId as the "
+           "original rsrcId: %#16lX held by the Image.", rsrcId);
     return;
   }
 
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
-    LOGERR(
-        "Error, getRsrcData failed for rsrcId: %#16lX, "
-        "will not setTexture for Image",
-        rsrcId);
-
+  if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
+    LOGERR("Error, getRsrcData failed for rsrcId: %#16lX, "
+           "will not setTexture for Image", rsrcId);
     return;
   }
 
@@ -231,10 +216,9 @@ void Image::addFrame(const Rectangle& rectFrame) {
 void Image::setManualFrames(const Rectangle* frameRects,
                             const uint32_t rectanglesCount) {
   if (!_isCreated) {
-    LOGERR(
-        "Error, Image with rsrcId: %#16lX already created. "
-        "::setManualFrames() will take no effect",
-        _sprites->getFramesRsrcId());
+    LOGERR("Error, Image with rsrcId: %#16lX already created. "
+           "::setManualFrames() will take no effect",
+           _sprites->getFramesRsrcId());
     return;
   }
 
@@ -257,6 +241,12 @@ void Image::setManualFrames(const Rectangle* frameRects,
   _sprites->init(currRsrcId, rects);
 }
 
-int32_t Image::getFrame() const { return _sprites->getFrame(); }
+int32_t Image::getFrame() const {
+  return _sprites->getFrame();
+}
 
-int32_t Image::getFrameCount() const { return _sprites->getFrameCount(); }
+int32_t Image::getFrameCount() const {
+  return _sprites->getFrameCount();
+}
+
+

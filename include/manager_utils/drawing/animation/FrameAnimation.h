@@ -1,12 +1,11 @@
 #ifndef MANAGER_UTILS_FRAMEANIMATION_H_
 #define MANAGER_UTILS_FRAMEANIMATION_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationBase.h"
@@ -56,12 +55,13 @@ class FrameAnimation : public AnimationBase {
    *  @param const uint16_t        - number of animation repeats
    *                                 if(AnimType::FINITE is used)
    *
-   *  @return int32_t              - error code
+   *  @return ErrorCode            - error code
    * */
-  int32_t configure(const AnimBaseConfig& cfg, AnimationEndCb* endCb = nullptr,
-                    const AnimType animType = AnimType::INFINITE,
-                    const uint16_t repeatIndex = 0,
-                    const uint16_t numberOfRepeats = 1);
+  ErrorCode configure(const AnimBaseConfig& cfg,
+                      AnimationEndCb* endCb = nullptr,
+                      const AnimType animType = AnimType::INFINITE,
+                      const uint16_t repeatIndex = 0,
+                      const uint16_t numberOfRepeats = 1);
 
   /** @brief used to swap the direction of movement for the animation.
    *

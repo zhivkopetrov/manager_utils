@@ -1,18 +1,14 @@
 // Corresponding .h file
 #include "manager_utils/time/TimerClientSpeedAdjustable.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 
 // Own components headers
 #include "manager_utils/managers/TimerMgr.h"
 
-TimerClientSpeedAdjustable::TimerClientSpeedAdjustable() {}
-
-TimerClientSpeedAdjustable::~TimerClientSpeedAdjustable() {}
+TimerClientSpeedAdjustable::~TimerClientSpeedAdjustable() noexcept {}
 
 void TimerClientSpeedAdjustable::startTimer(const int64_t interval,
                                             const int32_t timerId,

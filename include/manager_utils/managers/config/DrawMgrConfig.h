@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_DRAWMGRBASECONFIG_H_
 #define MANAGER_UTILS_DRAWMGRBASECONFIG_H_
 
-//C system headers
-
-//C++ system headers
+//System headers
 
 //Other libraries headers
 #include "sdl_utils/drawing/defines/MonitorDefines.h"

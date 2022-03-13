@@ -1,14 +1,13 @@
 #ifndef MANAGER_UTILS_MGRBASE_H_
 #define MANAGER_UTILS_MGRBASE_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
 #include "utils/class/NonCopyable.h"
 #include "utils/class/NonMoveable.h"
+#include "utils/ErrorCode.h"
 
 // Own components headers
 
@@ -18,14 +17,14 @@ class InputEvent;
 class MgrBase : public NonCopyable, public NonMoveable {
  public:
   MgrBase() = default;
-  virtual ~MgrBase() = default;
+  virtual ~MgrBase() noexcept = default;
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  virtual int32_t init() = 0;
+  virtual ErrorCode init() = 0;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -34,9 +33,9 @@ class MgrBase : public NonCopyable, public NonMoveable {
    *                successful pass of init() function, even if system
    *                was shutdown correctly.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  virtual int32_t recover() = 0;
+  virtual ErrorCode recover() = 0;
 
   /** @brief used to deinitialize the current manager.
    * */

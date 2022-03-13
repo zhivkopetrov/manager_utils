@@ -1,13 +1,10 @@
 // Corresponding header
 #include "manager_utils/drawing/animation/AnimationBase.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -17,7 +14,7 @@
 AnimationBase::AnimationBase()
     : _img(nullptr), _endCb(nullptr), _isVisible(true), _isCfgComplete(false) {}
 
-AnimationBase::~AnimationBase() {
+AnimationBase::~AnimationBase() noexcept {
   if (AnimImageType::INTERNAL == _cfg.animImageType) {
     if (nullptr != _img) {
       delete _img;
@@ -62,8 +59,8 @@ AnimationBase& AnimationBase::operator=(AnimationBase&& movedOther) {
   return *this;
 }
 
-int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
-                                         AnimationEndCb* endCb) {
+ErrorCode AnimationBase::configureInternal(const AnimBaseConfig& cfg,
+                                           AnimationEndCb* endCb) {
   _cfg = cfg;
 
   _endCb = endCb;
@@ -71,7 +68,7 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
   if (AnimImageType::INTERNAL == cfg.animImageType) {
     if (0 == _cfg.rsrcId) {
       LOGERR("Error, rsrcId not provided for animation!");
-      return FAILURE;
+      return ErrorCode::FAILURE;
     }
 
     _img = new Image;
@@ -80,38 +77,32 @@ int32_t AnimationBase::configureInternal(const AnimBaseConfig& cfg,
     _img = cfg.externalImage;
   }
 
-  if (Point::UNDEFINED != _cfg.startPos) {
+  if (Points::UNDEFINED != _cfg.startPos) {
     _img->setPosition(_cfg.startPos);
   } else {
     _cfg.startPos = _img->getPosition();
   }
 
   if (AnimDir::UNKNOWN == _cfg.animDirection) {
-    LOGERR(
-        "Error, animation with rsrcId: %#16lX has AnimDir::UNKNOWN, "
-        "which is forbidden. Consider using AnimDir::FORWARD or "
-        "AnimDir::BACKWARD",
-        _cfg.rsrcId);
-    return FAILURE;
+    LOGERR("Error, animation with rsrcId: %#16lX has AnimDir::UNKNOWN, "
+           "which is forbidden. Consider using AnimDir::FORWARD or "
+           "AnimDir::BACKWARD", _cfg.rsrcId);
+    return ErrorCode::FAILURE;
   }
 
   if (INIT_INT32_VALUE == _cfg.timerId) {
-    LOGERR(
-        "Error, timerId not provided for animation with rsrcId: "
-        "%#16lX",
-        _cfg.rsrcId);
-    return FAILURE;
+    LOGERR("Error, timerId not provided for animation with rsrcId: %#16lX",
+           _cfg.rsrcId);
+    return ErrorCode::FAILURE;
   }
 
   if (20 > _cfg.timerInterval) {
-    LOGERR(
-        "Error, timeInterval of %ld is forbidden. The minimum "
-        "possible timerInterval is 20ms",
-        _cfg.timerInterval);
-    return FAILURE;
+    LOGERR("Error, timeInterval of %ld is forbidden. The minimum "
+           "possible timerInterval is 20ms", _cfg.timerInterval);
+    return ErrorCode::FAILURE;
   }
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
 void AnimationBase::resetConfigInternal() {
@@ -133,10 +124,9 @@ bool AnimationBase::isAnimationActive() const {
   bool isActive = false;
 
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, Animation could not be checked for active status, "
-        "because configuration is incomplete. Consider using "
-        "Animation::configure() first");
+    LOGERR("Error, Animation could not be checked for active status, "
+           "because configuration is incomplete. Consider using "
+           "Animation::configure() first");
   }
 
   if (isActiveTimerId(_cfg.timerId)) {

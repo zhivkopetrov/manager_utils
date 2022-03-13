@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/managers/TimerMgr.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "sdl_utils/input/InputEvent.h"
@@ -28,17 +26,19 @@ TimerMgr::TimerMgr()
 
 }
 
-TimerMgr::~TimerMgr() {
+TimerMgr::~TimerMgr() noexcept {
   TRACE_ENTRY_EXIT;
 }
 
-int32_t TimerMgr::init() {
+ErrorCode TimerMgr::init() {
   TRACE_ENTRY_EXIT;
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
-int32_t TimerMgr::recover() { return SUCCESS; }
+ErrorCode TimerMgr::recover() {
+  return ErrorCode::SUCCESS;
+}
 
 void TimerMgr::deinit() {
   // free dynamically allocated timer data resources
@@ -503,7 +503,7 @@ void TimerMgr::removeTimersInternal() {
           // send signal to TimerClient instance to remove timerId
           // from it's list of managed timers
 
-          if (SUCCESS !=
+          if (ErrorCode::SUCCESS !=
               mapIt->second.tcInstance->removeTimerIdFromList(mapIt->first)) {
             LOGERR(
                 "Warning, internal error in "

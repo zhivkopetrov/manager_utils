@@ -1,12 +1,9 @@
 //Corresponding header
 #include "manager_utils/managers/ManagerHandler.h"
 
-//C system headers
-
-//C++ system headers
+//System headers
 
 //Other libraries headers
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 //Own components headers
@@ -15,36 +12,36 @@
 #include "manager_utils/managers/RsrcMgr.h"
 #include "manager_utils/managers/TimerMgr.h"
 
-int32_t ManagerHandler::init(const ManagerHandlerConfig &cfg) {
-  if (SUCCESS != allocateManagers(cfg)) {
+ErrorCode ManagerHandler::init(const ManagerHandlerConfig &cfg) {
+  if (ErrorCode::SUCCESS != allocateManagers(cfg)) {
     LOGERR("allocateManagers() failed -> Terminating...");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   Time initTime;
   //gDrawMgr should be initialized first, because it contains the renderer
   //Other managers (such as the RsrcMgr) needs it's renderer
   //to load graphical resources
-  if (SUCCESS != _managers[Managers::DRAW_MGR_IDX]->init()) {
+  if (ErrorCode::SUCCESS != _managers[Managers::DRAW_MGR_IDX]->init()) {
     LOGERR("Error in %s init() -> Terminating...",
         _managers[Managers::DRAW_MGR_IDX]->getName());
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   //IMPORTANT: set renderer for SDLContainers
   gRsrcMgr->setRenderer(gDrawMgr->getRenderer());
 
   for (int32_t i = 1; i < Managers::TOTAL_MGRS_COUNT; ++i) {
-    if (SUCCESS != _managers[i]->init()) {
+    if (ErrorCode::SUCCESS != _managers[i]->init()) {
       LOGERR("Error in %s init() -> Terminating...", _managers[i]->getName());
-      return FAILURE;
+      return ErrorCode::FAILURE;
     }
 
     LOG("%s init() passed successfully for %ld ms", _managers[i]->getName(),
         initTime.getElapsed().toMilliseconds());
   }
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
 void ManagerHandler::deinit() {
@@ -71,25 +68,25 @@ void ManagerHandler::process() {
   }
 }
 
-int32_t ManagerHandler::allocateManagers(const ManagerHandlerConfig &cfg) {
+ErrorCode ManagerHandler::allocateManagers(const ManagerHandlerConfig &cfg) {
   //gDrawMgr should be initialized first, because it contains the renderer
   //Other managers may want to load graphical resources
   gDrawMgr = new DrawMgr(cfg.drawMgrCfg);
   if (!gDrawMgr) {
     LOGERR("Error! Bad alloc for DrawMgr class -> Terminating...");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   gRsrcMgr = new RsrcMgr(cfg.sdlContainersCfg);
   if (!gRsrcMgr) {
     LOGERR("Error! Bad alloc for RsrcMgr class -> Terminating...");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   gTimerMgr = new TimerMgr;
   if (!gTimerMgr) {
     LOGERR("Error! Bad alloc for TimerMgr class -> Terminating...");
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   //put global managers into container so they can be easily iterated
@@ -98,7 +95,7 @@ int32_t ManagerHandler::allocateManagers(const ManagerHandlerConfig &cfg) {
   _managers[Managers::RSRC_MGR_IDX] = gRsrcMgr;
   _managers[Managers::TIMER_MGR_IDX] = gTimerMgr;
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
 void ManagerHandler::nullifyGlobalManager(const int32_t managerId) {

@@ -9,7 +9,6 @@
 
 // Other libraries headers
 #include "utils/data_type/FloatingPointUtils.h"
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -64,25 +63,22 @@ RotationAnimation& RotationAnimation::operator=(
   return *this;
 }
 
-int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
-                                     const double rotationAngleStep,
-                                     AnimationEndCb* endCb,
-                                     const Point& rotationCenter,
-                                     const PosAnimType posAnimDir,
-                                     const AnimType animType,
-                                     const double totalRotationAngle) {
-  int32_t err = SUCCESS;
+ErrorCode RotationAnimation::configure(const AnimBaseConfig& cfg,
+                                       const double rotationAngleStep,
+                                       AnimationEndCb* endCb,
+                                       const Point& rotationCenter,
+                                       const PosAnimType posAnimDir,
+                                       const AnimType animType,
+                                       const double totalRotationAngle) {
+  auto err = ErrorCode::SUCCESS;
   RotationAnimation::resetConfigInternal();
-  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
-    LOGERR(
-        "Error, AnimationBase::configureInternal() failed for rsrcId: "
-        "%#16lX",
-        cfg.rsrcId);
-
-    err = FAILURE;
+  if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+    LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
+           "%#16lX", cfg.rsrcId);
+    err = ErrorCode::FAILURE;
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _posAnimDir = posAnimDir;
     _animType = animType;
 
@@ -101,72 +97,63 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
     _rotAngleStep = rotationAngleStep;
     _totalRotAngle = totalRotationAngle;
 
-    if (Point::UNDEFINED != rotationCenter) {
+    if (Points::UNDEFINED != rotationCenter) {
       _img->setRotationCenter(rotationCenter);
     }
 
     if (!FloatingPointUtils::hasSameSign(_rotAngleStep, _totalRotAngle)) {
-      LOGERR(
-          "Error configuration not complete. Reason: provided rotation angle "
-          "(%f) and provided totalRotAngle: (%f) must have the same sign",
-          _rotAngleStep, _totalRotAngle);
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: provided rotation angle"
+             " (%f) and provided totalRotAngle: (%f) must have the same sign",
+             _rotAngleStep, _totalRotAngle);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir &&
         AnimType::INFINITE == animType) {
-      LOGERR(
-          "Error, Rotation animation of type ONE_DIRECTIONAL could not"
-          " be of type INFINITE. Configuration failed.");
-
-      err = FAILURE;
+      LOGERR("Error, Rotation animation of type ONE_DIRECTIONAL could not"
+             " be of type INFINITE. Configuration failed.");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (FloatingPointUtils::areAlmostEqual(ZERO_ANGLE, _rotAngleStep) ||
         FloatingPointUtils::areAlmostEqual(FULL_ROTATION_ANGLE,
                                            _rotAngleStep)) {
-      LOGERR(
-          "Error configuration not complete. Reason: zero or close to "
-          "zero rotationAngleStep provided: %f. Consider using an "
-          "angle > %f and angle < %f degrees.",
-          _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: zero or close to "
+             "zero rotationAngleStep provided: %f. Consider using an "
+             "angle > %f and angle < %f degrees.",
+             _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (FULL_ROTATION_ANGLE < _rotAngleStep) {
-      LOGERR(
-          "Error configuration not complete. Reason: too big "
-          "rotationAngleStep detected: %f\nConsider using an angle "
-          "> %f and angle < %f degrees.",
-          _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: too big "
+             "rotationAngleStep detected: %f\nConsider using an angle "
+             "> %f and angle < %f degrees.",
+             _rotAngleStep, ZERO_ANGLE, FULL_ROTATION_ANGLE);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (AnimType::FINITE == _animType &&
         FloatingPointUtils::areAlmostEqual(ZERO_ANGLE,
                                            totalRotationAngle)) {
-      LOGERR(
-          "Error configuration not complete. Reason: AnimType::FINITE "
-          "provided with totalRotationAngle = %f. Consider using a"
-          "totalRotationAngle value different than %f or change the"
-          "animation type to AnimType::INFINITE.",
-          ZERO_ANGLE, ZERO_ANGLE);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: AnimType::FINITE "
+             "provided with totalRotationAngle = %f. Consider using a"
+             "totalRotationAngle value different than %f or change the"
+             "animation type to AnimType::INFINITE.",
+             ZERO_ANGLE, ZERO_ANGLE);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     // when initial animation direction is set to backwards
     if (AnimDir::BACKWARD == _cfg.animDirection) {
       _img->rotate(-_totalRotAngle);
@@ -175,12 +162,10 @@ int32_t RotationAnimation::configure(const AnimBaseConfig& cfg,
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _isCfgComplete = true;
-  } else  // FAILURE == true
-  {
+  } else { // FAILURE == true
     LOGERR("RotationAnimation configuration failed!");
-
     resetConfigInternal();
   }
 
@@ -201,10 +186,9 @@ void RotationAnimation::resetConfigInternal() {
 
 void RotationAnimation::start() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, RotationAnimation could not be started, because "
-        "configuration is incomplete. Consider using "
-        "RotationAnimation::configure() first");
+    LOGERR("Error, RotationAnimation could not be started, because "
+           "configuration is incomplete. Consider using "
+           "RotationAnimation::configure() first");
     return;
   }
 
@@ -216,10 +200,9 @@ void RotationAnimation::start() {
 
 void RotationAnimation::stop() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, RotationAnimation could not be stopped, because "
-        "configuration is incomplete. Consider using "
-        "RotationAnimation::configure() first");
+    LOGERR("Error, RotationAnimation could not be stopped, because "
+           "configuration is incomplete. Consider using "
+           "RotationAnimation::configure() first");
     return;
   }
 
@@ -247,10 +230,9 @@ void RotationAnimation::stop() {
 
 void RotationAnimation::reset() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, RotationAnimation could not be reset, because "
-        "configuration is incomplete. Consider using "
-        "RotationAnimation::configure() first");
+    LOGERR("Error, RotationAnimation could not be reset, because "
+           "configuration is incomplete. Consider using "
+           "RotationAnimation::configure() first");
     return;
   }
 
@@ -274,52 +256,41 @@ void RotationAnimation::onTimeout(const int32_t timerId) {
     if (AnimType::FINITE == _animType) {
       if (AnimDir::FORWARD == _currAnimDir) {
         executeFiniteForward();
-      } else  // AnimDirection::BACKWARD == cfg.animDirection
-      {
+      } else { // AnimDirection::BACKWARD == cfg.animDirection
         executeFiniteBackward();
       }
-    } else  // INFINITE animations
-    {
+    } else { // INFINITE animations
       if (AnimDir::FORWARD == _currAnimDir) {
         executeInfiniteForward();
-      } else  // AnimDirection::BACKWARD == cfg.animDirection
-      {
+      } else { // AnimDirection::BACKWARD == cfg.animDirection
         executeInfiniteBackward();
       }
     }
   } else {
-    LOGERR(
-        "Invalid timer Id: %d from RotationAnimation with rsrcId: "
-        "%#16lX",
-        timerId, _cfg.rsrcId);
+    LOGERR("Invalid timer Id: %d from RotationAnimation with rsrcId: %#16lX",
+           timerId, _cfg.rsrcId);
   }
 }
 
 void RotationAnimation::advance(const double advanceAngle) {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, RotationAnimation::advance() could not be invoked, "
-        "because configuration is incomplete. Consider using "
-        "RotationAnimation::configure() first");
+    LOGERR("Error, RotationAnimation::advance() could not be invoked, "
+           "because configuration is incomplete. Consider using "
+           "RotationAnimation::configure() first");
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, RotationAnimation::advance() could not be "
-        "invoked, because animation is still running. Wait for it to "
-        "finish and then invoke .advance() method.");
-
+    LOGERR("Error, RotationAnimation::advance() could not be "
+           "invoked, because animation is still running. Wait for it to "
+           "finish and then invoke .advance() method.");
     return;
   }
 
   if (!((ZERO_ANGLE < advanceAngle) && (advanceAngle < _totalRotAngle))) {
-    LOGERR(
-        "Error, RotationAnimation::advance() could not be invoked, "
-        "because provided advanveAngle: %f is not clamped between %f and"
-        " _totalRotAngle: %f",
-        advanceAngle, ZERO_ANGLE, _totalRotAngle);
-
+    LOGERR("Error, RotationAnimation::advance() could not be invoked, "
+           "because provided advanveAngle: %f is not clamped between %f and"
+           " totalRotAngle: %f", advanceAngle, ZERO_ANGLE, _totalRotAngle);
     return;
   }
 
@@ -328,11 +299,9 @@ void RotationAnimation::advance(const double advanceAngle) {
 
   if (!FloatingPointUtils::areAlmostEqual(FP_RATIO,
                                           static_cast<double>(INT_RATIO))) {
-    LOGERR(
-        "Error, RotationAnimation::advanceAngle() called with "
-        "advanceAngle: %f, which is not exact divisible by config's "
-        "_rotAngleStep: %f",
-        advanceAngle, _rotAngleStep);
+    LOGERR("Error, RotationAnimation::advanceAngle() called with "
+           "advanceAngle: %f, which is not exact divisible by config's "
+           "rotAngleStep: %f", advanceAngle, _rotAngleStep);
 
     return;
   }
@@ -351,36 +320,28 @@ void RotationAnimation::advance(const double advanceAngle) {
 
 void RotationAnimation::swapDirection() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, RotationAnimation::swapDirection() could not be "
-        "performed, because configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
-
+    LOGERR("Error, RotationAnimation::swapDirection() could not be "
+           "performed, because configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
   if (PosAnimType::BI_DIRECTIONAL == _posAnimDir) {
-    LOGERR(
-        "Error, RotationAnimation::swapDirection() could not be "
-        "performed, because is configured to be of type BI_DIRECTIONAL");
-
+    LOGERR("Error, RotationAnimation::swapDirection() could not be "
+           "performed, because is configured to be of type BI_DIRECTIONAL");
     return;
   }
 
   if (AnimType::INFINITE == _animType) {
-    LOGERR(
-        "Error, RotationAnimation::swapDirection() could not be "
-        "performed, because is configured to be of type INFINITE");
-
+    LOGERR("Error, RotationAnimation::swapDirection() could not be "
+           "performed, because is configured to be of type INFINITE");
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, RotationAnimation::swapDirection() could not be "
-        "performed, because animation is still running. Wait for it to "
-        "finish and then invoke .swapDirection() method.");
-
+    LOGERR("Error, RotationAnimation::swapDirection() could not be "
+           "performed, because animation is still running. Wait for it to "
+           "finish and then invoke .swapDirection() method.");
     return;
   }
 
@@ -500,8 +461,7 @@ void RotationAnimation::executeInfiniteForward() {
       // swap direction to backward
       _currAnimDir = AnimDir::BACKWARD;
     }
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     /* Check for total rotation angle bypassed */
     if (ZERO_ANGLE <= _currRotAngle) {
       /** Manually set the animation internals, but do not stop the timer.
@@ -550,8 +510,7 @@ void RotationAnimation::executeInfiniteBackward() {
       // swap direction to forward
       _currAnimDir = AnimDir::FORWARD;
     }
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     /* Check for complete animation end */
     if (_currRotAngle <= -_totalRotAngle) {
       /** Manually set the animation internals, but do not stop the timer.

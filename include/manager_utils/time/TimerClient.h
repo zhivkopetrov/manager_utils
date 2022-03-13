@@ -1,13 +1,12 @@
 #ifndef MANAGER_UTILS_TIME_TIMERCLIENT_H_
 #define MANAGER_UTILS_TIME_TIMERCLIENT_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
 #include "utils/class/NonCopyable.h"
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/time/defines/TimerClientDefines.h"
@@ -15,7 +14,7 @@
 class TimerClient : public NonCopyable {
  public:
   TimerClient();
-  virtual ~TimerClient();
+  virtual ~TimerClient() noexcept;
 
   TimerClient(TimerClient&& movedOther);
   TimerClient& operator=(TimerClient&& movedOther);
@@ -111,9 +110,9 @@ class TimerClient : public NonCopyable {
    *
    *  @param const int32_t unique timerID
    *
-   *  @returns int32_t - error code
+   *  @returns ErrorCode - error code
    * */
-  int32_t removeTimerIdFromList(const int32_t timerId);
+  ErrorCode removeTimerIdFromList(const int32_t timerId);
 
  private:
   /** Since TimerClient header will be included a lot -> try not to
@@ -125,9 +124,9 @@ class TimerClient : public NonCopyable {
   /** @brief used to resize the managed timer list for this specific
    *                                              TimerClient instance
    *
-   *  @returns int32_t - error code
+   *  @returns ErrorCode - error code
    * */
-  int32_t resizeTimerList();
+  ErrorCode resizeTimerList();
 
   /** Timer ID list for auto-clean up of timers
    *  (to automatically stop all it's timers when TimerClient instance

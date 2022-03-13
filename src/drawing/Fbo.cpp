@@ -24,7 +24,7 @@ Fbo::Fbo()
   _drawParams.widgetType = WidgetType::SPRITE_BUFFER;
 }
 
-Fbo::~Fbo() {
+Fbo::~Fbo() noexcept {
   // attempt to destroy the Fbo only
   // if it was first created and not destroyed
   if (true == _isCreated && false == _isDestroyed) {
@@ -99,7 +99,7 @@ void Fbo::create(const int32_t coordinateX,
 
   _drawParams.angle = rotationAngle;
 
-  if (Point::UNDEFINED != rotationCenter) {
+  if (Points::UNDEFINED != rotationCenter) {
     _drawParams.rotCenter = rotationCenter;
   }
 
@@ -121,8 +121,7 @@ void Fbo::create(const Rectangle& dimensions,
 
 void Fbo::destroy() {
   if (_isDestroyed) {
-    LOGERR("Warning, trying to destroy a Fbo "
-        "that was already destroyed!");
+    LOGERR("Warning, trying to destroy a Fbo that was already destroyed!");
     return;
   }
 
@@ -144,29 +143,25 @@ void Fbo::destroy() {
 
 void Fbo::unlock() {
   if (!_isCreated) {
-    LOGERR(
-        "Error, Fbo::unlock() failed, because Fbo is "
-        "not yet created. Consider using ::create() method first");
-
+    LOGERR("Error, Fbo::unlock() failed, because Fbo is "
+           "not yet created. Consider using ::create() method first");
     return;
   }
 
   if (!_isLocked) {
-    LOGERR(
-        "Error, trying to unlock a Fbo with ID: %d"
-        "that is already unlocked", _drawParams.spriteBufferId);
+    LOGERR("Error, trying to unlock a Fbo with ID: %d"
+           "that is already unlocked", _drawParams.spriteBufferId);
     return;
   }
 
   _isLocked = false;
 
-  if (SUCCESS != gDrawMgr->unlockRenderer()) {
-    LOGERR(
-        "Error, Fbo with ID: %d can not be unlocked, because some "
-        "other entity is currently in possession of the main renderer lock. "
-        "Usually this is another Fbo. Be sure to lock your "
-        "Fbos when you are done with your work on them.",
-        _drawParams.spriteBufferId);
+  if (ErrorCode::SUCCESS != gDrawMgr->unlockRenderer()) {
+    LOGERR("Error, Fbo with ID: %d can not be unlocked, because some "
+           "other entity is currently in possession of the main renderer lock. "
+           "Usually this is another Fbo. Be sure to lock your "
+           "Fbos when you are done with your work on them.",
+           _drawParams.spriteBufferId);
     return;
   }
 
@@ -178,40 +173,36 @@ void Fbo::unlock() {
 
 void Fbo::lock() {
   if (!_isCreated) {
-    LOGERR(
-        "Error, Fbo::lock() failed, because Fbo is "
-        "not yet created. Consider using ::create() method first");
+    LOGERR("Error, Fbo::lock() failed, because Fbo is "
+           "not yet created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
     LOGERR("Error, trying to lock a Fbo with ID: %d "
-        "that is already locked", _drawParams.spriteBufferId);
+           "that is already locked", _drawParams.spriteBufferId);
     return;
   }
 
   _isLocked = true;
 
-  if (SUCCESS != gDrawMgr->lockRenderer()) {
+  if (ErrorCode::SUCCESS != gDrawMgr->lockRenderer()) {
     LOGERR("gDrawMgr->lockRenderer() failed");
-
     return;
   }
 }
 
 void Fbo::reset() {
   if (!_isCreated) {
-    LOGERR(
-        "Error, Fbo::reset() failed, because Fbo is "
-        "not yet created. Consider using ::create() method first");
+    LOGERR("Error, Fbo::reset() failed, because Fbo is "
+           "not yet created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
-    LOGERR(
-        "Error, Fbo with ID: %d ::reset() failed, because "
-        "Fbo is still locked. Consider using the sequence "
-        "::unlock(), ::reset(), ::lock()", _drawParams.spriteBufferId);
+    LOGERR("Error, Fbo with ID: %d ::reset() failed, because "
+           "Fbo is still locked. Consider using the sequence "
+           "::unlock(), ::reset(), ::lock()", _drawParams.spriteBufferId);
     return;
   }
 
@@ -233,8 +224,7 @@ void Fbo::reset() {
 
 void Fbo::addWidget(const Widget &widget) {
   if (!widget.isCreated()) {
-    LOGERR("Widget is not created, therefore -> "
-        "it could not be added to Fbo");
+    LOGERR("Widget is not created, therefore -> it could not be added to Fbo");
     return;
   }
 
@@ -243,17 +233,15 @@ void Fbo::addWidget(const Widget &widget) {
 
 void Fbo::update() {
   if (!_isCreated) {
-    LOGERR(
-        "Error, SpriteBuffe::update() failed, because Fbo is not yet "
-        "created. Consider using ::create() method first");
+    LOGERR("Error, SpriteBuffe::update() failed, because Fbo is not yet "
+           "created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
-    LOGERR(
-        "Error, Fbo with ID: %d ::update() failed, because "
-        "Fbo is still locked. Consider using the sequence "
-        "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
+    LOGERR("Error, Fbo with ID: %d ::update() failed, because "
+          "Fbo is still locked. Consider using the sequence "
+          "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
 
     return;
   }
@@ -278,27 +266,23 @@ void Fbo::update() {
 void Fbo::updateRanged(const int32_t fromIndex,
                                 const int32_t toIndex) {
   if (!_isCreated) {
-    LOGERR(
-        "Error, Fbo::updateRanged() failed, because "
-        "Fbo is not yet created. Consider using ::create() "
-        "method first");
+    LOGERR("Error, Fbo::updateRanged() failed, because "
+           "Fbo is not yet created. Consider using ::create() method first");
     return;
   }
 
   if (_isLocked) {
-    LOGERR(
-        "Error, Fbo with ID: %d ::updateRanged() failed, because "
-        "Fbo is still locked. Consider using the sequence "
-        "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
+    LOGERR("Error, Fbo with ID: %d ::updateRanged() failed, because "
+           "Fbo is still locked. Consider using the sequence "
+           "::unlock(), ::update(), ::lock()", _drawParams.spriteBufferId);
     return;
   }
 
   const int32_t SIZE = static_cast<int32_t>(_storedItems.size());
 
   if ((0 > fromIndex) || (fromIndex > toIndex) || (toIndex >= SIZE)) {
-    LOGERR(
-        "Error, Illegal ranges provided. fromIndex: %d, toIndex: %d, "
-        "storedItems.size(): %u for Fbo with ID: %d",
+    LOGERR("Error, Illegal ranges provided. fromIndex: %d, toIndex: %d, "
+           "storedItems.size(): %u for Fbo with ID: %d",
         fromIndex, toIndex, SIZE, _drawParams.spriteBufferId);
     return;
   }
@@ -335,11 +319,10 @@ void Fbo::setResetColor(const Color &clearColor) {
   _clearColor = clearColor;
 
   if (!_isAlphaModulationEnabled && _clearColor == Colors::FULL_TRANSPARENT) {
-    LOGERR(
-        "Warning, Fbo::setFboResetColor() invoked "
-        "with ID: %d with Colors::FULL_TRANSPARENT while alpha modulation "
-        "is not enabled. This will result in not proper reset color when "
-        "Fbo::reset() is invoked.", _drawParams.spriteBufferId);
+    LOGERR("Warning, Fbo::setFboResetColor() invoked "
+           "with ID: %d with Colors::FULL_TRANSPARENT while alpha modulation "
+           "is not enabled. This will result in not proper reset color when "
+           "Fbo::reset() is invoked.", _drawParams.spriteBufferId);
   }
 }
 

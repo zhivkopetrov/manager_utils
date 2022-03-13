@@ -1,13 +1,10 @@
 // Corresponding header
 #include "manager_utils/drawing/animation/FrameAnimation.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -58,23 +55,20 @@ FrameAnimation& FrameAnimation::operator=(FrameAnimation&& movedOther) {
   return *this;
 }
 
-int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
-                                  AnimationEndCb* endCb,
-                                  const AnimType animType,
-                                  const uint16_t repeatIndex,
-                                  const uint16_t numberOfRepeats) {
-  int32_t err = SUCCESS;
+ErrorCode FrameAnimation::configure(const AnimBaseConfig& cfg,
+                                    AnimationEndCb* endCb,
+                                    const AnimType animType,
+                                    const uint16_t repeatIndex,
+                                    const uint16_t numberOfRepeats) {
+  auto err = ErrorCode::SUCCESS;
   FrameAnimation::resetConfigInternal();
-  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
-    LOGERR(
-        "Error, AnimationBase::configureInternal() failed for rsrcId: "
-        "%#16lX",
-        cfg.rsrcId);
-
-    err = FAILURE;
+  if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+    LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
+           "%#16lX", cfg.rsrcId);
+    err = ErrorCode::FAILURE;
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (AnimDir::BACKWARD == _cfg.animDirection) {
       _img->setFrame(_img->getFrameCount() - 1);  // set last frame
     }
@@ -89,15 +83,14 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
     _origNumOfRepeats = numberOfRepeats;
 
     if (_repeatIndex >= _origFrameCount) {
-      LOGERR(
-          "Error configuration not complete. Reason: bad repeatIndex: "
-          "%hu, because totalImageFrames: %d",
-          _repeatIndex, _img->getFrameCount());
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: bad repeatIndex: "
+             "%hu, because totalImageFrames: %d",
+            _repeatIndex, _img->getFrameCount());
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _isCfgComplete = true;
   } else  // FAILURE == true
   {
@@ -110,26 +103,22 @@ int32_t FrameAnimation::configure(const AnimBaseConfig& cfg,
 
 void FrameAnimation::swapDirection() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, FrameAnimation::swapDirection() could not be performed, "
-        "because configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
+    LOGERR("Error, FrameAnimation::swapDirection() could not be performed, "
+           "because configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
   if (AnimType::INFINITE == _animType) {
-    LOGERR(
-        "Error, FrameAnimation::swapDirection() could not be "
-        "performed, because it is configured to be of type INFINITE");
+    LOGERR("Error, FrameAnimation::swapDirection() could not be "
+           "performed, because it is configured to be of type INFINITE");
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, FrameAnimation::swapDirection() could not be "
-        "performed, because animation is still running. Wait for it to "
-        "finish and then invoke .swapDirection() method.");
-
+    LOGERR("Error, FrameAnimation::swapDirection() could not be "
+            "performed, because animation is still running. Wait for it to "
+            "finish and then invoke .swapDirection() method.");
     return;
   }
 
@@ -145,51 +134,43 @@ void FrameAnimation::swapDirection() {
 
 void FrameAnimation::setFirstFrame() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, setFirstFrame for FrameAnimation could not be performed,"
-        " because configuration is incomplete. Consider using "
-        "FrameAnimation::configure() first");
+    LOGERR("Error, setFirstFrame for FrameAnimation could not be performed,"
+           " because configuration is incomplete. Consider using "
+           "FrameAnimation::configure() first");
 
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, .setFirstFrame() can not be invoked when "
-        "the animation is running");
+    LOGERR("Error, .setFirstFrame() can not be invoked when "
+           "the animation is running");
     return;
   }
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     _img->setFrame(0);
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     _img->setFrame(_origFrameCount - 1);
   }
 }
 
 void FrameAnimation::setLastFrame() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, setLastFrame for FrameAnimation could not be performed, "
-        "because configuration is incomplete. Consider using "
-        "FrameAnimation::configure() first");
-
+    LOGERR("Error, setLastFrame for FrameAnimation could not be performed, "
+           "because configuration is incomplete. Consider using "
+           "FrameAnimation::configure() first");
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, .setLastFrame() can not be invoked when "
-        "the animation is running");
-
+    LOGERR("Error, .setLastFrame() can not be invoked when "
+           "the animation is running");
     return;
   }
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     _img->setFrame(_origFrameCount - 1);
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     _img->setFrame(0);
   }
 }
@@ -206,11 +187,9 @@ void FrameAnimation::resetConfigInternal() {
 
 void FrameAnimation::start() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, FrameAnimation could not be started, because "
-        "configuration is incomplete. Consider using "
-        "FrameAnimation::configure() first");
-
+    LOGERR("Error, FrameAnimation could not be started, because "
+           "configuration is incomplete. Consider using "
+           "FrameAnimation::configure() first");
     return;
   }
 
@@ -222,11 +201,9 @@ void FrameAnimation::start() {
 
 void FrameAnimation::stop() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, FrameAnimation could not be stopped, because "
-        "configuration is incomplete. Consider using "
-        "FrameAnimation::configure() first");
-
+    LOGERR("Error, FrameAnimation could not be stopped, because "
+           "configuration is incomplete. Consider using "
+           "FrameAnimation::configure() first");
     return;
   }
 
@@ -245,8 +222,7 @@ void FrameAnimation::stop() {
       if (isActiveTimerId(_cfg.timerId)) {
         _endCb->onAnimationEnd();
       }
-    } else  // AnimType::BACKWARD == _cfg.animDirection
-    {
+    } else { // AnimType::BACKWARD == _cfg.animDirection
       if (isActiveTimerId(_cfg.timerId)) {
         _endCb->onAnimationEnd();
       }
@@ -261,10 +237,9 @@ void FrameAnimation::stop() {
 
 void FrameAnimation::reset() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, FrameAnimation could not be reset, because "
-        "configuration is incomplete. Consider using "
-        "FrameAnimation::configure() first");
+    LOGERR("Error, FrameAnimation could not be reset, because "
+           "configuration is incomplete. Consider using "
+           "FrameAnimation::configure() first");
     return;
   }
 
@@ -276,8 +251,7 @@ void FrameAnimation::reset() {
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     _img->setFrame(0);  // set first frame
-  } else               // AnimType::BACKWARD == _cfg.animDirection
-  {
+  } else {              // AnimType::BACKWARD == _cfg.animDirection
     _img->setFrame(_origFrameCount - 1);  // set last frame
   }
 }
@@ -287,24 +261,19 @@ void FrameAnimation::onTimeout(const int32_t timerId) {
     if (AnimType::FINITE == _animType) {
       if (AnimDir::FORWARD == _cfg.animDirection) {
         executeFiniteForward();
-      } else  // AnimDirection::BACKWARD == cfg.animDirection
-      {
+      } else { // AnimDirection::BACKWARD == cfg.animDirection
         executeFiniteBackward();
       }
-    } else  // INFINITE animations
-    {
+    } else { // INFINITE animations
       if (AnimDir::FORWARD == _cfg.animDirection) {
         executeInfiniteForward();
-      } else  // AnimDirection::BACKWARD == cfg.animDirection
-      {
+      } else { // AnimDirection::BACKWARD == cfg.animDirection
         executeInfiniteBackward();
       }
     }
   } else {
-    LOGERR(
-        "Invalid timer Id: %d from RotationAnimation with rsrcId: "
-        "%#16lX",
-        timerId, _cfg.rsrcId);
+    LOGERR("Invalid timer Id: %d from RotationAnimation with rsrcId: %#16lX",
+           timerId, _cfg.rsrcId);
   }
 }
 
@@ -332,8 +301,7 @@ void FrameAnimation::executeFiniteForward() {
       if (nullptr != _endCb) {
         _endCb->onAnimationEnd();
       }
-    } else  // 0 != _numOfRepeats
-    {
+    } else { // 0 != _numOfRepeats
       if (0 != _repeatIndex) {
         // there is repeatIndex set -> use it
         _img->setFrame(_repeatIndex);
@@ -366,8 +334,7 @@ void FrameAnimation::executeFiniteBackward() {
       if (nullptr != _endCb) {
         _endCb->onAnimationEnd();
       }
-    } else  // 0 != _numOfRepeats
-    {
+    } else { // 0 != _numOfRepeats
       if (0 != _repeatIndex) {
         // there is repeatIndex set -> use it
         _img->setFrame(_origFrameCount - _repeatIndex);

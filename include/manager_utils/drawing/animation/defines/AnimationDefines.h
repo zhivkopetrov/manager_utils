@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_ANIMATIONDEFINES_H_
 #define MANAGER_UTILS_ANIMATIONDEFINES_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers

@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_SOUNDWIDGET_H_
 #define MANAGER_UTILS_SOUNDWIDGET_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -20,7 +18,7 @@ class SoundWidgetEndCb;
 class SoundWidget : public NonCopyable {
  public:
   SoundWidget();
-  virtual ~SoundWidget() = default;
+  virtual ~SoundWidget() noexcept = default;
 
   SoundWidget(SoundWidget&& movedOther);
   SoundWidget& operator=(SoundWidget&& movedOther);

@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_TIMERCLIENTSPEEDADJUSTABLE_H
 #define MANAGER_UTILS_TIMERCLIENTSPEEDADJUSTABLE_H
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 
@@ -14,8 +12,7 @@
 
 class TimerClientSpeedAdjustable : public TimerClient {
  public:
-  TimerClientSpeedAdjustable();
-  virtual ~TimerClientSpeedAdjustable();
+  virtual ~TimerClientSpeedAdjustable() noexcept;
 
   /** @brief starts timer with provided arguments
    *    this functions does not return error code for performance reasons

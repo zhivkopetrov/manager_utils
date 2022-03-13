@@ -18,28 +18,29 @@
  *
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 
 class AnimationEndCb {
  public:
   AnimationEndCb() = default;
-  virtual ~AnimationEndCb() = default;
+  virtual ~AnimationEndCb() noexcept = default;
 
   /** @brief this function is invoked on complete cycle of the
    *         concrete animation if(isRepetative flag is set to true).
    *         NOTE: this function will not be invoked if animation is
    *               stopped manually (AnimationBase::stop)
    *
-   *  @return int32_t - user defined error code
+   *  @return ErrorCode - user defined error code
    * */
-  virtual int32_t onAnimationCycle() { return 0; }
+  virtual ErrorCode onAnimationCycle() {
+    return ErrorCode::SUCCESS;
+  }
 
   /** @brief this function is invoked on complete animation end
    *         (all iterations of the animations) of the concrete animation
@@ -47,9 +48,11 @@ class AnimationEndCb {
    *         NOTE: this function will not be invoked if animation is
    *               stopped manually (AnimationBase::stop)
    *
-   *  @return int32_t - user defined error code
+   *  @return ErrorCode - user defined error code
    * */
-  virtual int32_t onAnimationEnd() { return 0; }
+  virtual ErrorCode onAnimationEnd() {
+    return ErrorCode::SUCCESS;
+  }
 };
 
 #endif /* MANAGER_UTILS_ANIMATIONENDCB_H_ */

@@ -18,12 +18,11 @@
  *               anim.start();
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "sdl_utils/drawing/defines/DrawConstants.h"
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/time/TimerClient.h"
@@ -37,7 +36,7 @@ class Fbo;
 class AnimationBase : public TimerClient {
  public:
   AnimationBase();
-  virtual ~AnimationBase();
+  virtual ~AnimationBase() noexcept;
 
   AnimationBase(AnimationBase&& movedOther);
   AnimationBase& operator=(AnimationBase&& movedOther);
@@ -152,9 +151,9 @@ class AnimationBase : public TimerClient {
    *  @param const AnimBaseConfig& - animation configuration
    *  @param AnimationEndCb*       - animation End callback
    *
-   *  @return int32_t              - error code
+   *  @return ErrorCode            - error code
    * */
-  int32_t configureInternal(const AnimBaseConfig& cfg, AnimationEndCb* endCb);
+  ErrorCode configureInternal(const AnimBaseConfig& cfg, AnimationEndCb* endCb);
 
   /** @brief used to completely reset AnimationBase internal variables
    * */

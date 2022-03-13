@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/sound/SoundWidget.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "utils/ErrorCode.h"
@@ -64,12 +62,9 @@ void SoundWidget::create(const uint64_t rsrcId, SoundWidgetEndCb* endCb) {
   _isDestroyed = false;
 
   const SoundData* soundData = nullptr;
-  if (SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR(
-        "Error, getSoundData() failed for rsrcId: %#16lX, "
-        "will not create SoundWidget",
-        rsrcId);
-
+  if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
+    LOGERR("Error, getSoundData() failed for rsrcId: %#16lX, "
+           "will not create SoundWidget", rsrcId);
     return;
   }
 

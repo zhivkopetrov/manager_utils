@@ -1,9 +1,7 @@
 // Corresponding header
 #include "manager_utils/sound/Sound.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers

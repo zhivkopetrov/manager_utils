@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_TEXT_H_
 #define MANAGER_UTILS_TEXT_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -17,7 +15,7 @@
 class Text : public Widget {
  public:
   Text();
-  ~Text();
+  ~Text() noexcept;
 
   Text(Text&& movedOther);
   Text& operator=(Text&& movedOther);
@@ -35,7 +33,7 @@ class Text : public Widget {
   void create(const uint64_t fontId,
               const char* text,
               const Color& color,
-              const Point& pos = Point::ZERO);
+              const Point& pos = Points::ZERO);
 
   /** @brief used to destroy Text texture. In order to use the text
    *         texture again - it needs to be re-created.

@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_DRAWMGR_H_
 #define MANAGER_UTILS_DRAWMGR_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "sdl_utils/drawing/defines/RendererDefines.h"
@@ -27,16 +25,16 @@ public:
 
   explicit DrawMgr(const DrawMgrConfig &cfg);
 
-  ~DrawMgr();
+  virtual ~DrawMgr() noexcept;
 
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t init() override;
+  ErrorCode init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -45,9 +43,9 @@ public:
    *                successful pass of init() function, even if system
    *                was shutdown correctly.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t recover() override;
+  ErrorCode recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
@@ -176,16 +174,16 @@ public:
   /** @brief used to unlock renderer (for more information check
    *                ::unlockRenderer() in thirdparty/sdlutils/Renderer.h)
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t unlockRenderer();
+  ErrorCode unlockRenderer();
 
   /** @brief used to lock renderer (for more information check
    *                ::lockRenderer() in thirdparty/sdlutils/Renderer.h)
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t lockRenderer();
+  ErrorCode lockRenderer();
 
   /** @brief used to limit the frame rate to a specific value.
    *         In order not to over burden the CPU, when the desired FPS

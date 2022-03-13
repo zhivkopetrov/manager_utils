@@ -1,14 +1,11 @@
 // Corresponding header
 #include "manager_utils/input/Scroller.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers
 #include "utils/LimitValues.h"
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -16,18 +13,18 @@
 
 Scroller::Scroller()
     : _scrollerType(ScrollerType::UNKNOWN),
-      _prevPos(Point::UNDEFINED),
+      _prevPos(Points::UNDEFINED),
       _movementX(INIT_INT32_VALUE),
       _movementY(INIT_INT32_VALUE),
-      _boundaryRect(Rectangle::ZERO) {
+      _boundaryRect(Rectangles::ZERO) {
 }
 
 Scroller::Scroller(Scroller&& movedOther)
     : TouchEntity(std::move(movedOther)),
-      _prevPos(Point::UNDEFINED),
+      _prevPos(Points::UNDEFINED),
       _movementX(0),
       _movementY(0),
-      _boundaryRect(Rectangle::ZERO) {
+      _boundaryRect(Rectangles::ZERO) {
   // take ownership of resources
   _scrollerType = movedOther._scrollerType;
   _boundaryRect = movedOther._boundaryRect;
@@ -59,8 +56,8 @@ Scroller& Scroller::operator=(Scroller&& movedOther) {
   return *this;
 }
 
-int32_t Scroller::init(const Rectangle& boundaryRect, const Point& startPos,
-                       const ScrollerType scrollerType) {
+ErrorCode Scroller::init(const Rectangle& boundaryRect, const Point& startPos,
+                         const ScrollerType scrollerType) {
   _boundaryRect = boundaryRect;
   _prevPos = startPos;
   _scrollerType = scrollerType;
@@ -70,7 +67,7 @@ int32_t Scroller::init(const Rectangle& boundaryRect, const Point& startPos,
 
   touchEntityEventRect = &_boundaryRect;
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
 bool Scroller::containsEvent(const InputEvent& e) {
@@ -131,7 +128,7 @@ void Scroller::onLeave([[maybe_unused]]const InputEvent& e) {
 void Scroller::onReturn(const InputEvent& e) { _prevPos = e.pos; }
 
 void Scroller::resetScroller() {
-  _prevPos = Point::UNDEFINED;
+  _prevPos = Points::UNDEFINED;
 
   _movementX = 0;
   _movementY = 0;
@@ -139,8 +136,8 @@ void Scroller::resetScroller() {
 
 void Scroller::resetInternalVariables() {
   _scrollerType = ScrollerType::UNKNOWN;
-  _boundaryRect = Rectangle::ZERO;
-  _prevPos = Point::UNDEFINED;
+  _boundaryRect = Rectangles::ZERO;
+  _prevPos = Points::UNDEFINED;
   _movementX = INIT_INT32_VALUE;
   _movementY = INIT_INT32_VALUE;
 }

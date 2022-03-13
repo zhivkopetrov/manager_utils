@@ -46,7 +46,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
   gRsrcMgr->loadResourceOnDemandSingle(rsrcId);
   const ResourceData* rsrcData = nullptr;
-  if (SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
+  if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
         "Error, getRsrcData failed for rsrcId: %#16lX, "
         "will not create Image",

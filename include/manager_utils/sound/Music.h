@@ -14,9 +14,7 @@
  *                                                         constantly buffered;
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -29,7 +27,7 @@
 class Music : public SoundWidget {
  public:
   Music() = default;
-  virtual ~Music();
+  virtual ~Music() noexcept;
 
   Music(Music&& movedOther);
   Music& operator=(Music&& movedOther);

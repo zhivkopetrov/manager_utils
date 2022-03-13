@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_TIMERMGR_H_
 #define MANAGER_UTILS_TIMERMGR_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 #include <map>
 #include <set>
@@ -22,16 +20,16 @@ class TimerClient;
 class TimerMgr final : public MgrBase {
  public:
   TimerMgr();
-  virtual ~TimerMgr();
+  virtual ~TimerMgr() noexcept;
 
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t init() override;
+  ErrorCode init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -40,9 +38,9 @@ class TimerMgr final : public MgrBase {
    *                successful pass of init() function, even if system
    *                was shutdown correctly.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t recover() override;
+  ErrorCode recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */

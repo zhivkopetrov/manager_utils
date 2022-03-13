@@ -1,15 +1,12 @@
 // Corresponding header
 #include "manager_utils/time/TimerClient.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 #include "utils/debug/FunctionTracer.h"
 #include "utils/debug/StackTrace.h"
 #include "utils/LimitValues.h"
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -134,9 +131,8 @@ void TimerClient::startTimer(const int64_t interval, const int32_t timerId,
       return;
     }
 
-    if (SUCCESS != resizeTimerList()) {
+    if (ErrorCode::SUCCESS != resizeTimerList()) {
       LOGERR("Warning, timer with ID: %d could not be started", timerId);
-
       return;
     }
   }
@@ -257,7 +253,7 @@ int64_t TimerClient::getTimerRemainingInterval(const int32_t timerId) const {
   return gTimerMgr->getTimerRemainingInterval(timerId);
 }
 
-int32_t TimerClient::resizeTimerList() {
+ErrorCode TimerClient::resizeTimerList() {
   TRACE_ENTRY_EXIT;
 
   // increase maximum timers
@@ -267,9 +263,8 @@ int32_t TimerClient::resizeTimerList() {
   int32_t* increasedList = new int32_t[_maxTimersCount];
   if (!increasedList) {
     LOGERR("Error, bad alloc for _timerIdList");
-
     _maxTimersCount -= RESIZE_STEP;
-    return FAILURE;
+    return ErrorCode::FAILURE;
   }
 
   // copy timer id's from the smaller buffer
@@ -290,17 +285,17 @@ int32_t TimerClient::resizeTimerList() {
 
   increasedList = nullptr;
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
-int32_t TimerClient::removeTimerIdFromList(const int32_t timerId) {
+ErrorCode TimerClient::removeTimerIdFromList(const int32_t timerId) {
   for (int32_t i = 0; i < _maxTimersCount; ++i) {
     if (timerId == _timerIdList[i]) {
       --_currTimerCount;                   // lower total timers count
       _timerIdList[i] = INIT_INT32_VALUE;  // free the slot
-      return SUCCESS;                      // and end the search
+      return ErrorCode::SUCCESS;           // and end the search
     }
   }
 
-  return FAILURE;
+  return ErrorCode::FAILURE;
 }

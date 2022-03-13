@@ -1,9 +1,7 @@
 // Corresponding .h file
 #include "manager_utils/drawing/NumberCounter.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <string>
 
 // Other libraries headers
@@ -22,7 +20,7 @@ NumberCounter::NumberCounter()
 
 }
 
-int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
+ErrorCode NumberCounter::init(const NumberCounterConfig &cfg) {
   // set timer IDs
   _increaseTimerId = cfg.incrTimerId;
   _decreaseTimerId = cfg.decrTimerId;
@@ -42,14 +40,14 @@ int32_t NumberCounter::init(const NumberCounterConfig &cfg) {
   if (0 != cfg.backgroundRsrcId) {
     _balanceBackground.create(cfg.backgroundRsrcId);
 
-    if (Point::UNDEFINED != cfg.backgroundRsrcPos) {
+    if (Points::UNDEFINED != cfg.backgroundRsrcPos) {
       _balanceBackground.setPosition(cfg.backgroundRsrcPos);
     }
   }
 
   _triggerCfg = cfg.triggerCfg;
 
-  return SUCCESS;
+  return ErrorCode::SUCCESS;
 }
 
 void NumberCounter::setAmountText() {

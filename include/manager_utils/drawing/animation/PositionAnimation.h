@@ -1,12 +1,11 @@
 #ifndef MANAGER_UTILS_POSITIONANIMATION_H_
 #define MANAGER_UTILS_POSITIONANIMATION_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/drawing/animation/AnimationBase.h"
@@ -63,9 +62,9 @@ class PositionAnimation : public AnimationBase {
    *  @param const uint16_t         - number of animation repeats
    *                                  if(AnimType::FINITE is used)
    *
-   *  @return int32_t               - error code
+   *  @return ErrorCode             - error code
    * */
-  int32_t configure(const AnimBaseConfig& cfg, const Point& endPos,
+  ErrorCode configure(const AnimBaseConfig& cfg, const Point& endPos,
                     const uint16_t numberOfSteps,
                     AnimationEndCb* endCb = nullptr,
                     const PosAnimType posAnimDir = PosAnimType::BI_DIRECTIONAL,

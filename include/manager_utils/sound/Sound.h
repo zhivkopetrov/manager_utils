@@ -25,9 +25,7 @@
  *             to it's own sound resource.
  */
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -38,7 +36,7 @@
 class Sound : public SoundWidget {
  public:
   Sound() = default;
-  virtual ~Sound();
+  virtual ~Sound() noexcept;
 
   Sound(Sound&& movedOther);
   Sound& operator=(Sound&& movedOther);

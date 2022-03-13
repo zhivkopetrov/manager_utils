@@ -8,7 +8,6 @@
 #include <cmath>
 
 // Other libraries headers
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -75,67 +74,56 @@ PositionAnimation& PositionAnimation::operator=(
   return *this;
 }
 
-int32_t PositionAnimation::configure(const AnimBaseConfig& cfg,
-                                     const Point& endPos,
-                                     const uint16_t numberOfSteps,
-                                     AnimationEndCb* endCb,
-                                     const PosAnimType posAnimDir,
-                                     const AnimType animType,
-                                     const uint16_t numberOfRepeats) {
-  int32_t err = SUCCESS;
+ErrorCode PositionAnimation::configure(const AnimBaseConfig& cfg,
+                                       const Point& endPos,
+                                       const uint16_t numberOfSteps,
+                                       AnimationEndCb* endCb,
+                                       const PosAnimType posAnimDir,
+                                       const AnimType animType,
+                                       const uint16_t numberOfRepeats) {
+  auto err = ErrorCode::SUCCESS;
   PositionAnimation::resetConfigInternal();
-  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
-    LOGERR(
-        "Error, AnimationBase::configureInternal() failed for rsrcId: "
-        "%#16lX",
-        cfg.rsrcId);
-
-    err = FAILURE;
+  if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+    LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
+           "%#16lX", cfg.rsrcId);
+    err = ErrorCode::FAILURE;
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (AnimDir::BACKWARD == _cfg.animDirection ||
         AnimDir::UNKNOWN == _cfg.animDirection) {
-      LOGERR(
-          "Error, Position animation direction could only be "
-          "of type FORWARD. Configuration failed.");
-
-      err = FAILURE;
+      LOGERR("Error, Position animation direction could only be "
+             "of type FORWARD. Configuration failed.");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (0 == numberOfSteps) {
-      LOGERR(
-          "Error, Position animation numberOfSteps can not be 0."
-          "Configuration failed.");
-      err = FAILURE;
+      LOGERR("Error, Position animation numberOfSteps can not be 0."
+             "Configuration failed.");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir &&
         AnimType::INFINITE == animType) {
-      LOGERR(
-          "Error, Position animation of type ONE_DIRECTIONAL could not"
-          " be of type INFINITE. Configuration failed.");
-
-      err = FAILURE;
+      LOGERR("Error, Position animation of type ONE_DIRECTIONAL could not"
+             " be of type INFINITE. Configuration failed.");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (PosAnimType::ONE_DIRECTIONAL == posAnimDir && 1 != numberOfRepeats) {
-      LOGERR(
-          "Error, Position animation of type ONE_DIRECTIONAL could not"
-          " have numberOfRepeats different than 1. Configuration "
-          "failed.");
-
-      err = FAILURE;
+      LOGERR("Error, Position animation of type ONE_DIRECTIONAL could not"
+             " have numberOfRepeats different than 1. Configuration failed.");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _animType = animType;
 
     _numOfRepeats = numberOfRepeats;
@@ -159,7 +147,7 @@ int32_t PositionAnimation::configure(const AnimBaseConfig& cfg,
     _currAnimDir = _cfg.animDirection;
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _isCfgComplete = true;
   } else  // FAILURE == true
   {
@@ -188,10 +176,9 @@ void PositionAnimation::resetConfigInternal() {
 
 void PositionAnimation::start() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, PositionAnimation could not be started, because "
-        "configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
+    LOGERR("Error, PositionAnimation could not be started, because "
+           "configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
@@ -203,10 +190,9 @@ void PositionAnimation::start() {
 
 void PositionAnimation::stop() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, PositionAnimation could not be stopped, because "
-        "configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
+    LOGERR("Error, PositionAnimation could not be stopped, because "
+           "configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
@@ -234,10 +220,9 @@ void PositionAnimation::stop() {
 
 void PositionAnimation::reset() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, PositionAnimation could not be reset, because "
-        "configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
+    LOGERR("Error, PositionAnimation could not be reset, because "
+           "configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
@@ -260,20 +245,16 @@ void PositionAnimation::onTimeout(const int32_t timerId) {
       {
         executeFiniteBackward();
       }
-    } else  // INFINITE animations
-    {
+    } else { // INFINITE animations
       if (AnimDir::FORWARD == _currAnimDir) {
         executeInfiniteForward();
-      } else  // AnimDirection::BACKWARD == _currAnimDir
-      {
+      } else { // AnimDirection::BACKWARD == _currAnimDir
         executeInfiniteBackward();
       }
     }
   } else {
-    LOGERR(
-        "Invalid timer Id: %d from PositionAnimation with rsrcId: "
-        "%#16lX",
-        timerId, _cfg.rsrcId);
+    LOGERR("Invalid timer Id: %d from PositionAnimation with rsrcId: %#16lX",
+           timerId, _cfg.rsrcId);
   }
 }
 
@@ -318,8 +299,7 @@ void PositionAnimation::executeFiniteForward() {
         _endCb->onAnimationCycle();
         _endCb->onAnimationEnd();
       }
-    } else  // PosAnimType::BI_DIRECTIONAL == _posAnimDir
-    {
+    } else { // PosAnimType::BI_DIRECTIONAL == _posAnimDir
       // swap direction to backwards
       _currAnimDir = AnimDir::BACKWARD;
       _numOfSteps = _origNumOfSteps;
@@ -368,8 +348,7 @@ void PositionAnimation::executeFiniteBackward() {
         _endCb->onAnimationCycle();
         _endCb->onAnimationEnd();
       }
-    } else  // PosAnimType::BI_DIRECTIONAL == _posAnimDir
-    {
+    } else { // PosAnimType::BI_DIRECTIONAL == _posAnimDir
       if (0 < _numOfRepeats) {
         --_numOfRepeats;  // decrease remaining animation repetitions
       }
@@ -390,8 +369,7 @@ void PositionAnimation::executeFiniteBackward() {
         if (nullptr != _endCb) {
           _endCb->onAnimationEnd();
         }
-      } else  // 0 != _numOfRepeats
-      {
+      } else { // 0 != _numOfRepeats
         // swap direction to forward
         _currAnimDir = AnimDir::FORWARD;
         _numOfSteps = _origNumOfSteps;
@@ -461,36 +439,28 @@ void PositionAnimation::executeInfiniteBackward() {
 
 void PositionAnimation::swapDirection() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, PositionAnimation::swapDirection() could not be "
-        "performed, because configuration is incomplete. Consider using "
-        "PositionAnimation::configure() first");
-
+    LOGERR("Error, PositionAnimation::swapDirection() could not be "
+           "performed, because configuration is incomplete. Consider using "
+           "PositionAnimation::configure() first");
     return;
   }
 
   if (PosAnimType::BI_DIRECTIONAL == _posAnimDir) {
-    LOGERR(
-        "Error, PositionAnimation::swapDirection() could not be "
-        "performed, because is configured to be of type BI_DIRECTIONAL");
-
+    LOGERR("Error, PositionAnimation::swapDirection() could not be "
+           "performed, because is configured to be of type BI_DIRECTIONAL");
     return;
   }
 
   if (AnimType::INFINITE == _animType) {
-    LOGERR(
-        "Error, PositionAnimation::swapDirection() could not be "
-        "performed, because is configured to be of type INFINITE");
-
+    LOGERR("Error, PositionAnimation::swapDirection() could not be "
+           "performed, because is configured to be of type INFINITE");
     return;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    LOGERR(
-        "Error, PositionAnimation::swapDirection() could not be "
-        "performed, because animation is still running. Wait for it to "
-        "finish and then invoke .swapDirection() method.");
-
+    LOGERR("Error, PositionAnimation::swapDirection() could not be "
+           "performed, because animation is still running. Wait for it to "
+           "finish and then invoke .swapDirection() method.");
     return;
   }
 

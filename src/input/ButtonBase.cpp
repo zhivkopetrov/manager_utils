@@ -1,8 +1,6 @@
 #include "manager_utils/input/ButtonBase.h"
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <utility>
 
 // Other libraries headers
@@ -12,8 +10,8 @@
 #include "sdl_utils/input/InputEvent.h"
 
 ButtonBase::ButtonBase()
-    : _originalEventRect(Rectangle::UNDEFINED),
-      _captureEventRect(Rectangle::UNDEFINED),
+    : _originalEventRect(Rectangles::UNDEFINED),
+      _captureEventRect(Rectangles::UNDEFINED),
       _isCaptureEventRectSet(false) {}
 
 ButtonBase::ButtonBase(ButtonBase&& movedOther) {
@@ -31,8 +29,8 @@ ButtonBase::ButtonBase(ButtonBase&& movedOther) {
   }
 
   // ownership of resource should be taken from moved instance
-  movedOther._originalEventRect = Rectangle::UNDEFINED;
-  movedOther._captureEventRect = Rectangle::UNDEFINED;
+  movedOther._originalEventRect = Rectangles::UNDEFINED;
+  movedOther._captureEventRect = Rectangles::UNDEFINED;
   movedOther._isCaptureEventRectSet = false;
   movedOther.touchEntityEventRect = nullptr;
   movedOther._isInputUnlocked = true;
@@ -55,8 +53,8 @@ ButtonBase& ButtonBase::operator=(ButtonBase&& movedOther) {
     }
 
     // ownership of resource should be taken from moved instance
-    movedOther._originalEventRect = Rectangle::UNDEFINED;
-    movedOther._captureEventRect = Rectangle::UNDEFINED;
+    movedOther._originalEventRect = Rectangles::UNDEFINED;
+    movedOther._captureEventRect = Rectangles::UNDEFINED;
     movedOther._isCaptureEventRectSet = false;
     movedOther.touchEntityEventRect = nullptr;
     movedOther._isInputUnlocked = true;
@@ -198,7 +196,7 @@ void ButtonBase::setEventCaptureRect(const Rectangle& rect) {
 
 void ButtonBase::resetEventCaptureRect() {
   _isCaptureEventRectSet = false;
-  _captureEventRect = Rectangle::UNDEFINED;
+  _captureEventRect = Rectangles::UNDEFINED;
 
   /** User defined capture event rectangle is reset ->
    * set TouchEntityEventRect to point to _originalEventRect.

@@ -1,12 +1,11 @@
 #ifndef MANAGER_UTILS_NUMBERCOUNTER_H_
 #define MANAGER_UTILS_NUMBERCOUNTER_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <functional>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 #include "manager_utils/time/TimerClientSpeedAdjustable.h"
@@ -52,7 +51,7 @@ struct NumberCounterTriggerConfig {
 struct NumberCounterConfig {
   Rectangle boundaryRect;
   uint64_t backgroundRsrcId = 0;
-  Point backgroundRsrcPos = Point::UNDEFINED;
+  Point backgroundRsrcPos = Points::UNDEFINED;
   uint64_t fontId = 0;
   Color fontColor = Colors::WHITE;
   uint64_t startValue = 0;
@@ -65,7 +64,7 @@ class NumberCounter: public TimerClientSpeedAdjustable {
 public:
   NumberCounter();
 
-  int32_t init(const NumberCounterConfig& cfg);
+  ErrorCode init(const NumberCounterConfig& cfg);
 
   void draw() const;
 

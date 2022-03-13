@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_SCROLLER_H_
 #define MANAGER_UTILS_SCROLLER_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -11,6 +9,7 @@
 #include "utils/class/NonCopyable.h"
 #include "utils/drawing/Point.h"
 #include "utils/drawing/Rectangle.h"
+#include "utils/ErrorCode.h"
 
 // Own components headers
 
@@ -77,10 +76,10 @@ class Scroller : public TouchEntity, public NonCopyable {
    *  @param const Point        - the start positon of the scroller
    *  @param const ScrollerType - scroller type
    *
-   *  @return int32_t           - error code
+   *  @return ErrorCode         - error code
    * */
-  int32_t init(const Rectangle& boundaryRect, const Point& startPos,
-               const ScrollerType scrollerType = ScrollerType::VERTICAL);
+  ErrorCode init(const Rectangle& boundaryRect, const Point& startPos,
+                 const ScrollerType scrollerType = ScrollerType::VERTICAL);
 
   /** @brief used to acquire relative X coordinate movement since
    *                                                           last frame

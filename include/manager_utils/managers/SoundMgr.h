@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_SOUNDMGR_H_
 #define MANAGER_UTILS_SOUNDMGR_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
@@ -20,16 +18,16 @@ typedef struct _Mix_Music Mix_Music;
 class SoundMgr final : public MgrBase {
  public:
   SoundMgr();
-  virtual ~SoundMgr();
+  virtual ~SoundMgr() noexcept;
 
   //================= START MgrBase related functions ====================
 
   /** @brief used to initialize the current manager.
    *         NOTE: this is the first function that will be called.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t init() override;
+  ErrorCode init() override;
 
   /** @brief used to recover the current manager.
    *         NOTE: this function that will be called if init() passed
@@ -38,9 +36,9 @@ class SoundMgr final : public MgrBase {
    *                successful pass of init() function, even if system
    *                was shutdown correctly.
    *
-   *  @return int32_t - error code
+   *  @return ErrorCode - error code
    * */
-  int32_t recover() override;
+  ErrorCode recover() override;
 
   /** @brief used to deinitialize the current manager.
    * */
@@ -81,9 +79,9 @@ class SoundMgr final : public MgrBase {
    *
    *  @param const uint64_t     - specific resource ID
    *
-   *  @return int32_t           - error code
+   *  @return ErrorCode         - error code
    * */
-  int32_t loadMusic(const uint64_t rsrcId);
+  ErrorCode loadMusic(const uint64_t rsrcId);
 
   /** @brief used to unload a currently loaded music resource if the
    *         provided music ID is the same as the currently loaded one.
@@ -320,18 +318,18 @@ class SoundMgr final : public MgrBase {
    *  @param const uint8_t - left volume value
    *  @param const uint8_t - right volume value
    *
-   *  @return int32_t      - error code
+   *  @return ErrorCode    - error code
    * */
-  int32_t setChannelPanning(const int32_t channel, const uint8_t leftVolume,
-                            const uint8_t rightVolume);
+  ErrorCode setChannelPanning(const int32_t channel, const uint8_t leftVolume,
+                              const uint8_t rightVolume);
 
   /** @brief used to reset the panning of a channel.
    *
    *  @param const int32_t - specific channel Id
    *
-   *  @return int32_t      - error code
+   *  @return ErrorCode    - error code
    * */
-  int32_t resetChannelPanning(const int32_t channel);
+  ErrorCode resetChannelPanning(const int32_t channel);
 
   /** @brief used to determine whether a sound channel is
    *                                                    currently playing

@@ -1,12 +1,11 @@
 #ifndef MANAGER_UTILS_SOUNDWIDGETENDCB_H_
 #define MANAGER_UTILS_SOUNDWIDGETENDCB_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 #include <cstdint>
 
 // Other libraries headers
+#include "utils/ErrorCode.h"
 
 // Own components headers
 
@@ -15,7 +14,7 @@
 class SoundWidgetEndCb {
  public:
   SoundWidgetEndCb() = default;
-  virtual ~SoundWidgetEndCb() = default;
+  virtual ~SoundWidgetEndCb() noexcept = default;
 
   /** @brief this function is invoked on complete sound end
    *                                          (all loops of the sound)
@@ -23,9 +22,11 @@ class SoundWidgetEndCb {
    *         NOTE: this function will be invoked if sound is
    *               stopped manually (Sound::stop)
    *
-   *  @return int32_t - user defined error code
+   *  @return ErrorCode - user defined error code
    * */
-  virtual int32_t onSoundWidgetEnd() { return 0; }
+  virtual ErrorCode onSoundWidgetEnd() {
+    return ErrorCode::SUCCESS;
+  }
 };
 
 #endif /* MANAGER_UTILS_SOUNDWIDGETENDCB_H_ */

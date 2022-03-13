@@ -1,9 +1,7 @@
 #ifndef MANAGER_UTILS_DYNAMICIMAGE_H_
 #define MANAGER_UTILS_DYNAMICIMAGE_H_
 
-// C system headers
-
-// C++ system headers
+// System headers
 
 // Other libraries headers
 

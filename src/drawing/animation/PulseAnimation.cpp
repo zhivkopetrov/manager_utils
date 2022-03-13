@@ -8,7 +8,6 @@
 
 // Other libraries headers
 #include "utils/data_type/FloatingPointUtils.h"
-#include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
 // Own components headers
@@ -75,25 +74,22 @@ PulseAnimation& PulseAnimation::operator=(PulseAnimation&& movedOther) {
   return *this;
 }
 
-int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
-                                  const double minScale,
-                                  const uint8_t numberOfShrinkSteps,
-                                  const PulseAlignType alignType,
-                                  AnimationEndCb* endCb,
-                                  const AnimType animType,
-                                  const uint16_t numberOfRepeats) {
-  int32_t err = SUCCESS;
+ErrorCode PulseAnimation::configure(const AnimBaseConfig& cfg,
+                                    const double minScale,
+                                    const uint8_t numberOfShrinkSteps,
+                                    const PulseAlignType alignType,
+                                    AnimationEndCb* endCb,
+                                    const AnimType animType,
+                                    const uint16_t numberOfRepeats) {
+  auto err = ErrorCode::SUCCESS;
   PulseAnimation::resetConfigInternal();
-  if (SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
-    LOGERR(
-        "Error, AnimationBase::configureInternal() failed for rsrcId: "
-        "%#16lX",
-        cfg.rsrcId);
-
-    err = FAILURE;
+  if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
+    LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
+           "%#16lX", cfg.rsrcId);
+    err = ErrorCode::FAILURE;
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _animType = animType;
 
     _currAnimDir = cfg.animDirection;
@@ -112,65 +108,55 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
     _origImgHeight = _img->getFrameHeight();
 
     if (MIN_SCALE_FACTOR > minScale || MAX_SCALE_FACTOR < minScale) {
-      LOGERR(
-          "Error configuration not complete. Reason: Invalid minScale "
-          "param provided: %f. Consider using a value in "
-          "range %f - %f(non-inclusive)",
-          minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: Invalid minScale "
+             "param provided: %f. Consider using a value in "
+             "range %f - %f(non-inclusive)",
+             minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (FloatingPointUtils::areAlmostEqual(MIN_SCALE_FACTOR, minScale) ||
         FloatingPointUtils::areAlmostEqual(MAX_SCALE_FACTOR, minScale)) {
-      LOGERR(
-          "Error configuration not complete. Reason: Invalid minScale "
-          "param provided: %f. Consider using a value in "
-          "range %f - %f(non-inclusive)",
-          minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: Invalid minScale "
+             "param provided: %f. Consider using a value in "
+             "range %f - %f(non-inclusive)",
+              minScale, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if (MAX_SHRINK_STEPS < numberOfShrinkSteps || 0 >= numberOfShrinkSteps) {
-      LOGERR(
-          "Error configuration not complete. Reason: invalid value "
-          "%hhu for numberOfShrinkSteps. Valid range is "
-          "1 - 200(inclusive)",
-          numberOfShrinkSteps);
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: invalid value "
+             "%hhu for numberOfShrinkSteps. Valid range is "
+             "1 - %d(inclusive)", numberOfShrinkSteps, MAX_SHRINK_STEPS);
+      err = ErrorCode::FAILURE;
     } else {
       _scaleStep = (MAX_SCALE_FACTOR - _minScale) / numberOfShrinkSteps;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     if ((AnimDir::BACKWARD == cfg.animDirection) &&
         (PulseAlignType::TOP_LEFT == _alignType)) {
-      LOGERR(
-          "Error configuration not complete. Reason: PulseAnimation "
-          "could not be of type AnimDir::BACKWARD and "
-          "PulseAlignType::TOP_LEFT at the same time. Consider using "
-          "PulseAlignType::CENTER");
-
-      err = FAILURE;
+      LOGERR("Error configuration not complete. Reason: PulseAnimation "
+             "could not be of type AnimDir::BACKWARD and "
+             "PulseAlignType::TOP_LEFT at the same time. Consider using "
+             "PulseAlignType::CENTER");
+      err = ErrorCode::FAILURE;
     }
   }
 
-  if (SUCCESS == err) {
+  if (ErrorCode::SUCCESS == err) {
     _isCfgComplete = true;
     _img->activateScaling();
 
     if (AnimDir::FORWARD == _cfg.animDirection) {
       _currScale = MAX_SCALE_FACTOR;
       _img->setScale(_currScale);
-    } else  // AnimDir::BACKWARD == _cfg.animDirection
-    {
+    } else { // AnimDir::BACKWARD == _cfg.animDirection
       _currScale = _minScale;
       _img->setScale(_currScale);
 
@@ -178,8 +164,7 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
         centerImage();
       }
     }
-  } else  // FAILURE == true
-  {
+  } else { // FAILURE == true
     LOGERR("PulseAnimation configuration failed!");
     resetConfigInternal();
   }
@@ -189,10 +174,9 @@ int32_t PulseAnimation::configure(const AnimBaseConfig& cfg,
 
 void PulseAnimation::start() {
   if (false == _isCfgComplete) {
-    LOGERR(
-        "Error, PulseAnimation could not be started, because "
-        "configuration is incomplete. Consider using "
-        "PulseAnimation::configure() first");
+    LOGERR("Error, PulseAnimation could not be started, because "
+           "configuration is incomplete. Consider using "
+           "PulseAnimation::configure() first");
     return;
   }
 
@@ -250,8 +234,7 @@ void PulseAnimation::reset() {
 
   if (AnimDir::FORWARD == _cfg.animDirection) {
     resetScale = MAX_SCALE_FACTOR;
-  } else  // AnimDir::BACKWARD == _cfg.animDirection
-  {
+  } else { // AnimDir::BACKWARD == _cfg.animDirection
     resetScale = _minScale;
   }
 
@@ -276,12 +259,10 @@ void PulseAnimation::onTimeout(const int32_t timerId) {
       {
         executeFiniteBackward();
       }
-    } else  // INFINITE animations
-    {
+    } else { // INFINITE animations
       if (AnimDir::FORWARD == _currAnimDir) {
         executeInfiniteForward();
-      } else  // AnimDirection::BACKWARD == _currAnimDir
-      {
+      } else { // AnimDirection::BACKWARD == _currAnimDir
         executeInfiniteBackward();
       }
     }
@@ -290,10 +271,8 @@ void PulseAnimation::onTimeout(const int32_t timerId) {
       centerImage();
     }
   } else {
-    LOGERR(
-        "Invalid timer Id: %d from PulseAnimation with rsrcId: "
-        "%#16lX",
-        timerId, _cfg.rsrcId);
+    LOGERR("Invalid timer Id: %d from PulseAnimation with rsrcId: %#16lX",
+           timerId, _cfg.rsrcId);
   }
 }
 
@@ -346,8 +325,7 @@ void PulseAnimation::executeFiniteBackward() {
       if (nullptr != _endCb) {
         _endCb->onAnimationEnd();
       }
-    } else  // 0 != _numOfRepeats
-    {
+    } else { // 0 != _numOfRepeats
       // manually set the value to _minScale
       // to get rid of accumulated rounding error
       _currScale = MAX_SCALE_FACTOR;
