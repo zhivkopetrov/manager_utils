@@ -239,7 +239,7 @@ void Text::copyTextContent(const char* text) {
   }
 
   char* tempText = new char[INPUT_TEXT_SIZE + 1];  //+1 for the terminator
-  strncpy(tempText, text, INPUT_TEXT_SIZE);
+  memcpy(tempText, text, INPUT_TEXT_SIZE);
 
   // strncpy should be OK, but just to be sure
   tempText[INPUT_TEXT_SIZE] = '\0';
