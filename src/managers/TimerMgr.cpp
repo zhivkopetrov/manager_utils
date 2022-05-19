@@ -16,11 +16,6 @@
 
 TimerMgr* gTimerMgr = nullptr;
 
-typedef std::map<int32_t, TimerData>::iterator _timerMapIt;
-typedef std::map<int32_t, TimerData>::const_iterator _timerMapConstIt;
-
-typedef std::set<int32_t>::iterator _removeTimerSetIt;
-
 TimerMgr::TimerMgr()
     : _timerSpeed(TimerSpeed::NORMAL), _isTimerMgrPaused(false) {
 
@@ -43,7 +38,7 @@ ErrorCode TimerMgr::recover() {
 void TimerMgr::deinit() {
   // free dynamically allocated timer data resources
   // no need to erase the elemenets -> the map destructor will do it
-  for (_timerMapIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
+  for (auto it = _timerMap.begin(); it != _timerMap.end(); ++it) {
     if (TimerStructure::USER_DEFINED == it->second.timerStructure) {
       // free dynamically allocated resources if free func is set
       if (nullptr != it->second.freeFunc) {
@@ -61,7 +56,7 @@ void TimerMgr::process() {
       _timeInternal.getElapsed().toMilliseconds();
 
   // do the loop update by hand so we can safely remove elements
-  for (_timerMapIt it = _timerMap.begin(); it != _timerMap.end();) {
+  for (auto it = _timerMap.begin(); it != _timerMap.end();) {
     if (it->second.isPaused)  // timer paused, do not update it
     {
       ++it;
@@ -223,7 +218,7 @@ void TimerMgr::restartTimerClientTimerInterval(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     // NOTE: it is guaranteed by the TimerClient class
     //      (the called of this method) that the owner of the timer would
@@ -246,7 +241,7 @@ void TimerMgr::restartUserTimerInterval(const int32_t timerId) {
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     if (nullptr == it->second.tcInstance) {
       // restart the remaining interval
@@ -275,7 +270,7 @@ void TimerMgr::restartUserTimerInterval(const int32_t timerId) {
 void TimerMgr::addTimeToTimerClientTimer(const int32_t timerId,
                                              const int64_t intervalToAdd) {
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     // NOTE: it is guaranteed by the TimerClient class
     //      (the called of this method) that the owner of the timer would
@@ -299,7 +294,7 @@ void TimerMgr::addTimeToUserTimer(const int32_t timerId,
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     if (nullptr == it->second.tcInstance) {
       // increase the remaining interval
@@ -330,7 +325,7 @@ void TimerMgr::removeTimeFromTimerClientTimer(
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     // NOTE: it is guaranteed by the TimerClient class
     //      (the called of this method) that the owner of the timer would
@@ -365,7 +360,7 @@ void TimerMgr::removeTimeFromUserTimer(const int32_t timerId,
   TRACE_ENTRY_EXIT;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
 
     if (nullptr == it->second.tcInstance) {
       if (it->second.remaining > intervalToRemove) {
@@ -406,7 +401,7 @@ int64_t TimerMgr::getTimerRemainingInterval(const int32_t timerId) const {
   int64_t remainingTime = 0;
 
   if (isActiveTimerId(timerId)) {
-    _timerMapConstIt it = _timerMap.find(timerId);
+    auto it = _timerMap.find(timerId);
     remainingTime = it->second.remaining;
   } else {
     LOGERR(
@@ -477,9 +472,9 @@ void TimerMgr::removeTimersInternal() {
     return;
   }
 
-  _removeTimerSetIt setIt = _removeTimerSet.begin();
+  auto setIt = _removeTimerSet.begin();
   for (; setIt != _removeTimerSet.end(); ++setIt) {
-    _timerMapIt mapIt = _timerMap.find(*setIt);
+    auto mapIt = _timerMap.find(*setIt);
 
     // key not found
     if (mapIt == _timerMap.end()) {
@@ -535,7 +530,7 @@ void TimerMgr::pauseAllTimers() {
 
   _isTimerMgrPaused = true;
 
-  for (_timerMapIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
+  for (auto it = _timerMap.begin(); it != _timerMap.end(); ++it) {
     if (TimerGroup::INTERRUPTIBLE == it->second.timerGroup) {
       it->second.isPaused = true;
     }
@@ -555,7 +550,7 @@ void TimerMgr::resumeAllTimers() {
 
   _isTimerMgrPaused = false;
 
-  for (_timerMapIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
+  for (auto it = _timerMap.begin(); it != _timerMap.end(); ++it) {
     if (TimerGroup::INTERRUPTIBLE == it->second.timerGroup) {
       it->second.isPaused = false;
     }
@@ -565,7 +560,7 @@ void TimerMgr::resumeAllTimers() {
 int64_t TimerMgr::getClosestNonZeroTimerInterval() const {
   int64_t interval = INIT_INT64_VALUE;
 
-  for (_timerMapConstIt it = _timerMap.begin(); it != _timerMap.end(); ++it) {
+  for (auto it = _timerMap.begin(); it != _timerMap.end(); ++it) {
     if (interval > it->second.remaining) {
       /** If remaining interval is 0 or less -> this means the timer
        * is just about to tick. It is important here to take
