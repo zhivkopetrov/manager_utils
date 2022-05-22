@@ -14,7 +14,7 @@
 
 /* Common class for graphical Textures.
  * All graphical textures must inherit from Widget */
-class Widget : public NonCopyable {
+class Widget: public NonCopyable {
 public:
   Widget();
 
@@ -467,6 +467,17 @@ public:
    * */
   Rectangle getImageRect() const {
     return Rectangle(_drawParams.pos, _origFrameRect.w, _origFrameRect.h);
+  }
+
+  /** @brief used to get Image/Widget bounding scaled rectangle
+   *  WARNING: even scaling is not activated
+   *           a 0 width/height rectangle will be returned
+   *
+   *  @returns Rectangle - Image/Widget scaled bounding rectangle
+   * */
+  Rectangle getScaledRect() const {
+    return Rectangle(_drawParams.pos, _drawParams.scaledWidth,
+        _drawParams.scaledHeight);
   }
 
   /** @brief used to get absolute cropped image rectangle
