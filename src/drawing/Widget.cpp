@@ -457,14 +457,15 @@ void Widget::setScaleCentered(const double scale, const Point &startPos) {
     return;
   }
 
-  const int32_t NEW_SCALED_W = static_cast<int32_t>(_imageWidth * scale);
-  const int32_t NEW_SCALED_H = static_cast<int32_t>(_imageHeight * scale);
+  const int32_t newScaledWidth = static_cast<int32_t>(_origFrameRect.w * scale);
+  const int32_t newScaledHeight =
+      static_cast<int32_t>(_origFrameRect.h * scale);
 
-  const int32_t DIFF_X = (_imageWidth - NEW_SCALED_W) >> 1;
-  const int32_t DIFF_Y = (_imageHeight - NEW_SCALED_H) >> 1;
+  const int32_t diffX = (_origFrameRect.w - newScaledWidth) >> 1;
+  const int32_t diffY = (_origFrameRect.h - newScaledHeight) >> 1;
 
   setScale(scale);
-  setPosition(startPos.x + DIFF_X, startPos.y + DIFF_Y);
+  setPosition(startPos.x + diffX, startPos.y + diffY);
 }
 
 void Widget::setScaleXY(const double scaleX, const double scaleY) {

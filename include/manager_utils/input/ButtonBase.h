@@ -213,6 +213,7 @@ class ButtonBase : public TouchEntity, public NonCopyable {
   bool isCreated() const { return _buttonTexture.isCreated(); }
 
   const Image &getButtonTexture() const { return _buttonTexture; };
+  Image &getButtonTextureMutable() { return _buttonTexture; };
 
   /** @brief used to get absolute _buttonTexture coordinates
    *
