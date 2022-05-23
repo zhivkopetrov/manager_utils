@@ -121,19 +121,15 @@ void AnimationBase::resetConfigInternal() {
 }
 
 bool AnimationBase::isAnimationActive() const {
-  bool isActive = false;
-
   if (false == _isCfgComplete) {
-    LOGERR("Error, Animation could not be checked for active status, "
-           "because configuration is incomplete. Consider using "
-           "Animation::configure() first");
+    return false;
   }
 
   if (isActiveTimerId(_cfg.timerId)) {
-    isActive = true;
+    return true;
   }
 
-  return isActive;
+  return false;
 }
 
 void AnimationBase::draw() const {
