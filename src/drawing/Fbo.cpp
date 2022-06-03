@@ -228,7 +228,9 @@ void Fbo::addWidget(const Widget &widget) {
     return;
   }
 
-  _storedItems.emplace_back(widget.getDrawParams());
+  if (widget.isVisible()) {
+    _storedItems.emplace_back(widget.getDrawParams());
+  }
 }
 
 void Fbo::update() {
