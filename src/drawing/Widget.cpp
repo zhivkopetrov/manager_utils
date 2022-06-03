@@ -17,6 +17,8 @@ namespace {
 constexpr auto MAX_SCALE_FACTOR_INTERNAL = MAX_SCALE_FACTOR + 0.01;
 }
 
+#define OVERRIDE_SCALING_ON_NEW_FRAME_RECT 0
+
 Widget::Widget()
     : _isCreated(false),
       _isVisible(true),
@@ -574,6 +576,7 @@ void Widget::setFrameRect(const Rectangle &rect) {
   _drawParams.frameRect = rect;
   _origFrameRect = rect;
 
+#if OVERRIDE_SCALING_ON_NEW_FRAME_RECT
   if (_drawParams.hasScaling) {
     // check if maxScalingWidth is set
     if (_maxScalingWidth && _maxScalingWidth < rect.w) {
@@ -589,6 +592,7 @@ void Widget::setFrameRect(const Rectangle &rect) {
       _drawParams.scaledHeight = rect.h;
     }
   }
+#endif //OVERRIDE_SCALING_ON_NEW_FRAME_RECT
 
   if (_drawParams.hasCrop) {
     if (_drawParams.hasScaling) {
