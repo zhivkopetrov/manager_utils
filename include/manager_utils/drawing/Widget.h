@@ -291,6 +291,9 @@ public:
    *         override the value.
    *         NOTE2: this function modifies the frame rectangle
    *         (not full image rectangle).
+   *
+   *         WARNING: this method can override an already activated
+   *                  scaling dimensions
    * */
   void setFrameRect(const Rectangle &rect);
 

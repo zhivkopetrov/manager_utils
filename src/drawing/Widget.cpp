@@ -348,15 +348,8 @@ void Widget::setScaledWidth(const int32_t width) {
 
   // check if maxScalingHeight is set
   if (_maxScalingWidth && _maxScalingWidth < width) {
-    LOGERR(
-        "Warning, trying to setScaledWidth() %d, while Widget "
-        "with rsrcId: %#16lX has already set maxScalingWidth to:"
-        " %d. ScaledWidth will be set to maxScalingWidth (%d)",
-        width, _drawParams.rsrcId, _maxScalingWidth, _maxScalingWidth);
-
     _drawParams.scaledWidth = _maxScalingWidth;
-  } else  //_maxScaling is not set -> simply change the value
-  {
+  } else { //_maxScaling is not set -> simply change the value
     _drawParams.scaledWidth = width;
     _scaleXFactor =
         static_cast<double>(_origFrameRect.w / _drawParams.scaledWidth);
@@ -383,15 +376,8 @@ void Widget::setScaledHeight(const int32_t height) {
 
   // check if maxScalingHeight is set
   if (_maxScalingHeight && _maxScalingHeight < height) {
-    LOGERR(
-        "Warning, trying to setScaledHeight() %d, while Widget "
-        "with rsrcId: %#16lX has already set maxScalingHeight "
-        "to: %d. ScaledHeight will be set to maxScalingHeight (%d)",
-        height, _drawParams.rsrcId, _maxScalingHeight, _maxScalingHeight);
-
     _drawParams.scaledHeight = _maxScalingHeight;
-  } else  //_maxScaling is not set -> simply change the value
-  {
+  } else { //_maxScaling is not set -> simply change the value
     _drawParams.scaledHeight = height;
     _scaleYFactor =
         static_cast<double>(_origFrameRect.h / _drawParams.scaledHeight);
