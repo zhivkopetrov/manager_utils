@@ -90,12 +90,12 @@ void DrawMgr::finishFrame(const bool overrideRendererLockCheck) {
   _renderer->finishFrame_UT(overrideRendererLockCheck);
 }
 
-void DrawMgr::addDrawCmd(const DrawParams& drawParams) const {
+void DrawMgr::addDrawCmd(const DrawParams &drawParams) const {
   _renderer->addDrawCmd_UT(drawParams);
 }
 
-void DrawMgr::addRendererCmd(const RendererCmd rendererCmd,
-                                 const uint8_t *data, const uint64_t bytes) {
+void DrawMgr::addRendererCmd(const RendererCmd rendererCmd, const uint8_t *data,
+                             const uint64_t bytes) {
   _renderer->addRendererCmd_UT(rendererCmd, data, bytes);
 }
 
@@ -105,6 +105,12 @@ void DrawMgr::addRendererData(const uint8_t *data, const uint64_t bytes) {
 
 void DrawMgr::swapBackBuffers() {
   _renderer->swapBackBuffers_UT();
+}
+
+void DrawMgr::takeScreenshot(const char *file,
+                             const ScreenshotContainer container,
+                             const int32_t quality) {
+  _renderer->takeScreenshot_UT(file, container, quality);
 }
 
 uint32_t DrawMgr::getTotalWidgetCount() const {

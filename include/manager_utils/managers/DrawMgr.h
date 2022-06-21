@@ -5,6 +5,7 @@
 
 // Other libraries headers
 #include "sdl_utils/drawing/defines/RendererDefines.h"
+#include "sdl_utils/drawing/defines/DrawConstants.h"
 #include "sdl_utils/drawing/MonitorWindow.h"
 
 // Own components headers
@@ -129,8 +130,8 @@ public:
    * @param const uint8_t *   - inData buffer
    * @param const uint64_t    - bytes count to write
    * */
-  void addRendererCmd(const RendererCmd rendererCmd, const uint8_t *data =
-      nullptr,
+  void addRendererCmd(const RendererCmd rendererCmd,
+                      const uint8_t *data = nullptr,
                       const uint64_t bytes = 0);
 
   /* @brief used to store draw specific data populated by
@@ -163,6 +164,20 @@ public:
    *                  you are doing
    * */
   void swapBackBuffers();
+
+  /** @brief takes a snapshot of current renderer pixels
+   *
+   *  @param const char*               - file path
+   *  @param const ScreenshotContainer - type of container [PNG, JPG, ...]
+   *  @param const int32_t             - quality (applied only for JPG)
+   *                                     range: [0, 100], worst(0) - best(100)
+   *
+   *  WARNING: the renderer operation that would be performed from this call
+   *           is quite slow and should not be used in performance
+   *           critical parts of the code
+   * */
+  void takeScreenshot(const char *file, const ScreenshotContainer container,
+                      const int32_t quality);
 
   /** @brief used to monitor the number of widgets
    *                              currently being drawn by the renderer
