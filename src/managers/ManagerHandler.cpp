@@ -37,7 +37,7 @@ ErrorCode ManagerHandler::init(const ManagerHandlerConfig &cfg) {
       return ErrorCode::FAILURE;
     }
 
-    LOG("%s init() passed successfully for %ld ms", _managers[i]->getName(),
+    LOG("%s init() passed successfully for [%ld ms]", _managers[i]->getName(),
         initTime.getElapsed().toMilliseconds());
   }
 
