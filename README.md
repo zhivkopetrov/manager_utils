@@ -87,7 +87,7 @@ target_link_libraries(
 **Dependencies**
 - cmake_helpers - https://github.com/zhivkopetrov/cmake_helpers.git
 - The provided library CMakeLists.txt assumes the helpers.cmake from cmake_helpers repo have already been included
-- sdl_utils - https://github.com/zhivkopetrov/sdl_utils_utils
+- sdl_utils - https://github.com/zhivkopetrov/sdl_utils
 
 
 **Platform support**
