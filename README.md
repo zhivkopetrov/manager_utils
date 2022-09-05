@@ -22,14 +22,14 @@ Instead use the library provided wrapper classes.
 
 Examples:
 ```
-class TileButton : public ButtonBase {
+class TileButton final : public ButtonBase {
 public:
   void init(uint64_t buttonRsrcId, uint64_t clickSoundRsrcId) {
     ButtonBase::create(buttonRsrcId);
     mClickSound.create(clickSoundRsrcId);
   }
 
-  void handleEvent(const InputEvent& e) {
+  void handleEvent(const InputEvent& e) override {
     if (TouchEvent::TOUCH_RELEASE == e.type) {
       mClickSound.play();
     }
@@ -48,6 +48,7 @@ public:
 
   void draw() const {
     mTileSurface.draw();
+    mTileButton.draw();
   }
   
   void handleEvent(const InputEvent& e) {
