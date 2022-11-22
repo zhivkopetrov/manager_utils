@@ -5,6 +5,7 @@
 
 // Other libraries headers
 #include "sdl_utils/drawing/defines/RendererDefines.h"
+#include "sdl_utils/drawing/config/RendererConfig.h"
 #include "sdl_utils/drawing/defines/DrawConstants.h"
 #include "sdl_utils/drawing/MonitorWindow.h"
 
@@ -244,6 +245,12 @@ public:
   Renderer* getRenderer() {
     return _renderer;
   }
+
+  /** @brief used to acquire the current renderer policy
+   *
+   *  @returns RendererPolicy - SINGLE_THREADED or MULTI_THREADED
+   * */
+  RendererPolicy getRendererPolicy() const;
 
 private:
   // Hide renderer implementation under user defined renderer class.

@@ -137,3 +137,7 @@ void DrawMgr::resetAbsoluteGlobalMovement() {
   _renderer->resetAbsoluteGlobalMovement_UT();
 }
 
+RendererPolicy DrawMgr::getRendererPolicy() const {
+  return _renderer->getRendererPolicy();
+}
+
