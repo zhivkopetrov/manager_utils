@@ -195,6 +195,8 @@ void PulseAnimation::stop() {
     return;
   }
 
+  const bool isAnimActive = isActiveTimerId(_cfg.timerId);
+
   /** User requested animation stop -> execute onAnimationEnd()
    * callback if there is an active AnimationEndCb handler set.
    * */
@@ -206,13 +208,13 @@ void PulseAnimation::stop() {
      *
      *  For this reason we check if the timer was started.
      *  */
-    if (isActiveTimerId(_cfg.timerId)) {
+    if (isAnimActive) {
       _endCb->onAnimationEnd();
     }
   }
 
   // stop animation timer
-  if (isActiveTimerId(_cfg.timerId)) {
+  if (isAnimActive) {
     stopTimer(_cfg.timerId);
   }
 }
