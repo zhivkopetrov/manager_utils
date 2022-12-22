@@ -11,6 +11,7 @@
 #include "sdl_utils/sound/SoundMixer.h"
 #include "utils/data_type/EnumClassUtils.h"
 #include "utils/debug/FunctionTracer.h"
+#include "utils/debug/StrError.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"
 
@@ -178,10 +179,10 @@ void SoundMgr::changeOSVolume(const int32_t soundLevel) {
     FILE *fp = popen(command.c_str(), "w");
     if (!fp) {
       LOGERR("Error, pipe command %s could not be executed. Reason: %s",
-          command.c_str(), strerror(errno));
+          command.c_str(), strError().c_str());
     } else {
       if (EXIT_SUCCESS != pclose(fp)) {
-        LOGERR("Error, pclose() failed. Reason: %s", strerror(errno));
+        LOGERR("Error, pclose() failed. Reason: %s", strError().c_str());
       }
     }
   }
