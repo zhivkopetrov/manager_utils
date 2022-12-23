@@ -78,7 +78,7 @@ Widget &Widget::operator=(Widget &&movedOther) {
 void Widget::draw() const {
   if (!_isCreated) {
     LOGERR(
-        "Error, widget with rsrcId: %#16lX not created!", _drawParams.rsrcId);
+        "Error, widget with rsrcId: %zu not created!", _drawParams.rsrcId);
   } else if (_isVisible) {
     gDrawMgr->addDrawCmd(_drawParams);
   }
@@ -106,7 +106,7 @@ void Widget::activateAlphaModulation() {
   if (_isAlphaModulationEnabled) {
     LOGERR(
         "Error, alhaModulation is already enabled for Widget with "
-        "rsrcId: %#16lX. Will not try to activate it twice.",
+        "rsrcId: %zu. Will not try to activate it twice.",
         _drawParams.rsrcId);
 
     return;
@@ -149,7 +149,7 @@ void Widget::deactivateAlphaModulation() {
   if (!_isAlphaModulationEnabled) {
     LOGERR(
         "Error, alhaModulation was not enabled for Widget with "
-        "rsrcId: %#16lX. Will not try to deactivate it.",
+        "rsrcId: %zu. Will not try to deactivate it.",
         _drawParams.rsrcId);
 
     return;
@@ -192,7 +192,7 @@ void Widget::activateScaling() {
   if (_drawParams.hasScaling) {
     LOGERR(
         "Warning, Scaling is already active for Widget with rsrcId: "
-        "%#16lX. Current _drawParams.scaledWidth: %d and "
+        "%zu. Current _drawParams.scaledWidth: %d and "
         "_drawParams.scaledHeight: %d will be overridden by their "
         "default values -> width: %d, height: %d ",
         _drawParams.rsrcId, _drawParams.scaledWidth, _drawParams.scaledHeight,
@@ -227,7 +227,7 @@ void Widget::setFrameWidth(const int32_t width) {
   if (0 == width) {
     LOGERR(
         "Error, setFrameWidth() for Widget with rsrcId: "
-        "%#16lX with value 0 is forbidden.",
+        "%zu with value 0 is forbidden.",
         _drawParams.rsrcId);
     return;
   }
@@ -257,7 +257,7 @@ void Widget::setFrameHeight(const int32_t height) {
   if (0 == height) {
     LOGERR(
         "Error, setFrameHeight() for Widget with rsrcId: "
-        "%#16lX with value 0 is forbidden.",
+        "%zu with value 0 is forbidden.",
         _drawParams.rsrcId);
     return;
   }
@@ -287,7 +287,7 @@ void Widget::setMaxScalingWidth(const int32_t maxWidth) {
   if (0 == maxWidth) {
     LOGERR(
         "Error, setMaxScalingWidth() for Widget with rsrcId: "
-        "%#16lX with value 0 is forbidden.",
+        "%zu with value 0 is forbidden.",
         _drawParams.rsrcId);
     return;
   }
@@ -312,7 +312,7 @@ void Widget::setMaxScalingHeight(const int32_t maxHeight) {
   if (0 == maxHeight) {
     LOGERR(
         "Error, setMaxScalingHeight() for Widget with rsrcId: "
-        "%#16lX with value 0 is forbidden.",
+        "%zu with value 0 is forbidden.",
         _drawParams.rsrcId);
     return;
   }
@@ -336,7 +336,7 @@ void Widget::setMaxScalingHeight(const int32_t maxHeight) {
 void Widget::setScaledWidth(const int32_t width) {
   if (!_drawParams.hasScaling) {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " .setScaledWidth() with param %d, will not be performed",
         _drawParams.rsrcId, width);
     return;
@@ -364,7 +364,7 @@ void Widget::setScaledWidth(const int32_t width) {
 void Widget::setScaledHeight(const int32_t height) {
   if (!_drawParams.hasScaling) {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " .setScaledHeight() with param %d, will not be performed",
         _drawParams.rsrcId, height);
     return;
@@ -392,17 +392,17 @@ void Widget::setScaledHeight(const int32_t height) {
 void Widget::setScaleX(const double scaleX) {
   if (!_drawParams.hasScaling) {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " .setScaleX() with param %lf, will not be performed",
         _drawParams.rsrcId, scaleX);
   } else if (FloatingPointUtils::areAlmostEqual(scaleX, MIN_SCALE_FACTOR)) {
     LOGERR(
         "Error, setScaleX() for Widget with rsrcId: "
-        "%#16lX with value %lf is forbidden.",
+        "%zu with value %lf is forbidden.",
         _drawParams.rsrcId, MIN_SCALE_FACTOR);
   } else if (MIN_SCALE_FACTOR > scaleX || MAX_SCALE_FACTOR_INTERNAL < scaleX) {
     LOGERR(
-        "Error, setScaleX() for Widget with rsrcId: %#16lX with param "
+        "Error, setScaleX() for Widget with rsrcId: %zu with param "
         "%lf only takes values in range (%lf - %lf]",
         _drawParams.rsrcId, scaleX, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
   } else {
@@ -414,17 +414,17 @@ void Widget::setScaleX(const double scaleX) {
 void Widget::setScaleY(const double scaleY) {
   if (!_drawParams.hasScaling) {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " .setScaleY() with param %lf, will not be performed",
         _drawParams.rsrcId, scaleY);
   } else if (FloatingPointUtils::areAlmostEqual(scaleY, MIN_SCALE_FACTOR)) {
     LOGERR(
         "Error, setScaleY() for Widget with rsrcId: "
-        "%#16lX with value %lf is forbidden.",
+        "%zu with value %lf is forbidden.",
         _drawParams.rsrcId, MIN_SCALE_FACTOR);
   } else if (MIN_SCALE_FACTOR > scaleY || MAX_SCALE_FACTOR_INTERNAL < scaleY) {
     LOGERR(
-        "Error, setScaleY() for Widget with rsrcId: %#16lX with param "
+        "Error, setScaleY() for Widget with rsrcId: %zu with param "
         "%lf only takes values in range (%lf - %lf]",
         _drawParams.rsrcId, scaleY, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR);
   } else {
@@ -440,7 +440,7 @@ void Widget::setScale(const double scale) {
 
 void Widget::setScaleCentered(const double scale, const Point &startPos) {
   if (!_drawParams.hasScaling) {
-    LOGERR("Error! Scaling not enabled for widget with rsrcId: %#16lX",
+    LOGERR("Error! Scaling not enabled for widget with rsrcId: %zu",
         _drawParams.rsrcId);
     return;
   }
@@ -602,7 +602,7 @@ void Widget::setPredefinedRotationCenter(
   case RotationCenterType::SCALED_CENTER:
     if (!_drawParams.hasScaling) {
       LOGERR("Error, RotationCenterType::SCALED_CENTER requested for widget "
-          "with rsrcId: %#16lX, which does not have scaling enabled",
+          "with rsrcId: %zu, which does not have scaling enabled",
           _drawParams.rsrcId);
       return;
     }
@@ -621,7 +621,7 @@ void Widget::setOpacity(const int32_t opacity) {
   if (!_isAlphaModulationEnabled) {
     LOGERR(
         "Error, alphaModulation is not enabled for Widget with "
-        "rsrcId: %#16lX. .setOpacity() will not be performed. Consider "
+        "rsrcId: %zu. .setOpacity() will not be performed. Consider "
         "activating alphaModulation first with "
         ".activateAlphaModulation() method",
         _drawParams.rsrcId);
@@ -632,14 +632,14 @@ void Widget::setOpacity(const int32_t opacity) {
   if (ZERO_OPACITY > opacity) {
     LOGERR(
         "Error, invalid opacity provided: %d for Widget with rsrcId: "
-        "%#16lX. Opacity will be set to 0(ZERO_OPEACITY)",
+        "%zu. Opacity will be set to 0(ZERO_OPEACITY)",
         opacity, _drawParams.rsrcId);
     return;
   }
   if (FULL_OPACITY < opacity) {
     LOGERR(
         "Error, invalid opacity provided: %d for Widget with rsrcId: "
-        "%#16lX. Opacity will be set to 255(FULL_OPACITY)",
+        "%zu. Opacity will be set to 255(FULL_OPACITY)",
         opacity, _drawParams.rsrcId);
     return;
   }
@@ -720,7 +720,7 @@ Point Widget::getPredefinedRotationCenter(
       rotCenter.y = _drawParams.scaledHeight / 2;
     } else {
       LOGERR("Error, RotationCenterType::SCALED_CENTER requested for widget "
-          "with rsrcId: %#16lX, which does not have scaling enabled",
+          "with rsrcId: %zu, which does not have scaling enabled",
           _drawParams.rsrcId);
     }
     break;
@@ -738,7 +738,7 @@ int32_t Widget::getScaledWidth() const {
     return _drawParams.scaledWidth;
   } else {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " getScaledWidth() will return 0",
         _drawParams.rsrcId);
 
@@ -751,7 +751,7 @@ int32_t Widget::getScaledHeight() const {
     return _drawParams.scaledHeight;
   } else {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " getScaledHeight() will return 0",
         _drawParams.rsrcId);
 
@@ -764,7 +764,7 @@ int32_t Widget::getMaxScalingWidth() const {
     return _maxScalingWidth;
   } else {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " getMaxScalingWidth() will return 0",
         _drawParams.rsrcId);
 
@@ -777,7 +777,7 @@ int32_t Widget::getMaxScalingHeight() const {
     return _maxScalingHeight;
   } else {
     LOGERR(
-        "Error, scaling is not turned on for Widget with rsrcId: %#16lX."
+        "Error, scaling is not turned on for Widget with rsrcId: %zu."
         " getMaxScalingHeight() will return 0",
         _drawParams.rsrcId);
 

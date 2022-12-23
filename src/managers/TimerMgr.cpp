@@ -336,8 +336,8 @@ void TimerMgr::removeTimeFromTimerClientTimer(
       it->second.remaining -= intervalToRemove;
     } else {
       LOGERR(
-          "Warning, trying to remove time interval: %ld from timer"
-          " with ID: %d while the timer only has: %ld ms "
+          "Warning, trying to remove time interval: %" PRId64" from timer"
+          " with ID: %d while the timer only has: %" PRId64" ms "
           "remaining. Method will take no effect!,",
           intervalToRemove, timerId, it->second.remaining);
 
@@ -368,8 +368,8 @@ void TimerMgr::removeTimeFromUserTimer(const int32_t timerId,
         it->second.remaining -= intervalToRemove;
       } else {
         LOGERR(
-            "Warning, trying to remove time interval: %ld from timer"
-            " with ID: %d while the timer only has: %ld ms "
+            "Warning, trying to remove time interval: %" PRId64" from timer"
+            " with ID: %d while the timer only has: %" PRId64" ms "
             "remaining. Method will take no effect!,",
             intervalToRemove, timerId, it->second.remaining);
 

@@ -19,7 +19,7 @@ void UserTimerClient::startTimer(const int64_t interval, const int32_t timerId,
   } else {
     LOGERR(
         "Warning, timer with timerId: %d requested startTimer() with "
-        "interval %ld, while minimum interval is 20ms. Timer will not "
+        "interval %" PRId64", while minimum interval is 20ms. Timer will not "
         "be started!",
         timerId, interval);
   }

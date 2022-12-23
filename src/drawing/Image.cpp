@@ -59,21 +59,21 @@ Image::~Image() noexcept {
 
 void Image::create(const uint64_t rsrcId) {
   if (_isCreated) {
-    LOGERR("Error, Image with rsrcId: %#16lX already created,"
+    LOGERR("Error, Image with rsrcId: %zu already created,"
            " will not create twice", rsrcId);
     return;
   }
 
   const ResourceData* rsrcData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
-    LOGERR("Error, getRsrcData failed for rsrcId: %#16lX, "
+    LOGERR("Error, getRsrcData failed for rsrcId: %zu, "
            "will not create Image", rsrcId);
     return;
   }
 
   _sprites = new Sprite();
   if (nullptr == _sprites) {
-    LOGERR("Warning bad alloc for sprites for rsrcId: %#16lX", rsrcId);
+    LOGERR("Warning bad alloc for sprites for rsrcId: %zu", rsrcId);
     return;
   }
 
@@ -105,7 +105,7 @@ void Image::create(const uint64_t rsrcId) {
 void Image::destroy() {
   if (_isDestroyed) {
     LOGERR("Warning, trying to destroy already destroyed Image with rsrcId: "
-           "%#16lX", _drawParams.rsrcId);
+           "%zu", _drawParams.rsrcId);
     return;
   }
 
@@ -124,20 +124,20 @@ void Image::destroy() {
 
 void Image::setTexture(const uint64_t rsrcId) {
   if (!_isCreated) {
-    LOGERR("Error, setTexture() method failed with param rsrcId: %#16lX. "
+    LOGERR("Error, setTexture() method failed with param rsrcId: %zu. "
            " Reason: Image was not initially created.", rsrcId);
     return;
   }
 
   if (_drawParams.rsrcId == rsrcId) {
     LOGERR("Error, setTexture() called with same rsrcId as the "
-           "original rsrcId: %#16lX held by the Image.", rsrcId);
+           "original rsrcId: %zu held by the Image.", rsrcId);
     return;
   }
 
   const ResourceData* rsrcData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
-    LOGERR("Error, getRsrcData failed for rsrcId: %#16lX, "
+    LOGERR("Error, getRsrcData failed for rsrcId: %zu, "
            "will not setTexture for Image", rsrcId);
     return;
   }
@@ -146,7 +146,7 @@ void Image::setTexture(const uint64_t rsrcId) {
   if (nullptr == _sprites) {
     LOGERR(
         "Logic error, sprites were not initialised for Image "
-        "with rsrcId: %#16lX",
+        "with rsrcId: %zu",
         _drawParams.rsrcId);
 
     return;
@@ -216,7 +216,7 @@ void Image::addFrame(const Rectangle& rectFrame) {
 void Image::setManualFrames(const Rectangle* frameRects,
                             const uint32_t rectanglesCount) {
   if (!_isCreated) {
-    LOGERR("Error, Image with rsrcId: %#16lX already created. "
+    LOGERR("Error, Image with rsrcId: %zu already created. "
            "::setManualFrames() will take no effect",
            _sprites->getFramesRsrcId());
     return;

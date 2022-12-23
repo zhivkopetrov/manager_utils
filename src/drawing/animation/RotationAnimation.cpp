@@ -74,7 +74,7 @@ ErrorCode RotationAnimation::configure(const AnimBaseConfig& cfg,
   RotationAnimation::resetConfigInternal();
   if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
-           "%#16lX", cfg.rsrcId);
+           "%zu", cfg.rsrcId);
     err = ErrorCode::FAILURE;
   }
 
@@ -269,7 +269,7 @@ void RotationAnimation::onTimeout(const int32_t timerId) {
       }
     }
   } else {
-    LOGERR("Invalid timer Id: %d from RotationAnimation with rsrcId: %#16lX",
+    LOGERR("Invalid timer Id: %d from RotationAnimation with rsrcId: %zu",
            timerId, _cfg.rsrcId);
   }
 }

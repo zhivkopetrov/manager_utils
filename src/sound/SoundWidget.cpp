@@ -52,7 +52,7 @@ SoundWidget& SoundWidget::operator=(SoundWidget&& movedOther) {
 
 void SoundWidget::create(const uint64_t rsrcId, SoundWidgetEndCb* endCb) {
   if (_isCreated) {
-    LOGERR("Error, SoundWidget with _rsrcId: %#16lX already created,"
+    LOGERR("Error, SoundWidget with _rsrcId: %zu already created,"
            " will not create twice", _rsrcId);
     return;
   }
@@ -63,7 +63,7 @@ void SoundWidget::create(const uint64_t rsrcId, SoundWidgetEndCb* endCb) {
 
   const SoundData* soundData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR("Error, getSoundData() failed for rsrcId: %#16lX, "
+    LOGERR("Error, getSoundData() failed for rsrcId: %zu, "
            "will not create SoundWidget", rsrcId);
     return;
   }

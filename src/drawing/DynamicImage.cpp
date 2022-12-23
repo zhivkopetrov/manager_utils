@@ -38,7 +38,7 @@ DynamicImage::~DynamicImage() {
 void DynamicImage::create(const uint64_t rsrcId) {
   if (_isCreated) {
     LOGERR(
-        "Error, Image with rsrcId: %#16lX already created,"
+        "Error, Image with rsrcId: %zu already created,"
         " will not create twice",
         rsrcId);
     return;
@@ -48,7 +48,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
   const ResourceData* rsrcData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
-        "Error, getRsrcData failed for rsrcId: %#16lX, "
+        "Error, getRsrcData failed for rsrcId: %zu, "
         "will not create Image",
         rsrcId);
     gRsrcMgr->unloadResourceOnDemandSingle(rsrcId);
@@ -57,7 +57,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
   _sprites = new Sprite();
   if (nullptr == _sprites) {
-    LOGERR("Warning bad alloc for sprites for rsrcId: %#16lX", rsrcId);
+    LOGERR("Warning bad alloc for sprites for rsrcId: %zu", rsrcId);
     return;
   }
 
@@ -88,10 +88,8 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
 void DynamicImage::destroy() {
   if (_isDestroyed) {
-    LOGERR(
-        "Warning, trying to destroy already destroyed Image with rsrcId: "
-        "%#16lX",
-        _drawParams.rsrcId);
+    LOGERR("Warning, trying to destroy already destroyed Image with rsrcId: %zu",
+           _drawParams.rsrcId);
     return;
   }
 
@@ -105,8 +103,7 @@ void DynamicImage::destroy() {
 
   Widget::reset();
 
-  if (_sprites)  // Sanity check
-  {
+  if (_sprites) { // Sanity check
     _sprites->deinit();
 
     delete _sprites;

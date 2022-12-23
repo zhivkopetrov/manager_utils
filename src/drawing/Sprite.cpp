@@ -33,7 +33,7 @@ void Sprite::setFrame(const int32_t frameIndex) {
   if (frameIndex < _maxFrames) {
     _currFrame = frameIndex;
   } else {
-    LOGERR("Invalid frame: %d for rsrcId: %#16lX", frameIndex, _rsrcId);
+    LOGERR("Invalid frame: %d for rsrcId: %zu", frameIndex, _rsrcId);
   }
 }
 

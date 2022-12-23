@@ -3,6 +3,7 @@
 
 // System headers
 #include <cstring>
+#include <cstdint>
 #include <vector>
 #include <mutex>
 
@@ -172,20 +173,17 @@ void SoundMgr::changeOSVolume(const int32_t soundLevel) {
   if ( (0 > soundLevel) || (100 < soundLevel)) {
     LOGERR("Error, invalid soundLevel: %d provided! ::changeOSVolume() expects "
         "values in range [0, 100]", soundLevel);
-  } else {
-    std::string command("amixer -D pulse sset Master ");
-    command.append(std::to_string(soundLevel)).append("%");
-
-    FILE *fp = popen(command.c_str(), "w");
-    if (!fp) {
-      LOGERR("Error, pipe command %s could not be executed. Reason: %s",
-          command.c_str(), strError().c_str());
-    } else {
-      if (EXIT_SUCCESS != pclose(fp)) {
-        LOGERR("Error, pclose() failed. Reason: %s", strError().c_str());
-      }
-    }
+    return;
   }
+
+#ifdef __linux__
+  std::string command("amixer -D pulse sset Master ");
+  command.append(std::to_string(soundLevel)).append("%");
+  std::system(command.c_str());
+  return;
+#endif /* __linux__ */
+
+  LOGY("changeOSVolume() is currerntly supported only for Linux");
 }
 
 ErrorCode SoundMgr::loadMusic(const uint64_t rsrcId) {
@@ -201,7 +199,7 @@ ErrorCode SoundMgr::loadMusic(const uint64_t rsrcId) {
   gRsrcMgr->getMusicSound(rsrcId, _music);
 
   if (nullptr == _music) {
-    LOGERR("gRsrcMgr->getMusicSound() failed for rsrcId: %#16lX", rsrcId);
+    LOGERR("gRsrcMgr->getMusicSound() failed for rsrcId: %zu", rsrcId);
     return ErrorCode::FAILURE;
   }
 
@@ -228,7 +226,7 @@ void SoundMgr::trySelfUnloadMusic(const uint64_t rsrcId,
 
   const SoundData *soundData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %zu", rsrcId);
   } else {
     // only request change if value was change during run-time
     if (soundLevel != soundData->soundLevel) {
@@ -354,7 +352,7 @@ void SoundMgr::setChunkVolume(const uint64_t rsrcId,
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in gRsrcMgr->getChunkSound() for chunk: %#16lX", rsrcId);
+    LOGERR("Error in gRsrcMgr->getChunkSound() for chunk: %zu", rsrcId);
   } else { // it is valid chunk
     SoundMixer::setChunkVolume(chunk, getEnumValue(soundLevel));
   }
@@ -364,7 +362,7 @@ SoundLevel SoundMgr::getChunkVolume(const uint64_t rsrcId) const {
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
+    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
            "Returning SoundLevel::UNKNOWN.", rsrcId);
     return SoundLevel::UNKNOWN;
   }
@@ -377,7 +375,7 @@ void SoundMgr::playChunk(const uint64_t rsrcId, const int32_t loops,
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
+    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
            "Chunk could not be played!", rsrcId);
     return;
   }
@@ -385,7 +383,7 @@ void SoundMgr::playChunk(const uint64_t rsrcId, const int32_t loops,
   const int32_t channelId = getNextFreeChannel();
   if (INVALID_CHANNEL_ID == channelId) {
     LOGERR("Error, maximum sound supported channels count %d is reached. "
-           "Sound will with rsrcId: %#16lX will not be " "played. Increase the "
+           "Sound will with rsrcId: %zu will not be " "played. Increase the "
            "number of maximum sound supported channels SUPPORTED_SOUND_CHANNELS",
            SUPPORTED_SOUND_CHANNELS, rsrcId);
     return;
@@ -409,7 +407,7 @@ void SoundMgr::playChunkWithPanning(const uint64_t rsrcId, const int32_t loops,
 
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %#16lX. "
+    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
            "Chunk could not be played!", rsrcId);
     return;
   }
@@ -417,7 +415,7 @@ void SoundMgr::playChunkWithPanning(const uint64_t rsrcId, const int32_t loops,
   const int32_t channelId = getNextFreeChannel();
   if (INVALID_CHANNEL_ID == channelId) {
     LOGERR("Error, maximum sound supported channels count %d is reached. "
-           "Sound will with rsrcId: %#16lX will not be " "played. Increase the "
+           "Sound will with rsrcId: %zu will not be " "played. Increase the "
            "number of maximum sound supported channels SUPPORTED_SOUND_CHANNELS",
            SUPPORTED_SOUND_CHANNELS, rsrcId);
     return;
@@ -443,7 +441,7 @@ void SoundMgr::stopChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %#16lX is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
            "SoundMgr::stopChunk() will not take effect", rsrcId);
     return;
   }
@@ -461,7 +459,7 @@ void SoundMgr::trySelfStopChunk(const uint64_t rsrcId,
 
   const SoundData *soundData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %#16lX", rsrcId);
+    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %zu", rsrcId);
     return;
   }
 
@@ -472,7 +470,7 @@ void SoundMgr::trySelfStopChunk(const uint64_t rsrcId,
     gRsrcMgr->getChunkSound(rsrcId, chunk);
 
     if (nullptr == chunk) {
-      LOGERR("Error in getChunkSound() for rsrcId: %#16lX", rsrcId);
+      LOGERR("Error in getChunkSound() for rsrcId: %zu", rsrcId);
     } else {
       // reset sound to it's original value
       SoundMixer::setChunkVolume(chunk, getEnumValue(soundData->soundLevel));
@@ -503,7 +501,7 @@ bool SoundMgr::isChunkPlaying(const uint64_t rsrcId) const {
 bool SoundMgr::isChunkPaused(const uint64_t rsrcId) const {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %#16lX is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
            " SoundMgr::isChunkPaused() will not take effect. Returning false",
            rsrcId);
     return false;
@@ -515,7 +513,7 @@ bool SoundMgr::isChunkPaused(const uint64_t rsrcId) const {
 void SoundMgr::pauseChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %#16lX is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
            " SoundMgr::pauseChunk() will not take effect.", rsrcId);
     return;
   }
@@ -526,7 +524,7 @@ void SoundMgr::pauseChunk(const uint64_t rsrcId) {
 void SoundMgr::resumeChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %#16lX is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
           " SoundMgr::resumeChunk() will not take effect", rsrcId);
     return;
   }

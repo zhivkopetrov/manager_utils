@@ -2,6 +2,7 @@
 #include "manager_utils/drawing/animation/AnimationBase.h"
 
 // System headers
+#include <cinttypes>
 #include <utility>
 
 // Other libraries headers
@@ -84,20 +85,20 @@ ErrorCode AnimationBase::configureInternal(const AnimBaseConfig& cfg,
   }
 
   if (AnimDir::UNKNOWN == _cfg.animDirection) {
-    LOGERR("Error, animation with rsrcId: %#16lX has AnimDir::UNKNOWN, "
+    LOGERR("Error, animation with rsrcId: %zu has AnimDir::UNKNOWN, "
            "which is forbidden. Consider using AnimDir::FORWARD or "
            "AnimDir::BACKWARD", _cfg.rsrcId);
     return ErrorCode::FAILURE;
   }
 
   if (INIT_INT32_VALUE == _cfg.timerId) {
-    LOGERR("Error, timerId not provided for animation with rsrcId: %#16lX",
+    LOGERR("Error, timerId not provided for animation with rsrcId: %zu",
            _cfg.rsrcId);
     return ErrorCode::FAILURE;
   }
 
   if (20 > _cfg.timerInterval) {
-    LOGERR("Error, timeInterval of %ld is forbidden. The minimum "
+    LOGERR("Error, timeInterval of %" PRId64" is forbidden. The minimum "
            "possible timerInterval is 20ms", _cfg.timerInterval);
     return ErrorCode::FAILURE;
   }
