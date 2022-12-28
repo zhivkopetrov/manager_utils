@@ -38,7 +38,7 @@ DynamicImage::~DynamicImage() {
 void DynamicImage::create(const uint64_t rsrcId) {
   if (_isCreated) {
     LOGERR(
-        "Error, Image with rsrcId: %zu already created,"
+        "Error, Image with rsrcId: %" PRIu64" already created,"
         " will not create twice",
         rsrcId);
     return;
@@ -48,7 +48,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
   const ResourceData* rsrcData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getRsrcData(rsrcId, rsrcData)) {
     LOGERR(
-        "Error, getRsrcData failed for rsrcId: %zu, "
+        "Error, getRsrcData failed for rsrcId: %" PRIu64", "
         "will not create Image",
         rsrcId);
     gRsrcMgr->unloadResourceOnDemandSingle(rsrcId);
@@ -57,7 +57,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
   _sprites = new Sprite();
   if (nullptr == _sprites) {
-    LOGERR("Warning bad alloc for sprites for rsrcId: %zu", rsrcId);
+    LOGERR("Warning bad alloc for sprites for rsrcId: %" PRIu64, rsrcId);
     return;
   }
 
@@ -88,7 +88,7 @@ void DynamicImage::create(const uint64_t rsrcId) {
 
 void DynamicImage::destroy() {
   if (_isDestroyed) {
-    LOGERR("Warning, trying to destroy already destroyed Image with rsrcId: %zu",
+    LOGERR("Warning, trying to destroy already destroyed Image with rsrcId: %" PRIu64,
            _drawParams.rsrcId);
     return;
   }

@@ -72,7 +72,7 @@ void Text::create(const uint64_t fontId,
                   const Point& pos) {
   if (_isCreated) {
     LOGERR("Warning, trying to create a text that was already created with "
-          "fontId: %zu", _fontId);
+          "fontId: %" PRIu64, _fontId);
     return;
   }
 
@@ -110,14 +110,14 @@ void Text::destroy() {
   if (_isDestroyed) {
     LOGERR(
         "Warning, trying to destroy already destroyed text with fontId: "
-        "%zu", _fontId);
+        "%" PRIu64, _fontId);
     return;
   }
 
   if (!_isCreated) {
     LOGERR(
         "Warning, trying to destroy a not-created text with fontId: "
-        "%zu", _fontId);
+        "%" PRIu64, _fontId);
     return;
   }
 
@@ -139,7 +139,7 @@ void Text::destroy() {
 
 void Text::setText(const char* text) {
   if (!_isCreated) {
-    LOGERR("Error, text with fontId: %zu not created!", _fontId);
+    LOGERR("Error, text with fontId: %" PRIu64" not created!", _fontId);
     return;
   }
 
@@ -178,7 +178,7 @@ void Text::setText(const char* text) {
 
 void Text::setColor(const Color& color) {
   if (!_isCreated) {
-    LOGERR("Error, text with fontId: %zu not created!", _fontId);
+    LOGERR("Error, text with fontId: %" PRIu64" not created!", _fontId);
     return;
   }
 
@@ -203,7 +203,7 @@ void Text::setColor(const Color& color) {
 
 void Text::setTextAndColor(const char* text, const Color& color) {
   if (!_isCreated) {
-    LOGERR("Error, text with fontId: %zu not created!", _fontId);
+    LOGERR("Error, text with fontId: %" PRIu64" not created!", _fontId);
     return;
   }
 

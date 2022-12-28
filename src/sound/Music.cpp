@@ -35,7 +35,7 @@ Music& Music::operator=(Music &&movedOther) {
 void Music::destroy() {
   if (_isDestroyed) {
     LOGERR("Warning, trying to destroy already destroyed Music with "
-           "rsrcId: %zu", _rsrcId);
+           "rsrcId: %" PRIu64, _rsrcId);
     return;
   }
 

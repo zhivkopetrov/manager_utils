@@ -199,7 +199,7 @@ ErrorCode SoundMgr::loadMusic(const uint64_t rsrcId) {
   gRsrcMgr->getMusicSound(rsrcId, _music);
 
   if (nullptr == _music) {
-    LOGERR("gRsrcMgr->getMusicSound() failed for rsrcId: %zu", rsrcId);
+    LOGERR("gRsrcMgr->getMusicSound() failed for rsrcId: %" PRIu64, rsrcId);
     return ErrorCode::FAILURE;
   }
 
@@ -226,7 +226,7 @@ void SoundMgr::trySelfUnloadMusic(const uint64_t rsrcId,
 
   const SoundData *soundData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %zu", rsrcId);
+    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %" PRIu64, rsrcId);
   } else {
     // only request change if value was change during run-time
     if (soundLevel != soundData->soundLevel) {
@@ -352,7 +352,7 @@ void SoundMgr::setChunkVolume(const uint64_t rsrcId,
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in gRsrcMgr->getChunkSound() for chunk: %zu", rsrcId);
+    LOGERR("Error in gRsrcMgr->getChunkSound() for chunk: %" PRIu64, rsrcId);
   } else { // it is valid chunk
     SoundMixer::setChunkVolume(chunk, getEnumValue(soundLevel));
   }
@@ -362,8 +362,8 @@ SoundLevel SoundMgr::getChunkVolume(const uint64_t rsrcId) const {
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
-           "Returning SoundLevel::UNKNOWN.", rsrcId);
+    LOGERR("Error in getChunkSound() for rsrcId: %" PRIu64
+           ". Returning SoundLevel::UNKNOWN.", rsrcId);
     return SoundLevel::UNKNOWN;
   }
 
@@ -375,15 +375,15 @@ void SoundMgr::playChunk(const uint64_t rsrcId, const int32_t loops,
   Mix_Chunk *chunk = nullptr;
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
-           "Chunk could not be played!", rsrcId);
+    LOGERR("Error in getChunkSound() for rsrcId: %" PRIu64
+           ". Chunk could not be played!", rsrcId);
     return;
   }
 
   const int32_t channelId = getNextFreeChannel();
   if (INVALID_CHANNEL_ID == channelId) {
     LOGERR("Error, maximum sound supported channels count %d is reached. "
-           "Sound will with rsrcId: %zu will not be " "played. Increase the "
+           "Sound will with rsrcId: %" PRIu64" will not be played. Increase the "
            "number of maximum sound supported channels SUPPORTED_SOUND_CHANNELS",
            SUPPORTED_SOUND_CHANNELS, rsrcId);
     return;
@@ -407,15 +407,15 @@ void SoundMgr::playChunkWithPanning(const uint64_t rsrcId, const int32_t loops,
 
   gRsrcMgr->getChunkSound(rsrcId, chunk);
   if (nullptr == chunk) {
-    LOGERR("Error in getChunkSound() for rsrcId: %zu. "
-           "Chunk could not be played!", rsrcId);
+    LOGERR("Error in getChunkSound() for rsrcId: %" PRIu64
+           ". Chunk could not be played!", rsrcId);
     return;
   }
 
   const int32_t channelId = getNextFreeChannel();
   if (INVALID_CHANNEL_ID == channelId) {
     LOGERR("Error, maximum sound supported channels count %d is reached. "
-           "Sound will with rsrcId: %zu will not be " "played. Increase the "
+           "Sound will with rsrcId: %" PRIu64" will not be played. Increase the "
            "number of maximum sound supported channels SUPPORTED_SOUND_CHANNELS",
            SUPPORTED_SOUND_CHANNELS, rsrcId);
     return;
@@ -441,7 +441,7 @@ void SoundMgr::stopChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
 
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %" PRIu64" is not associated with a valid sound channel!"
            "SoundMgr::stopChunk() will not take effect", rsrcId);
     return;
   }
@@ -459,7 +459,7 @@ void SoundMgr::trySelfStopChunk(const uint64_t rsrcId,
 
   const SoundData *soundData = nullptr;
   if (ErrorCode::SUCCESS != gRsrcMgr->getSoundData(rsrcId, soundData)) {
-    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %zu", rsrcId);
+    LOGERR("gRsrcMgr->getSoundData() failed for rsrcId: %" PRIu64, rsrcId);
     return;
   }
 
@@ -470,7 +470,7 @@ void SoundMgr::trySelfStopChunk(const uint64_t rsrcId,
     gRsrcMgr->getChunkSound(rsrcId, chunk);
 
     if (nullptr == chunk) {
-      LOGERR("Error in getChunkSound() for rsrcId: %zu", rsrcId);
+      LOGERR("Error in getChunkSound() for rsrcId: %" PRIu64, rsrcId);
     } else {
       // reset sound to it's original value
       SoundMixer::setChunkVolume(chunk, getEnumValue(soundData->soundLevel));
@@ -501,7 +501,7 @@ bool SoundMgr::isChunkPlaying(const uint64_t rsrcId) const {
 bool SoundMgr::isChunkPaused(const uint64_t rsrcId) const {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %" PRIu64" is not associated with a valid sound channel!"
            " SoundMgr::isChunkPaused() will not take effect. Returning false",
            rsrcId);
     return false;
@@ -513,7 +513,7 @@ bool SoundMgr::isChunkPaused(const uint64_t rsrcId) const {
 void SoundMgr::pauseChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %" PRIu64" is not associated with a valid sound channel!"
            " SoundMgr::pauseChunk() will not take effect.", rsrcId);
     return;
   }
@@ -524,7 +524,7 @@ void SoundMgr::pauseChunk(const uint64_t rsrcId) {
 void SoundMgr::resumeChunk(const uint64_t rsrcId) {
   const int32_t channelId = findAssociatedChannel(rsrcId);
   if (INVALID_CHANNEL_ID == channelId) {
-    LOGERR("Error, rsrcId: %zu is not associated with a valid sound channel!"
+    LOGERR("Error, rsrcId: %" PRIu64" is not associated with a valid sound channel!"
           " SoundMgr::resumeChunk() will not take effect", rsrcId);
     return;
   }

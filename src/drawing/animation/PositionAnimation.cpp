@@ -85,7 +85,7 @@ ErrorCode PositionAnimation::configure(const AnimBaseConfig& cfg,
   PositionAnimation::resetConfigInternal();
   if (ErrorCode::SUCCESS != AnimationBase::configureInternal(cfg, endCb)) {
     LOGERR("Error, AnimationBase::configureInternal() failed for rsrcId: "
-           "%zu", cfg.rsrcId);
+           "%" PRIu64, cfg.rsrcId);
     err = ErrorCode::FAILURE;
   }
 
@@ -255,7 +255,7 @@ void PositionAnimation::onTimeout(const int32_t timerId) {
       }
     }
   } else {
-    LOGERR("Invalid timer Id: %d from PositionAnimation with rsrcId: %zu",
+    LOGERR("Invalid timer Id: %d from PositionAnimation with rsrcId: %" PRIu64,
            timerId, _cfg.rsrcId);
   }
 }

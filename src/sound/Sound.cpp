@@ -34,7 +34,7 @@ void Sound::destroy() {
   if (_isDestroyed) {
     LOGERR(
         "Warning, trying to destroy already destroyed Sound with "
-        "_rsrcId: %zu",
+        "_rsrcId: %" PRIu64,
         _rsrcId);
     return;
   }
