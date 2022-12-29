@@ -1,6 +1,7 @@
 # manager_utils
 
-**A static C++ library for 2D hardware accelerated widget rendering, input handling, sound playback and system timers**
+## A static C++ library for 2D hardware accelerated widget rendering, animations, input handling, sound playback and system timers
+The library is optimized for fast compilation.
 
 It supports:
 - 2D widget rendering - Images, Sprites, Frame buffer objects
@@ -18,7 +19,6 @@ Those implementation should never be directly used in derived code.
 Instead use the library provided wrapper classes.
 - Rendeder thread must operate on the main thread to guarantee cross-platform behaviour.
 - Simply spawn additional thread and keep the update loop there
-- The library is optimized for fast compilation.
 
 Examples:
 ```
@@ -64,7 +64,7 @@ private:
 
 ```
 
-**Usage from plain CMake**
+## Usage from plain CMake
 - Consume directly with find_package(manager_utils) in a CMakeLists.txt
 - Link against your target with suitable access modifier
 ```
@@ -76,20 +76,28 @@ target_link_libraries(
 ```
 - Example usage project: https://github.com/zhivkopetrov/dev_battle.git
 
-
-**Usage as part of ROS(catkin) / ROS2(colcon) meta-build systems**
+## Usage as part of ROS1(catkin) / ROS2(colcon) meta-build systems
 - Consume directly with find_package(manager_utils) in the package CMakeLists.txt
 - Link agains your target
-- The library automatically exposes and install it's artifacts following ROS/ROS2 structure
+- The library automatically exposes and install it's artifacts following ROS1/ROS2 structure
 - Example usage project: https://github.com/zhivkopetrov/robotics_v1
 
-
-**Dependencies**
+## Dependencies
 - cmake_helpers - https://github.com/zhivkopetrov/cmake_helpers.git
-- The provided library CMakeLists.txt assumes the helpers.cmake from cmake_helpers repo have already been included
+- utils - https://github.com/zhivkopetrov/utils
+- resource_utils - https://github.com/zhivkopetrov/resource_utils
 - sdl_utils - https://github.com/zhivkopetrov/sdl_utils
 
+## Supported Platforms
+Linux:
+  - g++ 12
+  - clang++ 14
+  - Emscripten (em++) 3.1.28
+  - Robot Operating System 2 (ROS2)
+    - Through colcon meta-build system (CMake based)
+  - Robot Operating System 1 (ROS1)
+    - Through catkin meta-build system (CMake based)
+      - Due to soon ROS1 end-of-life catkin builds are not actively supported
 
-**Platform support**
-- Tested on Unix, Windows
-- Never tested on Mac
+Windows:
+  - MSVC++ (>= 14.20) Visual Studio 2019
