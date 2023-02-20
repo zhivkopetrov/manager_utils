@@ -5,7 +5,7 @@
 #include <cstdint>
 
 // Other libraries headers
-#include "sdl_utils/input/TouchEntity.h"
+#include "utils/input/TouchEntity.h"
 #include "utils/class/NonCopyable.h"
 #include "utils/drawing/Point.h"
 #include "utils/drawing/Rectangle.h"

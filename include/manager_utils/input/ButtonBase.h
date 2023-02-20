@@ -32,7 +32,7 @@
 // System headers
 
 // Other libraries headers
-#include "sdl_utils/input/TouchEntity.h"
+#include "utils/input/TouchEntity.h"
 #include "utils/class/NonCopyable.h"
 
 // Own components headers
