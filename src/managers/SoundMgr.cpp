@@ -8,8 +8,8 @@
 #include <mutex>
 
 // Other libraries headers
-#include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/sound/SoundMixer.h"
+#include "utils/input/InputEvent.h"
 #include "utils/data_type/EnumClassUtils.h"
 #include "utils/debug/FunctionTracer.h"
 #include "utils/debug/StrError.h"

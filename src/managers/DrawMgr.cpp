@@ -4,8 +4,8 @@
 // System headers
 
 // Other libraries headers
-#include "sdl_utils/input/InputEvent.h"
 #include "sdl_utils/drawing/Renderer.h"
+#include "utils/input/InputEvent.h"
 #include "utils/debug/FunctionTracer.h"
 #include "utils/ErrorCode.h"
 #include "utils/Log.h"

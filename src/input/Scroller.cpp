@@ -5,11 +5,11 @@
 #include <utility>
 
 // Other libraries headers
+#include "utils/input/InputEvent.h"
 #include "utils/LimitValues.h"
 #include "utils/Log.h"
 
 // Own components headers
-#include "sdl_utils/input/InputEvent.h"
 
 Scroller::Scroller()
     : _scrollerType(ScrollerType::UNKNOWN),

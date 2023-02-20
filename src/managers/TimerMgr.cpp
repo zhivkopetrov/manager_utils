@@ -4,7 +4,7 @@
 // System headers
 
 // Other libraries headers
-#include "sdl_utils/input/InputEvent.h"
+#include "utils/input/InputEvent.h"
 #include "utils/debug/FunctionTracer.h"
 #include "utils/debug/StackTrace.h"
 #include "utils/LimitValues.h"
