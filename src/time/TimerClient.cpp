@@ -7,7 +7,7 @@
 #include "utils/debug/FunctionTracer.h"
 #include "utils/debug/StackTrace.h"
 #include "utils/LimitValues.h"
-#include "utils/Log.h"
+#include "utils/log/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/TimerMgr.h"

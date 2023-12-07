@@ -6,7 +6,7 @@
 #include <utility>
 
 // Other libraries headers
-#include "utils/Log.h"
+#include "utils/log/Log.h"
 
 // Own components headers
 #include "manager_utils/drawing/Fbo.h"

@@ -9,7 +9,7 @@
 #include "utils/drawing/WidgetAligner.h"
 #include "utils/LimitValues.h"
 #include "utils/ErrorCode.h"
-#include "utils/Log.h"
+#include "utils/log/Log.h"
 
 // Own components headers
 

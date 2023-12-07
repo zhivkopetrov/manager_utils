@@ -8,7 +8,7 @@
 #include "sdl_utils/drawing/GeometryUtils.h"
 #include "utils/data_type/EnumClassUtils.h"
 #include "utils/data_type/FloatingPointUtils.h"
-#include "utils/Log.h"
+#include "utils/log/Log.h"
 
 // Own components headers
 #include "manager_utils/managers/DrawMgr.h"
