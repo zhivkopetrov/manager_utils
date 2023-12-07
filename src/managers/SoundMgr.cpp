@@ -179,7 +179,7 @@ void SoundMgr::changeOSVolume(const int32_t soundLevel) {
 #ifdef __linux__
   std::string command("amixer -D pulse sset Master ");
   command.append(std::to_string(soundLevel)).append("%");
-  std::system(command.c_str());
+  [[maybe_unused]]const auto result = std::system(command.c_str());
   return;
 #endif /* __linux__ */
 
